@@ -5,11 +5,16 @@ export const darkThemeData = {
       type: 'dark',
       primary: {
         main: '#1E1E1E',
-        light: "#FFFFFF"
-      }
+        light: "#FFFFFF",
+        dark: '#1E1E1E'
+      },
+      text: {
+        primary: '#6E6E84'
+      },
     },
     typography: {
       fontFamily: 'graphik',
+      htmlFontSize: 18,
     }
   };
 
