@@ -1,10 +1,35 @@
 import React from 'react';
+
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { Box } from '@mui/system';
+
+import ComingSoon from './components/pages/ComingSoon';
+import Home from './components/pages/HomePage';
+import NotFound from './components/pages/NotFound';
+import Navbar from './navigation/Navbar/Navbar';
+
 import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <div>
-    </div>
+    <Box
+      width="100%"
+      height="100vh"
+      display="flex"
+      flexDirection="column"
+      overflow="hidden"
+    >
+      <Navbar />
+      <Routes>
+        <Route path="mint" element={<ComingSoon />} />
+        <Route path="stake" element={<ComingSoon />} />
+        <Route path="liquidate" element={<ComingSoon />} />
+        <Route path="ecosystem" element={<ComingSoon />} />
+        <Route path="" element={<Home />} />
+        <Route path="not-found" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/not-found" replace />} />
+      </Routes>
+    </Box>
   );
 }
 
