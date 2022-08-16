@@ -1,12 +1,20 @@
 import { AppBar, Button, Toolbar, Typography, Box } from "@mui/material";
 import { Stack } from "@mui/system";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext } from "react";
 import { NavLink } from "react-router-dom";
+
+import { EthProviderContext } from '../../components/common/EthProvider/EthProviderContext';
 
 interface NavbarProps { }
 
+
 const Navbar: FunctionComponent<NavbarProps> = () => {
 
+  const ethProviderContext = useContext(EthProviderContext)
+
+  const onClick = async () => {
+    await ethProviderContext.connectWallet();
+  }
   const logoUrl = process.env.PUBLIC_URL + '/damlogo.png';
   return (
     <AppBar sx={{
@@ -43,9 +51,12 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
               width: "122px",
               height: "48px",
               flexGrow: 0
-            }
-          }>
-            <Typography color="#FFFFFF">Connect</Typography>
+            }}
+            onClick={() => onClick()}
+          >
+            <Typography color="#FFFFFF">
+              {ethProviderContext.connected ? "Connected" : "Connect"}
+            </Typography>
           </Button>
         </Stack>
       </Toolbar>
