@@ -11,10 +11,10 @@ const Home: FC = () => {
             height="100%"
         >
             <Typography variant="h1" marginBottom="40px" sx={{ color: "text.primary" }}>
-                Decentralized Asset
+                dPRIME Asset
             </Typography>
             <Typography variant="h1" marginBottom="40px" sx={{ color: "text.primary" }}>
-                Management
+                Modules
             </Typography>
         </Stack>
      );
