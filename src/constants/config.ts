@@ -12,4 +12,5 @@ export const barJoin = "0x3cFEA900fd462607CCf32EBA83a780973d9C2F66";
 export const bazJoin = "0xbb2EbebC17CAf0cD430965912632615aF9611273";
 
 
-export const rpcUrl ="https://rpc.api.moonbase.moonbeam.network";
+// export const rpcUrl ="https://rpc.api.moonbase.moonbeam.network";
+export const rpcUrl ="http://127.0.0.1:8545";
