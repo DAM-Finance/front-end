@@ -14,31 +14,24 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     await ethProviderContext.connectWallet()
   }
 
-  const logoUrl = process.env.PUBLIC_URL + '/damlogo.png'
+  const logoUrl = process.env.PUBLIC_URL + '/damlogo.svg'
   return (
-    <nav className="flex">
-      <div>
-        <Box>
-          <NavLink to="/">
-            <img src={logoUrl} alt="Dam Finance logo" />
-          </NavLink>
-        </Box>
-        <NavLink to="/mint">
-          <Typography color="text.primary">Mint</Typography>
-        </NavLink>
-        <NavLink to="/stake">
-          <Typography color="text.primary">Stake</Typography>
-        </NavLink>
-        <NavLink to="/liquidate">
-          <Typography color="text.primary">Liquidate</Typography>
-        </NavLink>
-        <NavLink to="/ecosystem">
-          <Typography color="text.primary">Ecosystem</Typography>
-        </NavLink>
-        <Button onClick={() => onClick()}>
-          <Typography color="#FFFFFF">{ethProviderContext.connected ? 'Connected' : 'Connect'}</Typography>
-        </Button>
-      </div>
+    <nav className="flex items-center flex-wrap gap-12 md:px-24 md:py-12">
+      <NavLink to="/">
+        <img src={logoUrl} alt="Dam Finance logo" />
+      </NavLink>
+      {/* className="text-gray-500 hover:text-gray-300" */}
+      <NavLink to="/" className={({ isActive }) => (isActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300')}>
+        Dashboard
+      </NavLink>
+      <NavLink to="/manage" className="text-gray-500 hover:text-gray-300">
+        Manage
+      </NavLink>
+      <NavLink to="/earn" className="text-gray-500 hover:text-gray-300">
+        Earn
+      </NavLink>
+
+      <button onClick={() => onClick()}>{ethProviderContext.connected ? 'Connected' : 'Connect'}</button>
     </nav>
   )
 }
