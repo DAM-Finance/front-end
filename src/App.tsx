@@ -1,26 +1,23 @@
-import React from 'react';
+// import React from 'react';
 
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { Box } from '@mui/system';
+// import { Navigate, Route, Routes } from 'react-router-dom';
+// import { Box } from '@mui/system';
 
-import ComingSoon from './components/pages/ComingSoon';
-import Home from './components/pages/HomePage';
-import NotFound from './components/pages/NotFound';
-import Navbar from './navigation/Navbar/Navbar';
+// import ComingSoon from './components/pages/ComingSoon';
+// import Home from './components/pages/HomePage';
+// import NotFound from './components/pages/NotFound';
+// import Navbar from './navigation/Navbar/Navbar';
 
-import './App.css';
+import './App.css'
 
 const App = () => {
   return (
-    <Box
-      width="100%"
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      overflow="hidden"
-    >
-      <Navbar />
-      <Routes>
+    <div className="w-full h-screen flex flex-row">
+      <div>Hey</div>
+      <div>I am</div>
+      <div>ME!</div>
+      {/* <Navbar /> */}
+      {/* <Routes>
         <Route path="mint" element={<ComingSoon />} />
         <Route path="stake" element={<ComingSoon />} />
         <Route path="liquidate" element={<ComingSoon />} />
@@ -28,9 +25,9 @@ const App = () => {
         <Route path="" element={<Home />} />
         <Route path="not-found" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/not-found" replace />} />
-      </Routes>
-    </Box>
-  );
+      </Routes> */}
+    </div>
+  )
 }
 
-export default App;
+export default App
