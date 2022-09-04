@@ -6,8 +6,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Navbar from './navigation/Navbar/Navbar'
 import ComingSoon from './components/pages/ComingSoon'
 import Homepage from './components/pages/HomePage'
-import NotFound from './components/pages/HomePage'
 // import Home from './components/pages/HomePage'
+import NotFound from './components/pages/NotFound2'
 
 import './App.css'
 
