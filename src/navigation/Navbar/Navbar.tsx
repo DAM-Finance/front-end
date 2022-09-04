@@ -24,10 +24,10 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
       <NavLink to="/" className={({ isActive }) => (isActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300')}>
         Dashboard
       </NavLink>
-      <NavLink to="/manage" className="text-gray-500 hover:text-gray-300">
+      <NavLink to="/manage" className={({ isActive }) => (isActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300')}>
         Manage
       </NavLink>
-      <NavLink to="/earn" className="text-gray-500 hover:text-gray-300">
+      <NavLink to="/earn" className={({ isActive }) => (isActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300')}>
         Earn
       </NavLink>
 
