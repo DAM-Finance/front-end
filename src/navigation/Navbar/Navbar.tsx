@@ -31,7 +31,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         Earn
       </NavLink>
 
-      <button onClick={() => onClick()}>{ethProviderContext.connected ? 'Connected' : 'Connect'}</button>
+      <button onClick={() => onClick()} className="ml-auto outline outline-1 px-12 py-2 rounded-full bg-transparent text-yellow-300 outline-yellow-300">
+        {ethProviderContext.connected ? 'Connected' : 'Connect'}
+      </button>
     </nav>
   )
 }
