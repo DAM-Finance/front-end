@@ -1,5 +1,3 @@
-import { Button, Toolbar, Typography, Box } from '@mui/material'
-import { Stack } from '@mui/system'
 import React, { FunctionComponent, useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -20,7 +18,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
       <NavLink to="/">
         <img src={logoUrl} alt="Dam Finance logo" />
       </NavLink>
-      {/* className="text-gray-500 hover:text-gray-300" */}
+
       <NavLink to="/" className={({ isActive }) => (isActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300')}>
         Dashboard
       </NavLink>
