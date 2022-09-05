@@ -1,17 +1,17 @@
-import { Stack, Typography } from '@mui/material'
 import { FC } from 'react'
 
 const Home: FC = () => {
   return (
-    <Stack direction="column" justifyContent="center" alignItems="center" height="100%">
-      HOME
-      <Typography variant="h1" marginBottom="40px" sx={{ color: 'text.primary' }}>
-        dPRIME Asset
-      </Typography>
-      <Typography variant="h1" marginBottom="40px" sx={{ color: 'text.primary' }}>
-        Modules
-      </Typography>
-    </Stack>
+    <div className="p-28 col w-full">
+      <div className="flex w-full grid-cols-1 md:grid-cols-2">
+        <div className="row-span-3">A</div>
+        <div className="flex flex-col grid-rows-4">
+          <div>B</div>
+          <div>C</div>
+        </div>
+      </div>
+      <div className="">D</div>
+    </div>
   )
 }
 

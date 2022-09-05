@@ -1,13 +1,14 @@
 import Navbar from './navigation/Navbar/Navbar'
 import Routes from './components/common/Routes/Routes'
 
-import './App.css'
+import { useRef } from 'react'
 
 const App = () => {
+  useRef()
   return (
     <div className="flex flex-col w-full h-screen bg-damdarkgray">
       <Navbar />
-      <div style={{ width: 'calc(100vh - 80px)' }}>
+      <div className="w-full" style={{ width: 'calc(100vh - 80px)' }}>
         <Routes />
       </div>
     </div>
