@@ -8,7 +8,7 @@ const App = () => {
   return (
     <div className="flex flex-col w-full h-screen bg-damdarkgray">
       <Navbar />
-      <div className="w-full" style={{ width: 'calc(100vh - 80px)' }}>
+      <div className="w-full" style={{ height: 'calc(100vh - 80px)' }}>
         <Routes />
       </div>
     </div>

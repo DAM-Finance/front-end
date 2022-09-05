@@ -2,15 +2,15 @@ import { FC } from 'react'
 
 const Home: FC = () => {
   return (
-    <div className="p-28 col w-full">
-      <div className="flex w-full grid-cols-1 md:grid-cols-2">
-        <div className="row-span-3">A</div>
-        <div className="flex flex-col grid-rows-4">
-          <div>B</div>
-          <div>C</div>
+    <div className="w-full h-full flex flex-col p-28  text-white gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-red-300">A</div>
+        <div className="flex flex-col gap-4">
+          <div className="bg-orange-300">B</div>
+          <div className="bg-blue-300">C</div>
         </div>
       </div>
-      <div className="">D</div>
+      <div className="bg-blue-400">D</div>
     </div>
   )
 }
