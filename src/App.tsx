@@ -1,11 +1,3 @@
-// import React from 'react';
-
-// import { Navigate, Route, Routes } from 'react-router-dom'
-// import { Box } from '@mui/system';
-
-// import ComingSoon from './components/pages/ComingSoon'
-// import Dashboard from './components/pages/Dashboard'
-// import NotFound from './components/pages/PageNotFound'
 import Navbar from './navigation/Navbar/Navbar'
 import Routes from './components/common/Routes/Routes'
 
@@ -15,7 +7,9 @@ const App = () => {
   return (
     <div className="flex flex-col w-full h-screen bg-damdarkgray">
       <Navbar />
-      <Routes />
+      <div style={{ width: 'calc(100vh - 80px)' }}>
+        <Routes />
+      </div>
     </div>
   )
 }

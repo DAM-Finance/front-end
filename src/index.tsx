@@ -1,24 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-
-import { ThemeProvider } from '@mui/material'
-
-import { darkTheme } from './themes/darkTheme'
+import EthProvider from './components/common/EthProvider/EthProvider'
 import App from './App'
 import './index.css'
-import EthProvider from './components/common/EthProvider/EthProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={darkTheme}>
-      <BrowserRouter>
-        <EthProvider>
-          <App />
-        </EthProvider>
-      </BrowserRouter>
-    </ThemeProvider>
+    <BrowserRouter>
+      <EthProvider>
+        <App />
+      </EthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 )
 
