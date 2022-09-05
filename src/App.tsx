@@ -13,7 +13,7 @@ import './App.css'
 
 const App = () => {
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className="flex flex-col w-full h-screen bg-damdarkgray">
       <Navbar />
       <Routes />
     </div>

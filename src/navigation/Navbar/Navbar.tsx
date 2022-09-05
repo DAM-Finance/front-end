@@ -16,7 +16,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
   const logoUrl = process.env.PUBLIC_URL + '/damlogo.svg'
   return (
-    <nav className="flex items-center flex-wrap gap-12 md:px-24 md:py-12">
+    <nav className="flex items-center flex-wrap gap-12 bg-damgray px-4 md:px-24 py-4">
       <NavLink to="/">
         <img src={logoUrl} alt="Dam Finance logo" />
       </NavLink>
@@ -31,7 +31,10 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         Earn
       </NavLink>
 
-      <button onClick={() => onClick()} className="ml-auto outline outline-1 px-12 py-2 rounded-full bg-transparent text-yellow-300 outline-yellow-300">
+      <button
+        onClick={() => onClick()}
+        className="ml-auto outline outline-1 px-12 py-2 rounded-full bg-transparent text-yellow-300 outline-yellow-300 hover:bg-yellow-300 hover:text-damgray"
+      >
         {ethProviderContext.connected ? 'Connected' : 'Connect'}
       </button>
     </nav>
