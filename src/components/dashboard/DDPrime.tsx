@@ -1,9 +1,9 @@
 import { FC } from 'react'
 
-interface PortfolioProps {}
+interface DDPrimeProps {}
 
-const DDPrime: FC = ({}: PortfolioProps) => {
-  return <div className="bg-blue-300">PORTFOLIO</div>
+const DDPrime: FC = ({}: DDPrimeProps) => {
+  return <div className="bg-damgray rounded-xl p-8">DDPrime</div>
 }
 
 export default DDPrime

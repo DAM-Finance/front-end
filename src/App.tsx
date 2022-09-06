@@ -1,4 +1,4 @@
-import Navbar from './navigation/Navbar/Navbar'
+import Navbar from './components/common/Navbar/Navbar'
 import Routes from './components/common/Routes/Routes'
 
 import { useRef } from 'react'

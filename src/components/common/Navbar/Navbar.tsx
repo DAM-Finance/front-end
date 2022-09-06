@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useContext } from 'react'
 import { NavLink } from 'react-router-dom'
+import utils from '../../../constants/utils'
 
-import { EthProviderContext } from '../../components/common/EthProvider/EthProviderContext'
+import { EthProviderContext } from '../EthProvider/EthProviderContext'
 
 interface NavbarProps {}
 
@@ -12,7 +13,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     await ethProviderContext.connectWallet()
   }
 
-  const logoUrl = process.env.PUBLIC_URL + '/damlogo.svg'
+  const logoUrl = utils.getImageSrc('damlogo.svg')
   return (
     <nav className="flex items-center flex-wrap gap-12 bg-damgray px-4 md:px-24 py-4">
       <NavLink to="/">
