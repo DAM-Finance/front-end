@@ -1,9 +1,9 @@
 import { FC } from 'react'
 
-interface DDPrimeProps {}
+// interface DDPrimeProps {}
 
-const DDPrime: FC = ({}: DDPrimeProps) => {
-  return <div className="bg-damgray rounded-xl p-8">DDPrime</div>
+const DDPrime: FC = () => {
+  return <div className="bg-damgray rounded-xl p-8 py-8">DDPrime</div>
 }
 
 export default DDPrime

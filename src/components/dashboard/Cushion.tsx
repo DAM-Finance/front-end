@@ -1,8 +1,8 @@
 import { FC } from 'react'
 
-interface CushionProps {}
+// interface CushionProps {}
 
-const Cushion: FC = ({}: CushionProps) => {
+const Cushion: FC = () => {
   return <div className="bg-damgray rounded-xl p-8">Cushion</div>
 }
 

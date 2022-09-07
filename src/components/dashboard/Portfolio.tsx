@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import utils from '../../constants/utils'
 
-interface PortfolioProps {}
+// interface PortfolioProps {}
 
-const Portfolio: FC = ({}: PortfolioProps) => {
+const Portfolio: FC = () => {
   const portfolioImg = utils.getImageSrc('portfolio-placeholder.svg')
   const borrowIcon = utils.getImageSrc('borrow-icon.svg')
 
@@ -23,7 +23,7 @@ const Portfolio: FC = ({}: PortfolioProps) => {
           <button className="rounded-full py-1 px-4 bg-gray-500 text-yellow-300 hover:bg-gray-400">Learn More</button>
         </div>
       </div>
-      <img src={portfolioImg} alt="Portfolio image" />
+      <img src={portfolioImg} alt="Portfolio" />
     </div>
   )
 }

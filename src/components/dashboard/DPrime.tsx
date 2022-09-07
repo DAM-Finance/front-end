@@ -1,8 +1,8 @@
 import { FC } from 'react'
 
-interface DPrimeProps {}
+// interface DPrimeProps {}
 
-const DPrime: FC = ({}: DPrimeProps) => {
+const DPrime: FC = () => {
   return <div className="bg-damgray rounded-xl p-8">DPrime</div>
 }
 
