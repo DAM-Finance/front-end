@@ -8,7 +8,7 @@ const Portfolio: FC = () => {
   const borrowIcon = utils.getImageSrc('borrow-icon.svg')
 
   return (
-    <div className="flex bg-damgray rounded-xl p-8">
+    <div className="flex bg-damgray rounded-xl px-8 py-16">
       <div className="flex flex-col flex-wrap gap-6">
         <div>
           <span className="text-2xl">Create purchasing power from your portfolio through </span>
