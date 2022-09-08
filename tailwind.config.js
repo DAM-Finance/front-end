@@ -6,7 +6,8 @@ module.exports = {
     extend: {
       colors: {
         damgray: '#1F212C',
-        damdarkgray: '#151823'
+        damdarkgray: '#151823',
+        damtranspgray: 'rgba(40, 42, 52, 0.5)'
       }
     }
   },
