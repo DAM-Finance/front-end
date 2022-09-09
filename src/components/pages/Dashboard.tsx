@@ -12,7 +12,7 @@ const Home: FC = () => {
   //     draft.portfolioValue = 23324
   //   })
   // }
-  const { portfolio, setPortfolio } = useContext(StateContext)
+  const { portfolio } = useContext(StateContext)
 
   return (
     <div className="w-full h-full flex flex-col p-24  text-white gap-4">

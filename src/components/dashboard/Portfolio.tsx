@@ -1,14 +1,13 @@
-import { ClassNames } from '@emotion/react'
 import { FC, useContext } from 'react'
 import utils from '../../constants/utils'
-import { IStateContext, StateContext } from '../common/State/State'
+import { StateContext } from '../common/State/State'
 
 // interface PortfolioProps {}
 
 const Portfolio: FC = () => {
   const portfolioImg = utils.getImageSrc('portfolio-placeholder.svg')
   const borrowIcon = utils.getImageSrc('borrow-icon.svg')
-  const { portfolio, setPortfolio } = useContext(StateContext)
+  const { portfolio } = useContext(StateContext)
   const assetsUrl = utils.getImageSrc('assets.svg')
 
   let portfolioPage = (
