@@ -1,17 +1,27 @@
 import Navbar from './components/common/Navbar/Navbar'
 import Routes from './components/common/Routes/Routes'
+import { useImmer } from 'use-immer'
 
-import { useRef } from 'react'
+// import { useRef } from 'react'
+import { IPortolio } from './features/dashboard'
+import { StateContext } from './components/common/State/State'
+import { useState } from 'react'
+import EthProvider from './components/common/EthProvider/EthProvider'
 
 const App = () => {
-  useRef()
+  const [portfolio, setPortfolio] = useState<Partial<IPortolio>>({})
+
   return (
-    <div className="flex flex-col w-full h-screen bg-damdarkgray">
-      <Navbar />
-      <div className="w-full" style={{ height: 'calc(100vh - 80px)' }}>
-        <Routes />
-      </div>
-    </div>
+    <StateContext.Provider value={{ portfolio, setPortfolio }}>
+      <EthProvider {...{ portfolio, setPortfolio }}>
+        <div className="flex flex-col w-full h-screen bg-damdarkgray">
+          <Navbar />
+          <div className="w-full" style={{ height: 'calc(100vh - 80px)' }}>
+            <Routes />
+          </div>
+        </div>
+      </EthProvider>
+    </StateContext.Provider>
   )
 }
 

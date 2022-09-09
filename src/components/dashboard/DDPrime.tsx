@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { ArrowRightIcon } from '@heroicons/react/24/solid'
 
 // interface DDPrimeProps {}
 
@@ -13,7 +14,10 @@ const DDPrime: FC = () => {
         <div className="text-gray-400 text-sm">Put your LP tokens to work</div>
       </div>
       <div className="ml-auto flex justify-center">
-        <button className="text-yellow-200">Start Earning</button>
+        <button className="flex items-center gap-2 rounded-full py-1 px-6 bg-yellow-400 bg-opacity-5 text-yellow-300 hover:bg-opacity-10">
+          <span>Start Earning</span>
+          <ArrowRightIcon className="h-5 w-5 text-yellow-300"></ArrowRightIcon>
+        </button>
       </div>
     </div>
   )
