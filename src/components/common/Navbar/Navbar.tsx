@@ -13,6 +13,27 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     await ethProviderContext.connectWallet()
   }
 
+  const shortenWalletAddress = (wallet: string) => {
+    return `${wallet.slice(0, 5)}...${wallet.slice(-4, wallet.length)}`
+  }
+
+  let connectBtn = (
+    <button
+      onClick={() => onClick()}
+      className="ml-auto outline outline-1 px-12 py-2 rounded-full bg-transparent text-yellow-300 outline-yellow-300 hover:bg-yellow-300 hover:text-damgray"
+    >
+      Connect
+    </button>
+  )
+
+  if (ethProviderContext.connected) {
+    connectBtn = (
+      <div className="ml-auto outline outline-1 px-12 py-2 rounded-full bg-transparent text-yellow-300 outline-yellow-300">
+        {shortenWalletAddress(ethProviderContext.accounts[0])}
+      </div>
+    )
+  }
+
   const logoUrl = utils.getImageSrc('damlogo.svg')
   return (
     <nav className="flex items-center flex-wrap gap-12 bg-damgray px-4 md:px-24 py-4">
@@ -30,12 +51,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         Earn
       </NavLink>
 
-      <button
-        onClick={() => onClick()}
-        className="ml-auto outline outline-1 px-12 py-2 rounded-full bg-transparent text-yellow-300 outline-yellow-300 hover:bg-yellow-300 hover:text-damgray"
-      >
-        {ethProviderContext.connected ? 'Connected' : 'Connect'}
-      </button>
+      {connectBtn}
     </nav>
   )
 }

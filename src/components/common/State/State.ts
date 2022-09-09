@@ -1,13 +1,13 @@
 import { createContext } from 'react'
-import { IPortolio } from '../../../features/dashboard'
+import { IPortfolio } from '../../../features/dashboard'
 
-interface IStateContext {
-  portfolio: Partial<IPortolio>
-  setPortfolio: React.Dispatch<React.SetStateAction<Partial<IPortolio>>>
+export interface IStateContext {
+  portfolio: Partial<IPortfolio>
+  setPortfolio: React.Dispatch<React.SetStateAction<Partial<IPortfolio>>>
 }
-const stateContext: IStateContext = {
+const initialStateContext: IStateContext = {
   portfolio: {},
   setPortfolio: () => {}
 }
 
-export const StateContext = createContext<IStateContext>(stateContext)
+export const StateContext = createContext<IStateContext>(initialStateContext)

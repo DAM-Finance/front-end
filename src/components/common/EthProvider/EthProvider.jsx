@@ -35,14 +35,19 @@ class EthProvider extends Component {
     newState.connected = newState.accounts && newState.accounts.length ? true : false
 
     this.setState(newState)
-    // Improve demo with fake data that will get collected from the smart contract
-    const fakeData = {
-      dPrime: 15347,
-      cushion: 21,
-      portfolioValue: 23324
+    // TODO: Improve demo with mock data that will get collected from the smart contract
+    let mockData
+    if (newState.connected) {
+      mockData = {
+        dPrime: 15347,
+        cushion: 21,
+        portfolioValue: 23324
+      }
+    } else {
+      mockData = {}
     }
     this.props.setPortfolio((state) => {
-      return fakeData
+      return mockData
     })
   }
 

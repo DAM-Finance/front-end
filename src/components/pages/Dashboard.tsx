@@ -18,7 +18,7 @@ const Home: FC = () => {
     <div className="w-full h-full flex flex-col p-24  text-white gap-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="col-span-2">
-          <Portfolio {...portfolio}></Portfolio>
+          <Portfolio></Portfolio>
         </div>
         <div className="grid grid-rows-2 flex-col gap-4">
           <DPrime {...portfolio}></DPrime>

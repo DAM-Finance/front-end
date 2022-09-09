@@ -3,13 +3,13 @@ import Routes from './components/common/Routes/Routes'
 import { useImmer } from 'use-immer'
 
 // import { useRef } from 'react'
-import { IPortolio } from './features/dashboard'
+import { IPortfolio } from './features/dashboard'
 import { StateContext } from './components/common/State/State'
 import { useState } from 'react'
 import EthProvider from './components/common/EthProvider/EthProvider'
 
 const App = () => {
-  const [portfolio, setPortfolio] = useState<Partial<IPortolio>>({})
+  const [portfolio, setPortfolio] = useState<Partial<IPortfolio>>({})
 
   return (
     <StateContext.Provider value={{ portfolio, setPortfolio }}>

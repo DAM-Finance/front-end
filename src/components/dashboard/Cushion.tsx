@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import { IPortolio } from '../../features/dashboard'
+import { IPortfolio } from '../../features/dashboard'
 
 // interface CushionProps {}
 
-const Cushion: FC<Partial<IPortolio>> = (props) => {
+const Cushion: FC<Partial<IPortfolio>> = (props) => {
   return (
     <div className="flex flex-col bg-damgray rounded-xl overflow-hidden">
       <div className="p-6 gap-1">

@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import utils from '../../constants/utils'
-import { IPortolio } from '../../features/dashboard'
+import { IPortfolio } from '../../features/dashboard'
 
-const DPrime: FC<Partial<IPortolio>> = (props) => {
+const DPrime: FC<Partial<IPortfolio>> = (props) => {
   const dPrimeLogo = utils.getImageSrc('dprime.png')
   return (
     <div className="flex flex-col bg-damgray rounded-xl p-6 gap-1">
