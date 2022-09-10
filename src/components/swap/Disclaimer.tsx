@@ -9,9 +9,9 @@ const Disclaimer: FC = () => {
     <div className="flex flex-row bg-damnavygreen rounded-2xl p-6">
       <div>
         <div className="text-white ">Swap directly dor dPrime at a 1:1 rate, rather than borrowing dPrime.</div>
-        <button className="text-damyellow">Learn More</button>
+        <button className="text-damyellow opacity-70">Learn More</button>
       </div>
-      <img src={xUrl} className="ml-auto" alt="close" />
+      <img src={xUrl} className="ml-auto mb-auto" alt="close" />
     </div>
   )
 }
