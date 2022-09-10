@@ -41,13 +41,19 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         <img src={logoUrl} alt="Dam Finance logo" />
       </NavLink>
 
-      <NavLink to="/" className={({ isActive }) => (isActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300')}>
+      <NavLink to="/" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         Dashboard
       </NavLink>
-      <NavLink to="/manage" className={({ isActive }) => (isActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300')}>
+      <NavLink to="/swap" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
+        Swap
+      </NavLink>
+      <NavLink to="/manage" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         Manage
       </NavLink>
-      <NavLink to="/earn" className={({ isActive }) => (isActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300')}>
+      <NavLink to="/teleport" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
+        Teleport
+      </NavLink>
+      <NavLink to="/earn" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         Earn
       </NavLink>
 
