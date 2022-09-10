@@ -12,6 +12,10 @@ module.exports = {
         damnavygreen: 'rgba(134, 253, 217, 0.1)',
         damyellow: '#F5DB59'
       }
+    },
+    fontFamily: {
+      poppins: ['Poppins', 'sans-serif'],
+      sans: ['Poppins', 'Helvetica', 'Arial', 'sans-serif']
     }
   },
   plugins: []
