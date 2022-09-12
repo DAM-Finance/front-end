@@ -1,15 +1,16 @@
 import { FC } from 'react'
-import utils from '../../constants/utils'
-import Progress from '../common/Progress/Progress'
 import Disclaimer from '../Disclaimer'
+import Swaper from '../Swaper'
 
 // interface DDPrimeProps {}
 
 const Swap: FC = () => {
   return (
-    <div className="lg:px-96 px-12 py-24">
-      <Disclaimer infoTxt="Swap directly dor dPrime at a 1:1 rate, rather than borrowing dPrime." actionTxt="Learn More"></Disclaimer>
-      <div></div>
+    <div className="flex p-4 w-full justify-center py-24">
+      <div className="flex flex-col max-w-7xl gap-6">
+        <Disclaimer infoTxt="Swap directly dor dPrime at a 1:1 rate, rather than borrowing dPrime." actionTxt="Learn More"></Disclaimer>
+        <Swaper></Swaper>
+      </div>
     </div>
   )
 }

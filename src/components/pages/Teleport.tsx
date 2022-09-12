@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import utils from '../../constants/utils'
 import Disclaimer from '../Disclaimer'
 
 // interface DDPrimeProps {}
