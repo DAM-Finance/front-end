@@ -10,6 +10,7 @@ module.exports = {
         damtranspgray: 'rgba(40, 42, 52, 0.5)',
         damNavGray: 'rgba(255, 255, 255, 0.7)',
         damnavygreen: 'rgba(134, 253, 217, 0.1)',
+        dambackgroundgrayed: 'rgba(16, 16, 16, 0.6)',
         damyellow: '#F5DB59'
       }
     },
