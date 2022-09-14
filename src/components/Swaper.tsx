@@ -8,16 +8,22 @@ import SwaperInputList from './SwaperInputList'
 const Swaper: FC = () => {
   const [stableCoins] = useState([
     { name: 'USDC', icon: utils.getImageSrc('usdc.svg'), balance: '10' },
-    { name: 'DAI', icon: utils.getImageSrc('usdc.svg'), balance: '30' }
+    { name: 'DAI', icon: utils.getImageSrc('DAI.svg'), balance: '30' }
   ])
 
   const [firstCoin, setFirstCoin] = useState('0')
   const [secondCoin, setSecondCoin] = useState('0')
-
+  const [selectedStableCoin, setSelectedStableCoin] = useState(stableCoins[0])
   const [isInverted, setIsInverted] = useState(false)
 
   let swaperFirstElement = (
-    <SwaperInputList value={firstCoin} coins={stableCoins} selectedCoin={stableCoins[0]} handleChange={(value) => setFirstCoin(value)}></SwaperInputList>
+    <SwaperInputList
+      value={firstCoin}
+      coins={stableCoins}
+      selectedCoin={selectedStableCoin}
+      handleChange={(value) => setFirstCoin(value)}
+      handleListChange={(coin) => setSelectedStableCoin(coin)}
+    ></SwaperInputList>
   )
   let swaperSecondElement = <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} balance="0.0"></SwaperInput>
 
