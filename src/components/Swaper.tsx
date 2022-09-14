@@ -1,22 +1,42 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import utils from '../constants/utils'
+import SwaperInput from './SwaperInput'
+import SwaperInputList from './SwaperInputList'
 
 // interface DDPrimeProps {}
 
 const Swaper: FC = () => {
+  const [stableCoins] = useState([
+    { name: 'USDC', icon: utils.getImageSrc('usdc.svg'), balance: '10' },
+    { name: 'DAI', icon: utils.getImageSrc('usdc.svg'), balance: '30' }
+  ])
+
+  const [firstCoin, setFirstCoin] = useState('0')
+  const [secondCoin, setSecondCoin] = useState('0')
+
+  const [isInverted, setIsInverted] = useState(false)
+
+  let swaperFirstElement = (
+    <SwaperInputList value={firstCoin} coins={stableCoins} selectedCoin={stableCoins[0]} handleChange={(value) => setFirstCoin(value)}></SwaperInputList>
+  )
+  let swaperSecondElement = <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} balance="0.0"></SwaperInput>
+
+  if (isInverted) {
+    const temp = swaperSecondElement
+    swaperSecondElement = swaperFirstElement
+    swaperFirstElement = temp
+  }
+
   return (
-    <div className="flex flex-col items-center gap-4 bg-damgray rounded-2xl p-4">
-      <input
-        type="text"
-        className="w-full bg-damdarkgray p-4 text-2xl text-gray-400  border-solid focus:text-white  border-[1px] border-damdarkgray focus:border-yellow-300 hover:border-yellow-300 outline-none rounded-2xl"
-      />
-      <button className="w-fit p-4 bg-damdarkgray rounded-full">
+    <div className="flex flex-col items-center gap-4 bg-damgray rounded-2xl p-6">
+      {swaperFirstElement}
+
+      <button onClick={() => setIsInverted(!isInverted)} className="w-fit p-4 bg-damdarkgray rounded-full">
         <img src={utils.getImageSrc('invertswap.svg')} alt="invert swap" />
       </button>
-      <input
-        type="text"
-        className="w-full bg-damdarkgray p-4 text-2xl text-gray-400  border-solid focus:text-white  border-[1px] border-damdarkgray focus:border-yellow-300 hover:border-yellow-300 outline-none rounded-2xl"
-      />
+
+      {swaperSecondElement}
+
       <button className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
         <span>Swap</span>
       </button>
