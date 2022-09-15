@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
+import Earn from '../../pages/Earn'
 import Manage from '../../pages/Manage'
 import Swap from '../../pages/Swap'
 import Teleport from '../../pages/Teleport'
@@ -15,7 +16,7 @@ const AppRoutes: FC = () => {
         <Route path="swap" element={<Swap />} />
         <Route path="manage" element={<Manage />} />
         <Route path="teleport" element={<Teleport />} />
-        <Route path="earn" element={<ComingSoon />} />
+        <Route path="earn" element={<Earn />} />
         <Route path="not-found" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/not-found" replace />} />
       </Routes>
