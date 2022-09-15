@@ -1,13 +1,21 @@
 import { FC, useState } from 'react'
 import utils from '../../constants/utils'
+import { INetwork } from '../../features/Network'
 import AvailableInput from '../AvailableInput'
 import Disclaimer from '../Disclaimer'
+import SelectNetwork from '../SelectNetwork'
 
 // interface DDPrimeProps {}
 
 const Teleport: FC = () => {
   const [amount, setAmount] = useState('0')
   const [available] = useState('1020')
+  const [networks] = useState<INetwork[]>([
+    { name: 'Ethereum', symbol: 'eth' },
+    { name: 'Moonbeam', symbol: 'glmr' }
+  ])
+  const [originNetwork, setOriginNetwork] = useState(networks[0])
+  const [destinationNetwork, setDestinationNetwork] = useState(networks[1])
 
   return (
     <div className="flex p-4 w-full justify-center py-24">
@@ -19,9 +27,9 @@ const Teleport: FC = () => {
         >
           <div>1. Select Network</div>
           <div className="flex gap-4">
-            <img height={160} src={utils.getImageSrc('ethnet.png')} alt="" />
+            <SelectNetwork networks={networks} selectedNetwork={originNetwork} handleChange={(network) => setOriginNetwork(network)}></SelectNetwork>
             <img src={utils.getImageSrc('right-arrow.svg')} alt="" />
-            <img height={160} src={utils.getImageSrc('moonbeamnet.png')} alt="" />
+            <SelectNetwork networks={networks} selectedNetwork={destinationNetwork} handleChange={(network) => setDestinationNetwork(network)}></SelectNetwork>
           </div>
           <div>2. Select the amount of dPRIME to teleport</div>
           <AvailableInput amount={amount} available={available} handleChange={(value) => setAmount(value)}></AvailableInput>
