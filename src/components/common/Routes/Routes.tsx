@@ -4,7 +4,7 @@ import Earn from '../../pages/Earn'
 import Manage from '../../pages/Manage'
 import Swap from '../../pages/Swap'
 import Teleport from '../../pages/Teleport'
-import ComingSoon from './../../../components/pages/ComingSoon'
+// import ComingSoon from './../../../components/pages/ComingSoon'
 import Dashboard from './../../../components/pages/Dashboard'
 import NotFound from './../../../components/pages/PageNotFound'
 

@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 import utils from '../../constants/utils'
 import AvailableInput from '../AvailableInput'
-import Progress from '../common/Progress/Progress'
+// import Progress from '../common/Progress/Progress'
 
 // interface DDPrimeProps {}
 
