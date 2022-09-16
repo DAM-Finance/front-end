@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { NavLink } from 'react-router-dom'
 import { IPortfolio } from '../../features/dashboard'
 
 // interface CushionProps {}
@@ -17,7 +18,9 @@ const Cushion: FC<Partial<IPortfolio>> = (props) => {
           <div className="text-3xl text-gray-500">N/A</div>
         )}
       </div>
-      <button className="bg-damtranspgray rounded-none w-full mt-auto text-yellow-200 py-3">Repay Now</button>
+      <NavLink className="mt-auto" to="/manage/repay">
+        <button className="bg-damtranspgray rounded-none w-full text-yellow-200 py-3">Repay Now</button>
+      </NavLink>
     </div>
   )
 }

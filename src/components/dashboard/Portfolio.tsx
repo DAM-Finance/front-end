@@ -1,4 +1,5 @@
 import { FC, useContext } from 'react'
+import { NavLink } from 'react-router-dom'
 import utils from '../../constants/utils'
 import { StateContext } from '../common/State/State'
 
@@ -19,10 +20,12 @@ const Portfolio: FC = () => {
         </div>
         <div className="text-gray-500">dPRIME is a cross-chain portfolio backed stablecoin for Dotsama</div>
         <div className="flex gap-4">
-          <button className="flex items-center gap-2 rounded-full py-2 px-6 bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
-            <img src={borrowIcon} alt="Burrow icon" />
-            <span>Borrow</span>
-          </button>
+          <NavLink to="manage/borrow">
+            <button className="flex items-center gap-2 rounded-full py-2 px-6 bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
+              <img src={borrowIcon} alt="Burrow icon" />
+              <span>Borrow</span>
+            </button>
+          </NavLink>
           <button className="rounded-full py-1 px-6 bg-yellow-400 bg-opacity-5 text-yellow-300 hover:bg-opacity-10">Learn More</button>
         </div>
       </div>
@@ -36,10 +39,12 @@ const Portfolio: FC = () => {
         <div className="text-gray-400 pl-4">Portfolio Value</div>
         <div className="flex bg-damgray rounded-xl px-4 py-6">
           <div className="text-2xl">$ {portfolio?.portfolioValue?.toLocaleString()}</div>
-          <button className="flex items-center gap-2 ml-auto rounded-full py-2 px-6 bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
-            <img src={borrowIcon} alt="Burrow icon" />
-            <span>Borrow</span>
-          </button>
+          <NavLink className="ml-auto" to="manage/borrow">
+            <button className="flex items-center gap-2  rounded-full py-2 px-6 bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
+              <img src={borrowIcon} alt="Burrow icon" />
+              <span>Borrow</span>
+            </button>
+          </NavLink>
         </div>
         <div className="text-gray-400 pl-4">Your assets</div>
         <div className="flex items-center gap-4 bg-damgray rounded-xl px-4 py-6">

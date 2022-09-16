@@ -24,6 +24,7 @@ const AppRoutes: FC = () => {
           <Route path="deposit" element={<Deposit />} />
           <Route path="repay" element={<Repay />} />
           <Route path="withdraw" element={<Withdraw />} />
+          <Route index element={<Navigate to="/manage/borrow" replace />} />
         </Route>
 
         <Route path="teleport" element={<Teleport />} />
