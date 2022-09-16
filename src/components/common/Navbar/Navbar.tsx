@@ -45,7 +45,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         Dashboard
       </NavLink>
       <NavLink to="/swap" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
-        Swap
+        dPRIME Swap
       </NavLink>
       <NavLink to="/manage" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         Manage
