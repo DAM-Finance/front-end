@@ -1,8 +1,5 @@
-import { produceWithPatches } from 'immer'
-import { FC, useState } from 'react'
-import { NavLink, Outlet, Routes } from 'react-router-dom'
-import utils from '../../constants/utils'
-import AvailableInput from '../AvailableInput'
+import { FC } from 'react'
+import { NavLink, Outlet } from 'react-router-dom'
 import './Manage.css'
 // import Progress from '../common/Progress/Progress'
 
