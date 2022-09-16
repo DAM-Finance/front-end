@@ -1,0 +1,4 @@
+.manage-navbar.active > button {
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
+  color: rgb(253 224 71 / var(--tw-text-opacity));
+}

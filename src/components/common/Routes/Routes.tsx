@@ -1,5 +1,9 @@
 import { FC } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
+import Borrow from '../../manage/Borrow'
+import Deposit from '../../manage/Deposit'
+import Repay from '../../manage/Repay'
+import Withdraw from '../../manage/Withdraw'
 import Earn from '../../pages/Earn'
 import Manage from '../../pages/Manage'
 import Swap from '../../pages/Swap'
@@ -14,7 +18,14 @@ const AppRoutes: FC = () => {
       <Routes>
         <Route path="" element={<Dashboard />} />
         <Route path="swap" element={<Swap />} />
-        <Route path="manage" element={<Manage />} />
+
+        <Route path="manage" element={<Manage />}>
+          <Route path="borrow" element={<Borrow />} />
+          <Route path="deposit" element={<Deposit />} />
+          <Route path="repay" element={<Repay />} />
+          <Route path="withdraw" element={<Withdraw />} />
+        </Route>
+
         <Route path="teleport" element={<Teleport />} />
         <Route path="earn" element={<Earn />} />
         <Route path="not-found" element={<NotFound />} />
