@@ -7,15 +7,15 @@ const Cushion: FC<Partial<IPortfolio>> = (props) => {
 
   return (
     <div className="flex flex-col bg-damgray rounded-xl overflow-hidden" style={{ opacity: isDisabled ? '0.2' : '1' }}>
-      <div className="flex flex-col p-6 gap-2 pb-16">
+      <div className="flex flex-col p-6 gap-2">
         <div className="text-damlabelgray">Cushion</div>
         {isDisabled ? (
           <div className="text-3xl">N/A</div>
         ) : (
-          <>
-            <div className="text-3xl text-orange-300">{props.cushion}%</div>
-            <div className="text-xs text-orange-300">High Risk of Liquidation</div>
-          </>
+          <div>
+            <div className="text-3xl text-damorange">{props.cushion}%</div>
+            <div className="text-xs text-damorange">High Risk of Liquidation</div>
+          </div>
         )}
       </div>
       <NavLink className="mt-auto" to="/manage/repay">

@@ -20,11 +20,11 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
         <div className="text-gray-500">dPRIME is a cross-chain portfolio backed stablecoin for Dotsama</div>
         <div className="flex gap-4">
           <NavLink to="/swap">
-            <button className="flex font-bold items-center gap-2 rounded-full py-2 px-6 bg-yellow-300 text-damgray hover:bg-yellow-200">
+            <button className="flex font-bold items-center gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200">
               <span>Swap for dPRIME</span>
             </button>
           </NavLink>
-          <button className="rounded-full py-1 px-6 bg-damyellowgradient text-damyellow">Learn More</button>
+          <button className="rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">Learn More</button>
         </div>
       </div>
       <img src={portfolioImg} alt="Portfolio" />
@@ -33,21 +33,24 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
 
   if (portfolio.hasOwnProperty('portfolioValue')) {
     portfolioPage = (
-      <div className="flex flex-col w-full gap-2">
-        <div className="text-gray-400 pl-4">Portfolio Value</div>
-        <div className="flex bg-damgray rounded-xl px-4 py-6">
-          <div className="text-2xl">$ {portfolio?.portfolioValue?.toLocaleString()}</div>
-          <NavLink className="ml-auto" to="manage/borrow">
-            <button className="flex items-center gap-2  rounded-full py-2 px-6 bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
-              <img src={borrowIcon} alt="Burrow icon" />
-              <span>Borrow</span>
-            </button>
-          </NavLink>
+      <div className="flex flex-col w-full gap-8">
+        <div className="flex flex-col gap-2">
+          <div className="text-gray-400 pl-4">Portfolio Value</div>
+          <div className="flex bg-damgray rounded-xl px-4 py-6">
+            <div className="text-4xl">$ {portfolio?.portfolioValue?.toLocaleString()}</div>
+            <NavLink className="ml-auto" to="manage/borrow">
+              <button className="flex items-center gap-2  rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
+                <span>Borrow dPRIME</span>
+              </button>
+            </NavLink>
+          </div>
         </div>
-        <div className="text-gray-400 pl-4">Your assets</div>
-        <div className="flex items-center gap-4 bg-damgray rounded-xl px-4 py-6">
-          <img src={assetsUrl} alt="assets" />
-          <div className="text-gray-600">GLMR, EWT, ACALA and 12 others</div>
+        <div className="flex flex-col gap-2">
+          <div className="text-gray-400 pl-4">Your assets</div>
+          <div className="flex items-center gap-4 bg-damgray rounded-xl px-4 py-6">
+            <img src={assetsUrl} alt="assets" />
+            <div className="text-gray-600">GLMR, EWT, ACALA and 12 others</div>
+          </div>
         </div>
       </div>
     )
