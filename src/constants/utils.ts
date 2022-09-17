@@ -1,5 +1,8 @@
 export class Utils {
   getImageSrc(img: string) {
+    if (!img) {
+      return ''
+    }
     if (!img.startsWith('/')) {
       img = `/${img}`
     }
