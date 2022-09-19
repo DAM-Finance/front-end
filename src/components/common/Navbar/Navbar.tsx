@@ -1,19 +1,13 @@
-import React, { FunctionComponent, useContext, useEffect, useRef } from 'react'
+import { ChevronDownIcon } from '@heroicons/react/24/solid'
+import { FunctionComponent } from 'react'
 import { NavLink } from 'react-router-dom'
 import utils from '../../../constants/utils'
 import { useAppStore } from '../../../stores/appStore/appStore'
-import { EthProviderContext } from '../EthProvider/EthProviderContext'
-import { ChevronDownIcon, BeakerIcon } from '@heroicons/react/24/solid'
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = () => {
   const appStore = useAppStore()
-  const ethProviderContext = useContext(EthProviderContext)
-
-  const onClick = async () => {
-    await ethProviderContext.connectWallet()
-  }
 
   const shortenWalletAddress = (wallet: string) => {
     return `${wallet.slice(0, 5)}...${wallet.slice(-4, wallet.length)}`
@@ -22,17 +16,17 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   // Connect button
   let connectBtn = (
     <button
-      onClick={() => onClick()}
+      onClick={appStore.connectWallet}
       className="outline outline-1 px-12 py-2 rounded-full bg-transparent text-damyellow outline-damtext-damyellow hover:bg-damyellow hover:text-damgray"
     >
       Connect
     </button>
   )
 
-  if (ethProviderContext.connected) {
+  if (appStore.walletProvider.connected) {
     connectBtn = (
       <div className="flex items-center px-4 py-2 gap-2 rounded-full bg-dambackgroundgrayed text-damyellow">
-        <div>{shortenWalletAddress(ethProviderContext.accounts[0])}</div>
+        <div>{shortenWalletAddress(appStore.walletProvider.accounts[0])}</div>
         <img className="pb-1" src={utils.getImageSrc('walleticon.png')} alt="wallet" />
       </div>
     )

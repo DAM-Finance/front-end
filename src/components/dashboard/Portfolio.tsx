@@ -7,7 +7,6 @@ import { IPortfolio } from '../../features/dashboard'
 
 const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
   const portfolioImg = utils.getImageSrc('portfolio-placeholder.svg')
-  const borrowIcon = utils.getImageSrc('borrow-icon.svg')
   const assetsUrl = utils.getImageSrc('assets.svg')
 
   let portfolioPage = (

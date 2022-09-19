@@ -1,12 +1,12 @@
-import React, { FC, useContext } from 'react'
+import { FC } from 'react'
+import { useAppStore } from '../../stores/appStore/appStore'
 import Cushion from '../dashboard/Cushion'
 import DDPrime from '../dashboard/DDPrime'
 import DPrime from '../dashboard/DPrime'
 import Portfolio from '../dashboard/Portfolio'
-import { StateContext } from '../common/State/State'
 
 const Home: FC = () => {
-  const { portfolio } = useContext(StateContext)
+  const portfolio = useAppStore((state) => state.portfolio)
 
   return (
     <div className="w-full h-full flex flex-col p-24  text-white gap-4">

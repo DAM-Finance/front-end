@@ -5,22 +5,25 @@ import Routes from './components/common/Routes/Routes'
 // import { useRef } from 'react'
 import { IPortfolio } from './features/dashboard'
 import { StateContext } from './components/common/State/State'
-import { useState } from 'react'
-import EthProvider from './components/common/EthProvider/EthProvider'
+import { useEffect, useState } from 'react'
+import { useAppStore } from './stores/appStore/appStore'
 
 const App = () => {
   const [portfolio, setPortfolio] = useState<Partial<IPortfolio>>({})
+  const appStore = useAppStore()
+
+  useEffect(() => {
+    appStore.setupWallet()
+  }, [])
 
   return (
     <StateContext.Provider value={{ portfolio, setPortfolio }}>
-      <EthProvider {...{ portfolio, setPortfolio }}>
-        <div className="flex flex-col w-full h-screen bg-damdarkgray">
-          <Navbar />
-          <div className="w-full" style={{ height: 'calc(100vh - 80px)' }}>
-            <Routes />
-          </div>
+      <div className="flex flex-col w-full h-screen bg-damdarkgray">
+        <Navbar />
+        <div className="w-full" style={{ height: 'calc(100vh - 80px)' }}>
+          <Routes />
         </div>
-      </EthProvider>
+      </div>
     </StateContext.Provider>
   )
 }
