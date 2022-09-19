@@ -1,13 +1,17 @@
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useCallback } from 'react'
 import { NavLink } from 'react-router-dom'
 import utils from '../../../constants/utils'
-import { useAppStore } from '../../../stores/appStore/appStore'
+import { supportedNetworks, useAppStore } from '../../../stores/appStore/appStore'
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = () => {
   const appStore = useAppStore()
+
+  const getSelectedNetwork = useCallback(() => {
+    return supportedNetworks.find((network) => network.chainId === appStore.walletProvider.chainId)
+  }, [appStore.walletProvider.chainId])
 
   const shortenWalletAddress = (wallet: string) => {
     return `${wallet.slice(0, 5)}...${wallet.slice(-4, wallet.length)}`
@@ -59,18 +63,18 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
       <div className="flex ml-auto gap-4">
         <div className="relative">
           <div className="flex px-2 py-1 gap-2 rounded-full border-solid border-[1px] border-damyellow">
-            <img className="" width={29} height={29} src={utils.getImageSrc(appStore.selectedNetwork?.iconName as string)} alt="selected network" />
+            <img className="" width={29} height={29} src={utils.getImageSrc(getSelectedNetwork()?.iconName as string)} alt="selected network" />
             <ChevronDownIcon width={14} className="text-damyellow"></ChevronDownIcon>
           </div>
           <select
             className="absolute w-full h-full top-0 bg-transparent text-transparent outline-none"
             name="from"
             id="from"
-            value={appStore.selectedNetwork?.symbol}
-            onChange={() => {}}
+            value={appStore.walletProvider?.chainId}
+            onChange={(evt) => appStore.switchNetwork(evt.target.value)}
           >
             {appStore.supportedNetworks.map((network) => (
-              <option className="bg-damgray text-white" key={network.symbol} value={network.symbol}>
+              <option className="bg-damgray text-white" key={network.symbol} value={network.chainId}>
                 {network.name}
               </option>
             ))}

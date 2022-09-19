@@ -6,12 +6,15 @@ import { IAppStore } from './IAppStore'
 import { ISupportedNetwork } from './ISupportedNetwork'
 import { IWalletProvider } from './IWalletProvider'
 
-const supportedNetworks = [{ name: 'Ethereum', symbol: 'ETH', id: 1, iconName: 'ethneticon.png' }]
+export const supportedNetworks = [
+  { name: 'Moonbeam', symbol: 'GLMR', chainId: '0x504', id: 1284, iconName: 'moonbeamneticon.png' },
+  { name: 'Ethereum', symbol: 'ETH', chainId: '0x1', id: 1, iconName: 'ethneticon.png' }
+]
 const initialWalletProvider = {
   metamask: null,
   provider: null,
   connectedToChain: false,
-  chainId: null,
+  chainId: '',
   accounts: [],
   connected: false,
   connectWallet: async () => false
@@ -53,6 +56,8 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         }
       })
     ),
+
+  // Move to a Wallet service?
   connectWallet: async () => {
     const accounts = await get().metamask.connect(get().walletProvider.provider)
     get().setWalletProvider({ accounts } as any)
@@ -78,5 +83,11 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
 
     get().connectWallet()
+  },
+  switchNetwork: async (chainId: string) => {
+    const metamask = get().metamask
+    const provider = get().walletProvider.provider
+
+    await metamask.switchNetwork(provider, chainId)
   }
 }))

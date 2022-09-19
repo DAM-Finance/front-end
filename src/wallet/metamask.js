@@ -17,6 +17,14 @@ class Metamask {
     return chainId
   }
 
+  async switchNetwork(provider, chainId) {
+    const res = await provider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId }]
+    })
+    return res
+  }
+
   async connect(provider) {
     if (!this.isValidProvider(provider)) return []
 

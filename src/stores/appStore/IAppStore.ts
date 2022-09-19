@@ -15,4 +15,5 @@ export interface IAppStore {
   setWalletProvider: (wallet: Partial<IWalletProvider>) => void
   autoConnect: (metamaskProvider: ethers.providers.ExternalProvider) => void
   connectWallet: () => void
+  switchNetwork: (chainId: string) => void
 }
