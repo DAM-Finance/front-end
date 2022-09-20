@@ -18,6 +18,7 @@ const App = () => {
 
   useEffect(() => {
     appStore.setupWallet()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
