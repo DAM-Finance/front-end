@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { FC } from 'react'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
 

@@ -1,16 +1,20 @@
 import Navbar from './components/common/Navbar/Navbar'
 import Routes from './components/common/Routes/Routes'
-// import { useImmer } from 'use-immer'
+import WrongNetworkPop from './components/wallet/WrongNetworkPopup'
 
-// import { useRef } from 'react'
-import { IPortfolio } from './features/dashboard'
+import { useCallback, useEffect, useState } from 'react'
 import { StateContext } from './components/common/State/State'
-import { useEffect, useState } from 'react'
-import { useAppStore } from './stores/appStore/appStore'
+import { IPortfolio } from './features/dashboard'
+import { supportedNetworks, useAppStore } from './stores/appStore/appStore'
 
 const App = () => {
   const [portfolio, setPortfolio] = useState<Partial<IPortfolio>>({})
+  // const [showWrongNetwork, setShowWrongNetwork] = useState(true)
   const appStore = useAppStore()
+
+  const isSelectedNetworkSupported = useCallback(() => {
+    return !!supportedNetworks.find((network) => network.chainId === appStore.walletProvider.chainId)
+  }, [appStore.walletProvider.chainId])
 
   useEffect(() => {
     appStore.setupWallet()
@@ -24,6 +28,7 @@ const App = () => {
           <Routes />
         </div>
       </div>
+      <WrongNetworkPop show={appStore.walletProvider.connected && !isSelectedNetworkSupported()} handleClose={() => {}} />
     </StateContext.Provider>
   )
 }
