@@ -1,4 +1,4 @@
-import { ethers, utils as ethersUtils } from 'ethers'
+import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
 import utils from '../../constants/utils'
 import { INetwork } from '../../features/Network'
