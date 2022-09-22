@@ -34,7 +34,7 @@ const Teleport: FC = () => {
       setGasPrice(roundedPrice.toString())
     }
     getGasPrice()
-  }, [appStore.walletProvider?.provider])
+  }, [appStore.walletProvider?.web3Provider])
 
   return (
     <div className="flex p-4 w-full justify-center py-24">
