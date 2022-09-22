@@ -34,7 +34,7 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
     portfolioPage = (
       <div className="flex flex-col w-full gap-8">
         <div className="flex flex-col gap-2">
-          <div className="text-gray-400 pl-4">Portfolio Value</div>
+          <div className="text-gray-400 pl-4">Collateral Value</div>
           <div className="flex bg-damgray rounded-xl px-4 py-6">
             <div className="text-4xl">$ {portfolio?.portfolioValue?.toLocaleString()}</div>
             <NavLink className="ml-auto" to="manage/borrow">

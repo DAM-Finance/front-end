@@ -9,7 +9,7 @@ const Home: FC = () => {
   const portfolio = useAppStore((state) => state.portfolio)
 
   return (
-    <div className="w-full h-full flex flex-col p-24  text-white gap-4">
+    <div className="w-full h-full max-w-screen-2xl flex flex-col mx-auto p-24 text-white gap-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="col-span-2">
           <Portfolio {...portfolio}></Portfolio>
