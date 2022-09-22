@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import Progress from '../common/Progress/Progress'
+import WaitingForConfirmationPopup from '../wallet/WaitingForConfirmationPopup'
 
 // interface DDPrimeProps {}
 
@@ -11,7 +11,7 @@ const Earn: FC = () => {
       <button className="text-white bg-gray-600" onClick={() => setShowPopup(true)}>
         Show POPUP
       </button>
-      <Progress handleClose={() => setShowPopup(false)} show={showPopup}></Progress>
+      <WaitingForConfirmationPopup handleClose={() => setShowPopup(false)} show={showPopup}></WaitingForConfirmationPopup>
     </div>
   )
 }
