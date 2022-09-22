@@ -13,7 +13,7 @@ export interface IAppStore {
   setPortfolio: (data: any) => void // TODO: remove when smart contracts are called
   setupWallet: () => void
   setWalletProvider: (wallet: Partial<IWalletProvider>) => void
-  autoConnect: (metamaskProvider: ethers.providers.ExternalProvider) => void
+  autoConnect: (web3Provider: ethers.providers.Web3Provider) => void
   connectWallet: () => void
   switchNetwork: (chainId: string) => void
 }

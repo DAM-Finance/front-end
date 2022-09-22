@@ -7,6 +7,8 @@ module.exports = {
       colors: {
         damgray: '#1F212C',
         damlabelgray: '#BCBCC0',
+        damlabelgray2: '#B1B1B1',
+        damlabelgray3: '#646E82',
         damlabellightgray: '#A1A3AA',
         damdarkgray: '#151823',
         damtranspgray: 'rgba(40, 42, 52, 0.5)',

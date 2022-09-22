@@ -1,6 +1,8 @@
-import { FC, useState } from 'react'
+import { ethers, utils as ethersUtils } from 'ethers'
+import { FC, useEffect, useState } from 'react'
 import utils from '../../constants/utils'
 import { INetwork } from '../../features/Network'
+import { useAppStore } from '../../stores/appStore/appStore'
 import AvailableInput from '../AvailableInput'
 import Disclaimer from '../Disclaimer'
 import SelectNetwork from '../SelectNetwork'
@@ -16,6 +18,23 @@ const Teleport: FC = () => {
   ])
   const [originNetwork, setOriginNetwork] = useState(networks[0])
   const [destinationNetwork, setDestinationNetwork] = useState(networks[1])
+  const appStore = useAppStore()
+  const [gasPrice, setGasPrice] = useState('')
+
+  useEffect(() => {
+    const getGasPrice = async () => {
+      const web3Provider = appStore.walletProvider?.web3Provider
+      if (!web3Provider) {
+        return
+      }
+
+      const gasPrice = await web3Provider.getGasPrice()
+      const priceInGwei = ethersUtils.formatUnits(gasPrice, 'gwei')
+      const roundedPrice = Math.round(+priceInGwei * 10) / 10
+      setGasPrice(roundedPrice.toString())
+    }
+    getGasPrice()
+  }, [appStore.walletProvider?.provider])
 
   return (
     <div className="flex p-4 w-full justify-center py-24">
@@ -39,19 +58,20 @@ const Teleport: FC = () => {
           </div>
           <div className="flex flex-col gap-2">
             <div>2. Select the amount of dPRIME to teleport</div>
-            <AvailableInput amount={amount} available={available} handleChange={(value) => setAmount(value)}></AvailableInput>
+            <AvailableInput amount={amount} available={available} handleChange={(value) => setAmount(value)} gasPrice={gasPrice}></AvailableInput>
           </div>
           <div className="flex flex-col gap-3">
             <button
               className="flex items-center w-full justify-center gap-2 rounded-full py-4 px-6 text-black font-bold"
               style={{ background: 'linear-gradient(90deg, #7742CD 5.88%, #F1DD79 100%)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
+              disabled={false}
             >
               <img src={utils.getImageSrc('teleport.svg')} alt="teleport" />
               Teleport
             </button>
             <div className="flex justify-center items-center gap-2">
               <img src={utils.getImageSrc('warning.svg')} alt="" />
-              <div className="text-damlightyellow text-xs font-light">Make sure you have enough gas on the destination chain.</div>
+              <div className="text-damlightyellow text-sm font-light">Make sure you have enough gas on the destination chain.</div>
             </div>
           </div>
         </div>

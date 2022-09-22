@@ -13,6 +13,7 @@ export const supportedNetworks = [
 const initialWalletProvider = {
   metamask: null,
   provider: null,
+  web3Provider: null,
   connectedToChain: false,
   chainId: '',
   accounts: [],
@@ -65,18 +66,18 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   setupWallet: async () => {
     const provider = await get().metamask.detectProvider()
     const chainId = await get().metamask.getChainId(provider)
+    const web3Provider = new ethers.providers.Web3Provider(provider)
 
     get().metamask.subscribeEvents(provider, (data: any) => {
       get().setWalletProvider(data)
     })
 
-    const walletData = { provider, chainId, connectWallet: get().connectWallet }
+    const walletData = { provider, web3Provider, chainId, connectWallet: get().connectWallet }
     get().setWalletProvider(walletData as any)
-    get().autoConnect(provider)
+    get().autoConnect(web3Provider)
   },
-  autoConnect: async (metamaskProvider: ethers.providers.ExternalProvider) => {
-    const provider = new ethers.providers.Web3Provider(metamaskProvider)
-    const accounts = await provider.listAccounts()
+  autoConnect: async (web3Provider: ethers.providers.Web3Provider) => {
+    const accounts = await web3Provider.listAccounts()
 
     if (!accounts.length) {
       return

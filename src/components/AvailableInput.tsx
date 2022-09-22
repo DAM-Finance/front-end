@@ -1,12 +1,14 @@
 import { FC } from 'react'
+import utils from '../constants/utils'
 
 interface AvailableInputProps {
   amount?: string
   available: string
+  gasPrice?: string
   handleChange: (elem: string) => void
 }
 
-const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, handleChange }) => {
+const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasPrice, handleChange }) => {
   return (
     <div className="w-full flex flex-col gap-1">
       <div className="w-full flex text-gray-400 bg-damdarkgray border-solid border-[1px] border-damdarkgray outline-none focus:border-yellow-300 hover:border-yellow-300 rounded-2xl">
@@ -24,8 +26,14 @@ const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, hand
         </button>
       </div>
       <div className="flex gap-2 ml-4">
-        <div className="text-gray-400 ">{available}</div>
-        <div className="text-gray-600 font-light">Available dPRIME</div>
+        <div className="text-damlabelgray2 ">{available}</div>
+        <div className="text-damlabelgray3 font-light text-sm">Available dPRIME</div>
+        {gasPrice && (
+          <div className="flex items-center gap-2 ml-auto mr-4">
+            <img src={utils.getImageSrc('gaspump.svg')} alt="gas" />
+            <div className="text-sm">{gasPrice}</div>
+          </div>
+        )}
       </div>
     </div>
   )
