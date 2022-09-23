@@ -139,7 +139,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       console.log("Moonbase attach")
 
       //Only dPrime deployed moonbase
-      connectedContracts.dPrime     = new ethers.Contract(rinkeby_testnet_addresses.dPrime, dPrimeAbi, signer);
+      connectedContracts.dPrime     = new ethers.Contract(moonbase_addresses.dPrime, dPrimeAbi, signer);
 
     }else {
       console.log("LMCV Not implemented yet");
