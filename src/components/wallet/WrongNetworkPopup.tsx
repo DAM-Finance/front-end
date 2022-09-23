@@ -13,7 +13,7 @@ const WrongNetworkPop: FC<WrongNetworkPopupProps> = ({ show, handleClose }) => {
   return (
     <>
       {show && (
-        <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-dambackgroundgrayed">
+        <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
           <div className="fixed bg-damgray flex flex-col items-center p-8 gap-4 rounded-xl text-white">
             <div className="font-light text-2xl">Wrong Network</div>
             <div className="text-sm font-light text-damlabelgray">

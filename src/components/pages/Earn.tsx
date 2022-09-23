@@ -1,17 +1,23 @@
 import { FC, useState } from 'react'
+import TermsAndConditionsPopup from '../wallet/TermsAndConditionsPopup'
 import WaitingForConfirmationPopup from '../wallet/WaitingForConfirmationPopup'
 
 // interface DDPrimeProps {}
 
 const Earn: FC = () => {
   const [showPopup, setShowPopup] = useState(false)
+  const [showTCsPopup, setShowTCsPopup] = useState(false)
 
   return (
-    <div className="lg:px-96 px-12 py-24">
+    <div className="flex lg:px-96 px-12 py-24 gap-16">
       <button className="text-white bg-gray-600" onClick={() => setShowPopup(true)}>
         Show POPUP
       </button>
+      <button className="text-white bg-gray-600" onClick={() => setShowTCsPopup(true)}>
+        Show TCs
+      </button>
       <WaitingForConfirmationPopup handleClose={() => setShowPopup(false)} show={showPopup}></WaitingForConfirmationPopup>
+      <TermsAndConditionsPopup handleClose={() => setShowTCsPopup(false)} show={showTCsPopup}></TermsAndConditionsPopup>
     </div>
   )
 }

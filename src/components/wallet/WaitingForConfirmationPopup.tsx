@@ -10,7 +10,7 @@ const WaitingForConfirmationPopup: FC<WaitingForConfirmationPopupProps> = ({ sho
   return (
     <>
       {show && (
-        <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-dambackgroundgrayed">
+        <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
           <div className="fixed bg-damgray flex flex-col items-center p-16 gap-2 rounded-xl text-white">
             <img width="128" src={utils.getImageSrc('progress.svg')} alt="progress animation" />
             <div className="font-light text-2xl">Waiting for your confirmation</div>

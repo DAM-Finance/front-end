@@ -11,6 +11,7 @@ module.exports = {
         damlabelgray3: '#646E82',
         damlabellightgray: '#A1A3AA',
         damdarkgray: '#151823',
+        damtranspdarkgray: 'rgba(21, 24, 35, 0.8)',
         damtranspgray: 'rgba(40, 42, 52, 0.5)',
         damNavGray: 'rgba(255, 255, 255, 0.7)',
         damnavygreen: 'rgba(134, 253, 217, 0.1)',
