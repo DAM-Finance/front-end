@@ -18,4 +18,6 @@ export interface IAppStore {
   switchNetwork: (chainId: string) => void
   teleport:  (dPrimeAmount: string, dstChainName: string) => void
   attachContracts:  (web3Provider: ethers.providers.Web3Provider) => void
+  getDPrimeBalance: () => Promise<number>
+  getUSDCBalance: () => Promise<number>
 }

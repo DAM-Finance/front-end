@@ -93,7 +93,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     initialWalletProvider.web3Provider = web3Provider;
     initialWalletProvider.accounts = await web3Provider.listAccounts();
 
-
     get().metamask.subscribeEvents(provider, (data: any) => {
       get().setWalletProvider(data)
     })
@@ -161,61 +160,40 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       dstChainId = LayerZeroChainIds.rinkeby_testnet;
     }
 
-    if(networkInfo.chainId == rinkeby_testnet_id){
-      console.log("Teleport from Rinkeby")
+    console.log("Teleport from Rinkeby")
 
-      console.log(dstChainName)
-      console.log(dPrimeAmount)
-      console.log(dstChainId)
+    console.log(dstChainName)
+    console.log(dPrimeAmount)
+    console.log(dstChainId)
 
-      teleportFee = await connectedContracts.dPrime.estimateSendFee(
-        dstChainId,
-        accounts[0],
-        fwad(dPrimeAmount), //Convert from decimal number (type: string still) into 18 dec amount
-        false,
-        []
-      );
-
-      await connectedContracts.dPrime.sendFrom(
-        accounts[0],                      //address _from, 
-        dstChainId,                       //uint16 _dstChainId,
-        accounts[0],                      //bytes memory _toAddress,
-        fwad(dPrimeAmount),               //uint _amount, 
-        accounts[0],                      //address payable _refundAddress, 
-        accounts[0],                      //address _zroPaymentAddress, 
-        [],                               //bytes memory _adapterParams
-        {value: teleportFee.nativeFee}
+    teleportFee = await connectedContracts.dPrime.estimateSendFee(
+      dstChainId,
+      accounts[0],
+      fwad(dPrimeAmount), //Convert from decimal number (type: string still) into 18 dec amount
+      false,
+      []
     );
 
-    console.log(teleportFee);
-
-    }else if(networkInfo.chainId == moonbase_testnet_id){
-      console.log("Teleport from Moonbase");
-
-      teleportFee = await connectedContracts.dPrime.estimateSendFee(
-        dstChainId,
-        accounts[0],
-        fwad(dPrimeAmount),
-        false,
-        []
-      );
-
-      await connectedContracts.dPrime.sendFrom(
-        accounts[0],                      //address _from, 
-        dstChainId,                       //uint16 _dstChainId, 
-        accounts[0],                      //bytes memory _toAddress, 
-        fwad(dPrimeAmount),               //uint _amount, 
-        accounts[0],                      //address payable _refundAddress, 
-        accounts[0],                      //address _zroPaymentAddress, 
-        [],                               //bytes memory _adapterParams
-        {value: teleportFee.nativeFee}
+    await connectedContracts.dPrime.sendFrom(
+      accounts[0],                      //address _from, 
+      dstChainId,                       //uint16 _dstChainId,
+      accounts[0],                      //bytes memory _toAddress,
+      fwad(dPrimeAmount),               //uint _amount, 
+      accounts[0],                      //address payable _refundAddress, 
+      accounts[0],                      //address _zroPaymentAddress, 
+      [],                               //bytes memory _adapterParams
+      {value: teleportFee.nativeFee}
     );
-
-    }else {
-      console.log("No ChainId");
-    }
   },
-  getBalance: async () => {
+  getDPrimeBalance: async (): Promise<number> => {
+    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    const accounts = await web3Provider.listAccounts()
+    return await connectedContracts.dPrime.balanceOf(accounts[0])
+  },
+  getUSDCBalance: async (): Promise<number> => {
+    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    const accounts = await web3Provider.listAccounts()
+    return await connectedContracts.usdc.balanceOf(accounts[0])
   }
 
 }))
