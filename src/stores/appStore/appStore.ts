@@ -22,6 +22,7 @@ export const supportedNetworks = [
 ]
 
 function fwad(wad: string) { return ethers.utils.parseEther(wad) }
+function pwad(wad: string) { return ethers.utils.formatUnits(wad, 18) }
 
 const initialWalletProvider = {
   metamask: null,
@@ -85,7 +86,8 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const chainId = await get().metamask.getChainId(provider)
     const web3Provider = new ethers.providers.Web3Provider(provider)
 
-    
+    initialWalletProvider.web3Provider = web3Provider;
+    initialWalletProvider.accounts = await web3Provider.listAccounts();
 
 
     get().metamask.subscribeEvents(provider, (data: any) => {
@@ -110,6 +112,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const provider = get().walletProvider.provider
 
     await metamask.switchNetwork(provider, chainId)
+    console.log();
   },
   attachDPrime: async (web3Provider: ethers.providers.Web3Provider) => {
 
@@ -120,21 +123,36 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const accounts = await web3Provider.listAccounts()
 
     if(networkInfo.chainId == rinkeby_testnet_id){
-      console.log("Connected dPrime to Rinkeby");
-      dPrimeContract = new ethers.Contract(rinkeby_testnet_addresses.dPrime, dPrimeAbi, web3Provider);
-      balance = await dPrimeContract.balanceOf(accounts[0]);
+      console.log("Connected dPrime to Rinkeby")
+
+      const signer = web3Provider.getSigner();
+      dPrimeContract = new ethers.Contract(rinkeby_testnet_addresses.dPrime, dPrimeAbi, signer)
+      balance = await dPrimeContract.balanceOf(accounts[0])
 
       teleportFee = await dPrimeContract.estimateSendFee(
         LayerZeroChainIds.rinkeby_testnet,
         accounts[0],
-        fwad("10"),
+        fwad("2"),
         false,
         []
       );
 
+      await dPrimeContract.sendFrom(
+        accounts[0],                      //address _from, 
+        LayerZeroChainIds.moonbase,       //uint16 _dstChainId, 
+        accounts[0],                      //bytes memory _toAddress, 
+        fwad("2"),                        //uint _amount, 
+        accounts[0],                      //address payable _refundAddress, 
+        accounts[0],                      //address _zroPaymentAddress, 
+        [],                               //bytes memory _adapterParams
+        {value: teleportFee.nativeFee}
+    );
+
     }else if(networkInfo.chainId == moonbase_testnet_id){
-      console.log("Connected dPrime to MOONBASE");
-      dPrimeContract = new ethers.Contract(moonbase_addresses.dPrime, dPrimeAbi, web3Provider);
+      console.log("Connected dPrime to Moonbase");
+
+      const signer = web3Provider.getSigner();
+      dPrimeContract = new ethers.Contract(moonbase_addresses.dPrime, dPrimeAbi, signer);
       balance = await dPrimeContract.balanceOf(accounts[0]);
       
       teleportFee = await dPrimeContract.estimateSendFee(
@@ -149,8 +167,9 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       console.log("No ChainId");
     }
 
-    console.log(balance.div("1000000000000000000").toString());
-    console.log(teleportFee.nativeFee.toString());
+    console.log(pwad(balance));
+    console.log(pwad(teleportFee.nativeFee));
 
-  }
+  },
+
 }))
