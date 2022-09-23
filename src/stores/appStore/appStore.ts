@@ -17,6 +17,7 @@ import CollateralJoinDecAbi from '../../constants/abis/CollateralJoinDecimals.js
 import PSMAbi from '../../constants/abis/PSM.json'
 import ERC20Abi from '../../constants/abis/ERC20.json'
 import { Console } from 'console'
+import { IBalances } from './IBalances'
 
 
 export const supportedNetworks = [
@@ -27,7 +28,9 @@ export const supportedNetworks = [
 ]
 
 function fwad(wad: string) { return ethers.utils.parseEther(wad) }
-function pwad(wad: string) { return ethers.utils.formatUnits(wad, 18) }
+function fusdc(wad: string){ return ethers.utils.parseEther(wad).div("1000000000000")}
+//BYTES
+let USDCBytes = ethers.utils.formatBytes32String("PSM-USDC");
 
 const initialWalletProvider = {
   metamask: null,
@@ -40,8 +43,9 @@ const initialWalletProvider = {
   connectWallet: async () => false
 } as IWalletProvider
 
-const connectedContracts = {} as IContractInstances
 
+const connectedContracts = {} as IContractInstances
+const initBalances = {} as IBalances
 
 export const useAppStore = create<IAppStore>((set, get) => ({
   supportedNetworks,
@@ -49,6 +53,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   walletProvider: initialWalletProvider,
   metamask: new Metamask(),
   portfolio: null,
+  balances: initBalances,
   setSelectedNetwork: (network: ISupportedNetwork) =>
     set(
       produce((state: IAppStore) => {
@@ -160,8 +165,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       dstChainId = LayerZeroChainIds.rinkeby_testnet;
     }
 
-    console.log("Teleport from Rinkeby")
-
     console.log(dstChainName)
     console.log(dPrimeAmount)
     console.log(dstChainId)
@@ -185,15 +188,47 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       {value: teleportFee.nativeFee}
     );
   },
-  getDPrimeBalance: async (): Promise<number> => {
+  //Not working
+  getDPrimeBalance: async () => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
     const accounts = await web3Provider.listAccounts()
-    return await connectedContracts.dPrime.balanceOf(accounts[0])
+    
+    initBalances.dPrime = await connectedContracts.dPrime.balanceOf(accounts[0])
+    console.log(initBalances.dPrime)
   },
-  getUSDCBalance: async (): Promise<number> => {
+  //Not working
+  getUSDCBalance: async () => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
     const accounts = await web3Provider.listAccounts()
-    return await connectedContracts.usdc.balanceOf(accounts[0])
+    console.log(connectedContracts.usdc);
+    initBalances.usdc = await connectedContracts.usdc.balanceOf(accounts[0])
+    console.log(initBalances.usdc)
+  },
+  stableSwap: async (amount: string) => {
+    if(amount == "0"){
+      return
+    }
+    let formattedAmount = fusdc(amount).toString();
+    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    const accounts = await web3Provider.listAccounts()
+
+    console.log(connectedContracts.usdc.address);
+    const allowance = await connectedContracts.usdc.allowance(accounts[0], rinkeby_testnet_addresses.USDCJoin)
+
+    if(allowance < formattedAmount){
+      console.log("Allowance: " + allowance)
+      get().approveUSDC(formattedAmount)
+    }
+    console.log("Amount: " + formattedAmount);
+
+    await connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
+
+  },
+  approveUSDC: async (amount: string) => {
+    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    const accounts = await web3Provider.listAccounts()
+
+    await connectedContracts.usdc.approve(rinkeby_testnet_addresses.USDCJoin, amount);
   }
 
 }))

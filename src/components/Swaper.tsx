@@ -1,5 +1,6 @@
 import { FC, useState } from 'react'
 import utils from '../constants/utils'
+import { useAppStore } from '../stores/appStore/appStore'
 import SwaperInput from './SwaperInput'
 import SwaperInputList from './SwaperInputList'
 
@@ -15,6 +16,7 @@ const Swaper: FC = () => {
   const [secondCoin, setSecondCoin] = useState('0')
   const [selectedStableCoin, setSelectedStableCoin] = useState(stableCoins[0])
   const [isInverted, setIsInverted] = useState(false)
+  const appStore = useAppStore()
 
   let swaperFirstElement = (
     <SwaperInputList
@@ -33,6 +35,11 @@ const Swaper: FC = () => {
     swaperFirstElement = temp
   }
 
+  function swapIt(amount: string){
+    //Change to make this accept multiple types when more PSM are deployed
+    appStore.stableSwap(amount);
+  }
+
   return (
     <div className="flex flex-col items-center gap-4 bg-damgray rounded-2xl p-6">
       {swaperFirstElement}
@@ -43,7 +50,9 @@ const Swaper: FC = () => {
 
       {swaperSecondElement}
 
-      <button className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
+      <button
+        onClick = {() => swapIt(firstCoin)}
+        className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
         <span>Swap</span>
       </button>
     </div>
