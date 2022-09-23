@@ -21,5 +21,5 @@ export interface IAppStore {
   teleport:  (dPrimeAmount: string, dstChainName: string) => void
   attachContracts:  (web3Provider: ethers.providers.Web3Provider) => void
   stableSwap:  (amount: string) => void
-  approveUSDC:  (amount: string) => void
+  approveUSDC:  (amount: string) => any
 }

@@ -217,18 +217,25 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     if(allowance < formattedAmount){
       console.log("Allowance: " + allowance)
-      get().approveUSDC(formattedAmount)
+      get().approveUSDC(formattedAmount).then((data: any) =>{
+        connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
+      });
+    }else{
+      await connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
     }
     console.log("Amount: " + formattedAmount);
 
-    await connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
+   
 
   },
   approveUSDC: async (amount: string) => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
     const accounts = await web3Provider.listAccounts()
 
-    await connectedContracts.usdc.approve(rinkeby_testnet_addresses.USDCJoin, amount);
+    let res = await connectedContracts.usdc.approve(rinkeby_testnet_addresses.USDCJoin, amount);
+    let txComplete = await res.wait()
+    console.log(txComplete)
+    return txComplete
   }
 
 }))
