@@ -52,44 +52,6 @@
           "internalType": "address",
           "name": "usr",
           "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "wad",
-          "type": "uint256"
-        }
-      ],
-      "name": "Exit",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "usr",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "wad",
-          "type": "uint256"
-        }
-      ],
-      "name": "Join",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "usr",
-          "type": "address"
         }
       ],
       "name": "Rely",
@@ -129,6 +91,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "dec",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "address",
@@ -145,7 +120,7 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "usr",
+          "name": "guy",
           "type": "address"
         },
         {
@@ -163,13 +138,18 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "usr",
+          "name": "urn",
           "type": "address"
         },
         {
           "internalType": "uint256",
           "name": "wad",
           "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_msgSender",
+          "type": "address"
         }
       ],
       "name": "join",
@@ -214,24 +194,6 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "usr",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "wad",
-          "type": "uint256"
-        }
-      ],
-      "name": "proxyExit",
-      "outputs": [],
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {

@@ -1,16 +1,39 @@
-export const dPrime = "0xf39E86ea5e491339A240120768827e1A1A32a4e1";
-export const lmcv = "0x7B1960Fb005AC409466070f52d8de4143f915a04";
-export const dPrimeJoin = "0xEf75f6E9733384395DdAC1a265977fE6B03C22A8";
-export const LMCVProxy = "0xa2CEa9B8F6Af2d2e20B4dDB66De67cCB98EA5E3c";
-
-
-export const foo = "0xDaf0C8585d57eADBAC974b4dcF6AEE5862FF3d31";
-export const bar = "0x8bE2b54A86ADd13b141c778Fd785653A5a381d3E";
-export const baz = "0xa28905518a893A085a41Ab24dbcb405E5C2AF05c";
-export const fooJoin = "0xE2591840A843C93499B91176C3BDd627483C5165";
-export const barJoin = "0x3cFEA900fd462607CCf32EBA83a780973d9C2F66";
-export const bazJoin = "0xbb2EbebC17CAf0cD430965912632615aF9611273";
-
-
 // export const rpcUrl ="https://rpc.api.moonbase.moonbeam.network";
-export const rpcUrl ="http://127.0.0.1:8545";
+export const rpcUrl = "http://127.0.0.1:8545";
+
+//chain ids
+export const bnb_testnet_id         = 97;
+export const rinkeby_testnet_id     = 4;
+export const moonbase_testnet_id    = 1287;
+
+export const bnb_testnet_addresses = {
+    "dPrime"        : "0xf209894986d921b2868821E728eFa57145Fed3f7",
+    "lzEndpoint"    : "0x6Fcb97553D41516Cb228ac03FdC8B9a0a9df04A1"
+};
+
+export const rinkeby_testnet_addresses = {
+    "dPrime"        : "0x75396167802c8719A85571c37240c3E16B2007c2",
+    "dPrimeJoin"    : "0xbB5F842c2EFB6CfED9dE45b49f4f34E987b52C63",
+    "LMCV"          : "0x6CD5fA2262bCD92b0644289A04B9fa6a8342CB37",
+    "LMCVProxy"     : "0xE26182845FCC2732771B4A7b1eCC947B5f724965",
+    "USDCJoin"      : "0xf209894986d921b2868821E728eFa57145Fed3f7", //DEC COLLAT JOIN
+    "USDCPSM"       : "0xa2CEa9B8F6Af2d2e20B4dDB66De67cCB98EA5E3c",
+    "USDC"          : "0xeb8f08a975Ab53E34D8a0330E0D34de942C95926",
+    "WETH"          : "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+    "WETHJoin"      : "0x3685328d43EC3F5F3efD3c61E05cDdD037aab949",
+    "LINK"          : "0x01BE23585060835E02B77ef475b0Cc51aA1e0709",
+    "LINKJoin"      : "0xbb2EbebC17CAf0cD430965912632615aF9611273",
+    "lzEndpoint"    : "0x79a63d6d8BBD5c6dfc774dA79bCcD948EAcb53FA",
+}
+
+export const moonbase_addresses = {
+    "dPrime"        : "0x95D8E71E2E31fB3B99aD398745856AEAbE2cf3ac",
+    "lzEndpoint"    : "0xb23b28012ee92E8dE39DEb57Af31722223034747",
+}
+
+//DIFFERENT TO ACTUAL EVM CHAIN IDS
+export const LayerZeroChainIds = {
+    "rinkeby_testnet"   : "10001",
+    "bnb_testnet"       : "10002",
+    "moonbase"          : "10026"
+}

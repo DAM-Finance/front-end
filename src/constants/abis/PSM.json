@@ -3,22 +3,17 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "lmcv_",
+          "name": "collateralJoin_",
           "type": "address"
         },
         {
           "internalType": "address",
-          "name": "_lmcvProxy",
+          "name": "dPrimeJoin_",
           "type": "address"
         },
         {
-          "internalType": "bytes32",
-          "name": "collateralName_",
-          "type": "bytes32"
-        },
-        {
           "internalType": "address",
-          "name": "collateralContract_",
+          "name": "treasury_",
           "type": "address"
         }
       ],
@@ -27,17 +22,11 @@
     },
     {
       "anonymous": false,
-      "inputs": [],
-      "name": "Cage",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
+          "indexed": false,
           "internalType": "address",
-          "name": "usr",
+          "name": "user",
           "type": "address"
         }
       ],
@@ -48,47 +37,28 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "usr",
-          "type": "address"
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "MintRay",
+          "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "wad",
+          "name": "RepayRay",
           "type": "uint256"
         }
       ],
-      "name": "Exit",
+      "name": "MintRepayFee",
       "type": "event"
     },
     {
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "usr",
-          "type": "address"
-        },
-        {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "wad",
-          "type": "uint256"
-        }
-      ],
-      "name": "Join",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
           "internalType": "address",
-          "name": "usr",
+          "name": "user",
           "type": "address"
         }
       ],
@@ -96,18 +66,24 @@
       "type": "event"
     },
     {
-      "inputs": [],
-      "name": "cage",
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "usr",
+          "type": "address"
+        }
+      ],
+      "name": "approve",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "collateralContract",
+      "name": "collateralJoin",
       "outputs": [
         {
-          "internalType": "contract CollateralLike",
+          "internalType": "contract CollateralJoinLike",
           "name": "",
           "type": "address"
         }
@@ -134,6 +110,55 @@
           "internalType": "address",
           "name": "usr",
           "type": "address"
+        },
+        {
+          "internalType": "bytes32[]",
+          "name": "collateral",
+          "type": "bytes32[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "collatAmount",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "createDPrime",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dPrime",
+      "outputs": [
+        {
+          "internalType": "contract dPrimeLike",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dPrimeJoin",
+      "outputs": [
+        {
+          "internalType": "contract dPrimeJoinLike",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "usr",
+          "type": "address"
         }
       ],
       "name": "deny",
@@ -147,14 +172,9 @@
           "internalType": "address",
           "name": "usr",
           "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "wad",
-          "type": "uint256"
         }
       ],
-      "name": "exit",
+      "name": "disapprove",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -167,27 +187,19 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
-          "name": "wad",
-          "type": "uint256"
+          "internalType": "bytes32[]",
+          "name": "collateral",
+          "type": "bytes32[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "collatAmount",
+          "type": "uint256[]"
         }
       ],
-      "name": "join",
+      "name": "getCollateral",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "live",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -204,37 +216,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "lmcvProxy",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "usr",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "wad",
-          "type": "uint256"
-        }
-      ],
-      "name": "proxyExit",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
@@ -245,6 +226,37 @@
       "name": "rely",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "mintRay",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "repayRay",
+          "type": "uint256"
+        }
+      ],
+      "name": "setMintRepayFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "treasury",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
