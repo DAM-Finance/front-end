@@ -58,7 +58,22 @@ const Teleport: FC = () => {
           </div>
           <div className="flex flex-col gap-2">
             <div>2. Select the amount of dPRIME to teleport</div>
-            <AvailableInput amount={amount} available={available} handleChange={(value) => setAmount(value)} gasPrice={gasPrice}></AvailableInput>
+            <AvailableInput amount={amount} available={available} gasPrice={gasPrice} handleChange={(value) => setAmount(value)}>
+              <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
+                <div className="flex">
+                  <div>Expected Output</div>
+                  <div className="ml-auto">{amount} dPRIME</div>
+                </div>
+                <div className="flex">
+                  <div>Teleport Fee</div>
+                  <div className="ml-auto">0 dPRIME</div>
+                </div>
+                <div className="flex">
+                  <div>Gas fee</div>
+                  <div className="ml-auto">$0</div>
+                </div>
+              </div>
+            </AvailableInput>
           </div>
           <div className="flex flex-col gap-3">
             <button

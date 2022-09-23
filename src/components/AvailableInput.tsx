@@ -1,14 +1,18 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import utils from '../constants/utils'
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
 
 interface AvailableInputProps {
   amount?: string
   available: string
   gasPrice?: string
+  children?: any
   handleChange: (elem: string) => void
 }
 
-const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasPrice, handleChange }) => {
+const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasPrice, handleChange, children }) => {
+  const [showFees, setShowFees] = useState(false)
+  const toogleShowFees = () => setShowFees(!showFees)
   return (
     <div className="w-full flex flex-col gap-1">
       <div className="w-full flex text-gray-400 bg-damdarkgray border-solid border-[1px] border-damdarkgray outline-none focus:border-yellow-300 hover:border-yellow-300 rounded-2xl">
@@ -29,12 +33,14 @@ const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasP
         <div className="text-damlabelgray2 ">{available}</div>
         <div className="text-damlabelgray3 font-light text-sm">Available dPRIME</div>
         {gasPrice && (
-          <div className="flex items-center gap-2 ml-auto mr-4">
+          <div onClick={toogleShowFees} className="flex items-center gap-2 ml-auto mr-4 cursor-pointer text-damlabelgray2 hover:text-damNavGray">
             <img src={utils.getImageSrc('gaspump.svg')} alt="gas" />
             <div className="text-sm">{gasPrice}</div>
+            {showFees ? <ChevronUpIcon width={16}></ChevronUpIcon> : <ChevronDownIcon width={16}></ChevronDownIcon>}
           </div>
         )}
       </div>
+      {showFees && <div className="p-4 bg-damtranspdarkgray rounded-2xl">{children}</div>}
     </div>
   )
 }
