@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import SwaperBalance from './SwaperBalance'
 
 interface SwaperInputListProps {
   value?: string
@@ -29,7 +28,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
           value={value}
           onChange={(ev) => handleChange(ev.target.value)}
           type="text"
-          className="bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
+          className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
         />
         <div className="flex mx-4 my-2 px-2 ml-auto bg-damgray rounded-3xl">
           <img className="py-2 pr-1" src={selectedCoin.icon} width={46} alt="selected coin" />
