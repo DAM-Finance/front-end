@@ -148,6 +148,11 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }else {
       console.log("LMCV Not implemented yet");
     }
+
+    get().getDPrimeBalance()
+    if(networkInfo.chainId == rinkeby_testnet_id) {
+      get().getUSDCBalance()
+    }
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
 
@@ -190,19 +195,27 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   //Not working
   getDPrimeBalance: async () => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider(), 'any')
     const accounts = await web3Provider.listAccounts()
-    
-    initBalances.dPrime = await connectedContracts.dPrime.balanceOf(accounts[0])
-    console.log(initBalances.dPrime)
+    let balance = await connectedContracts.dPrime.balanceOf(accounts[0])
+    console.log("dPRIME: ", balance)
+    set(
+      produce((state: IAppStore) => {
+        state.balances.dPrime = balance
+      })
+    )
   },
   //Not working
   getUSDCBalance: async () => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider(), 'any')
     const accounts = await web3Provider.listAccounts()
-    console.log(connectedContracts.usdc);
-    initBalances.usdc = await connectedContracts.usdc.balanceOf(accounts[0])
-    console.log(initBalances.usdc)
+    let balance  = await connectedContracts.usdc.balanceOf(accounts[0])
+    console.log("USDC: ", balance)
+    set(
+      produce((state: IAppStore) => {
+        state.balances.usdc = balance
+      })
+    )
   },
   stableSwap: async (amount: string) => {
     if(amount == "0"){

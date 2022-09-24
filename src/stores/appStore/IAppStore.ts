@@ -18,8 +18,10 @@ export interface IAppStore {
   autoConnect: (web3Provider: ethers.providers.Web3Provider) => void
   connectWallet: () => void
   switchNetwork: (chainId: string) => void
-  teleport:  (dPrimeAmount: string, dstChainName: string) => void
-  attachContracts:  (web3Provider: ethers.providers.Web3Provider) => void
-  stableSwap:  (amount: string) => void
-  approveUSDC:  (amount: string) => any
+  attachContracts: (web3Provider: ethers.providers.Web3Provider) => void
+  getDPrimeBalance: () => void
+  getUSDCBalance: () => void
+  stableSwap: (amount: string) => void
+  approveUSDC: (amount: string) => any
+  teleport: (dPrimeAmount: string, dstChainName: string) => void
 }
