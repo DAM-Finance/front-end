@@ -5,13 +5,18 @@ interface SwaperInputProps {
   value?: string
   coin: string
   balance?: string
+  minHeight?: string
+  children?: any
   handleChange: (elem: string) => void
 }
 
-const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, balance, handleChange }) => {
+const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, balance, handleChange, minHeight = '', children = <></> }) => {
   return (
     <div className="w-full flex flex-col gap-1">
-      <div className="w-full flex text-gray-400 bg-damdarkgray border-solid border-[1px] border-damdarkgray outline-none focus:border-yellow-300 hover:border-yellow-300 rounded-2xl">
+      <div
+        className="w-full flex text-gray-400 bg-damdarkgray border-solid border-[1px] border-damdarkgray outline-none focus:border-yellow-300 hover:border-yellow-300 rounded-2xl"
+        style={{ minHeight: minHeight ? minHeight : '' }}
+      >
         <input
           value={value}
           onChange={(ev) => handleChange(ev.target.value)}
@@ -20,9 +25,7 @@ const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, balance, handleCha
         />
         <div className="flex items-center pr-4 text-2xl">{coin}</div>
       </div>
-      <div className="ml-auto">
-        <SwaperBalance value={balance || ''}></SwaperBalance>
-      </div>
+      <div className="ml-auto">{children}</div>
     </div>
   )
 }

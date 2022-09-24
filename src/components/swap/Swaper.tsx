@@ -1,5 +1,6 @@
 import { FC, useState } from 'react'
-import utils from '../constants/utils'
+import utils from '../../constants/utils'
+import SwaperBalance from './SwaperBalance'
 import SwaperInput from './SwaperInput'
 import SwaperInputList from './SwaperInputList'
 
@@ -16,23 +17,36 @@ const Swaper: FC = () => {
   const [selectedStableCoin, setSelectedStableCoin] = useState(stableCoins[0])
   const [isInverted, setIsInverted] = useState(false)
 
-  let swaperFirstElement = (
-    <SwaperInputList
-      value={firstCoin}
-      coins={stableCoins}
-      selectedCoin={selectedStableCoin}
-      handleChange={(value) => setFirstCoin(value)}
-      handleListChange={(coin) => setSelectedStableCoin(coin)}
-    ></SwaperInputList>
-  )
-  let swaperSecondElement = <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} balance="0.0"></SwaperInput>
+  const generateComponent = (isFirstInput = true) => {
+    let balanceComponent = <SwaperBalance value={selectedStableCoin.balance} coin={selectedStableCoin.name}></SwaperBalance>
+    if (!isFirstInput) {
+      balanceComponent = <div>Fancy Balance</div>
+    }
 
-  if (isInverted) {
-    const temp = swaperSecondElement
-    swaperSecondElement = swaperFirstElement
-    swaperFirstElement = temp
+    let component = (
+      <SwaperInputList
+        value={firstCoin}
+        coins={stableCoins}
+        selectedCoin={selectedStableCoin}
+        handleChange={(value) => setFirstCoin(value)}
+        handleListChange={(coin) => setSelectedStableCoin(coin)}
+      >
+        <div className="ml-auto">{balanceComponent}</div>
+      </SwaperInputList>
+    )
+    if ((!isFirstInput && !isInverted) || (isFirstInput && isInverted)) {
+      component = (
+        <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} balance="0.0" minHeight="75px">
+          {balanceComponent}
+        </SwaperInput>
+      )
+    }
+
+    return component
   }
 
+  const swaperFirstElement = generateComponent(true)
+  const swaperSecondElement = generateComponent(false)
   return (
     <div className="flex flex-col items-center gap-4 bg-damgray rounded-2xl p-6">
       {swaperFirstElement}

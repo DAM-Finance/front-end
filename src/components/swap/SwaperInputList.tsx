@@ -5,6 +5,7 @@ interface SwaperInputListProps {
   value?: string
   coins: Coin[]
   selectedCoin: Coin
+  children?: any
   handleChange: (elem: string) => void
   handleListChange: (coin: Coin) => void
 }
@@ -15,7 +16,7 @@ interface Coin {
   balance: string
 }
 
-const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selectedCoin, handleChange, handleListChange }) => {
+const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selectedCoin, handleChange, handleListChange, children }) => {
   const changeSelected = (ev: any) => {
     const selectedCoin = coins.find((coin) => coin.name === ev.target.value) || coins[0]
     handleListChange(selectedCoin)
@@ -41,9 +42,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
           </select>
         </div>
       </div>
-      <div className="ml-auto">
-        <SwaperBalance value={selectedCoin.balance} coin={selectedCoin.name}></SwaperBalance>
-      </div>
+      {children}
     </div>
   )
 }
