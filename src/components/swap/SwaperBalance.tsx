@@ -1,16 +1,16 @@
 import { FC } from 'react'
 
 interface SwaperBalanceProps {
-  value: string
-  coin?: string
+  balance: string
+  coinName?: string
 }
 
-const SwaperBalance: FC<SwaperBalanceProps> = ({ value, coin = '' }) => {
+const SwaperBalance: FC<SwaperBalanceProps> = ({ balance, coinName: coin = '' }) => {
   return (
-    <div className="flex ml-auto gap-2">
+    <div className="flex ml-4 gap-2 text-sm">
       <div className="text-gray-600 font-light">Balance</div>
       <div className="text-gray-400 ">
-        {value} {coin}
+        {balance} {coin}
       </div>
     </div>
   )

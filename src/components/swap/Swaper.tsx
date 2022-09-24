@@ -1,8 +1,11 @@
-import { FC, useState } from 'react'
+import { utils as ethersUtils } from 'ethers'
+import { FC, useState, useEffect } from 'react'
 import utils from '../../constants/utils'
+import { useAppStore } from '../../stores/appStore/appStore'
 import SwaperBalance from './SwaperBalance'
 import SwaperInput from './SwaperInput'
 import SwaperInputList from './SwaperInputList'
+import SwapperBalanceWithFees from './SwaperBalanceWithFees'
 
 // interface DDPrimeProps {}
 
@@ -16,11 +19,56 @@ const Swaper: FC = () => {
   const [secondCoin, setSecondCoin] = useState('0')
   const [selectedStableCoin, setSelectedStableCoin] = useState(stableCoins[0])
   const [isInverted, setIsInverted] = useState(false)
+  const [gasPrice, setGasPrice] = useState('')
+  const appStore = useAppStore()
+
+  useEffect(() => {
+    const getGasPrice = async () => {
+      const web3Provider = appStore.walletProvider?.web3Provider
+      if (!web3Provider) {
+        return
+      }
+
+      const gasPrice = await web3Provider.getGasPrice()
+      const priceInGwei = ethersUtils.formatUnits(gasPrice, 'gwei')
+      const roundedPrice = Math.round(+priceInGwei * 10) / 10
+      setGasPrice(roundedPrice.toString())
+    }
+    getGasPrice()
+  }, [appStore.walletProvider?.web3Provider])
 
   const generateComponent = (isFirstInput = true) => {
-    let balanceComponent = <SwaperBalance value={selectedStableCoin.balance} coin={selectedStableCoin.name}></SwaperBalance>
+    const isSecondCoin = (!isFirstInput && !isInverted) || (isFirstInput && isInverted)
+    let coin = firstCoin
+
+    if (isSecondCoin) {
+      coin = secondCoin
+    }
+
+    const gasDetails = (
+      <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
+        <div className="flex">
+          <div>Expected Output</div>
+          <div className="ml-auto">
+            {isInverted ? firstCoin : secondCoin} {isSecondCoin ? 'dPRIME' : selectedStableCoin.name}
+          </div>
+        </div>
+        <div className="flex">
+          <div>Teleport Fee</div>
+          <div className="ml-auto">0 {isSecondCoin ? 'dPRIME' : selectedStableCoin.name}</div>
+        </div>
+        <div className="flex">
+          <div>Gas fee</div>
+          <div className="ml-auto">$0</div>
+        </div>
+      </div>
+    )
+
+    let balanceComponent = (
+      <SwaperBalance balance={isSecondCoin ? '300' : selectedStableCoin.balance} coinName={isSecondCoin ? 'dPRIME' : selectedStableCoin.name}></SwaperBalance>
+    )
     if (!isFirstInput) {
-      balanceComponent = <div>Fancy Balance</div>
+      balanceComponent = <SwapperBalanceWithFees available={coin} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
     }
 
     let component = (
@@ -31,12 +79,12 @@ const Swaper: FC = () => {
         handleChange={(value) => setFirstCoin(value)}
         handleListChange={(coin) => setSelectedStableCoin(coin)}
       >
-        <div className="ml-auto">{balanceComponent}</div>
+        <div className="">{balanceComponent}</div>
       </SwaperInputList>
     )
-    if ((!isFirstInput && !isInverted) || (isFirstInput && isInverted)) {
+    if (isSecondCoin) {
       component = (
-        <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} balance="0.0" minHeight="75px">
+        <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} minHeight="75px">
           {balanceComponent}
         </SwaperInput>
       )
@@ -50,13 +98,10 @@ const Swaper: FC = () => {
   return (
     <div className="flex flex-col items-center gap-4 bg-damgray rounded-2xl p-6">
       {swaperFirstElement}
-
       <button onClick={() => setIsInverted(!isInverted)} className="w-fit p-4 bg-damdarkgray rounded-full">
         <img src={utils.getImageSrc('invertswap.svg')} alt="invert swap" />
       </button>
-
       {swaperSecondElement}
-
       <button className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
         <span>Swap</span>
       </button>

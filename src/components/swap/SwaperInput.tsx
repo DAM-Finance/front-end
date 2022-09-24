@@ -1,16 +1,13 @@
 import { FC } from 'react'
-import SwaperBalance from './SwaperBalance'
-
 interface SwaperInputProps {
   value?: string
   coin: string
-  balance?: string
   minHeight?: string
   children?: any
   handleChange: (elem: string) => void
 }
 
-const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, balance, handleChange, minHeight = '', children = <></> }) => {
+const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, minHeight = '', children = <></> }) => {
   return (
     <div className="w-full flex flex-col gap-1">
       <div
@@ -25,7 +22,7 @@ const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, balance, handleCha
         />
         <div className="flex items-center pr-4 text-2xl">{coin}</div>
       </div>
-      <div className="ml-auto">{children}</div>
+      <div>{children}</div>
     </div>
   )
 }
