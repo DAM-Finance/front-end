@@ -1,8 +1,8 @@
 import { FC, useState } from 'react'
 import utils from '../constants/utils'
 import { useAppStore } from '../stores/appStore/appStore'
-import SwaperInput from './SwaperInput'
-import SwaperInputList from './SwaperInputList'
+import SwaperInput from './swap/SwaperInput'
+import SwaperInputList from './swap/SwaperInputList'
 
 // interface DDPrimeProps {}
 
