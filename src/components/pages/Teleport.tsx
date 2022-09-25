@@ -11,6 +11,13 @@ import SelectNetwork from '../SelectNetwork'
 // interface DDPrimeProps {}
 
 const Teleport: FC = () => {
+  const appStore = useAppStore()
+  const dPrimeBalance = appStore.balances.dPrime
+  const teleportFees = appStore.teleportFees
+
+  console.log(teleportFees)
+
+
   const [amount, setAmount] = useState('0')
   const [available] = useState('1020')
   const [networks] = useState<INetwork[]>([
@@ -21,7 +28,6 @@ const Teleport: FC = () => {
   ])
   const [originNetwork, setOriginNetwork] = useState(networks[0])
   const [destinationNetwork, setDestinationNetwork] = useState(networks[1])
-  const appStore = useAppStore()
   const [gasPrice, setGasPrice] = useState('')
 
   useEffect(() => {
@@ -33,8 +39,7 @@ const Teleport: FC = () => {
 
       const gasPrice = await web3Provider.getGasPrice()
       const priceInGwei = ethersUtils.formatUnits(gasPrice, 'gwei')
-      const roundedPrice = Math.round(+priceInGwei * 10) / 10
-      setGasPrice(roundedPrice.toString())
+      setGasPrice(priceInGwei.toString())
     }
     getGasPrice()
   }, [appStore.walletProvider?.web3Provider])
@@ -65,15 +70,15 @@ const Teleport: FC = () => {
           </div>
           <div className="flex flex-col gap-2">
             <div>2. Select the amount of dPRIME to teleport</div>
-            <AvailableInput amount={amount} available={available} gasPrice={gasPrice} handleChange={(value) => setAmount(value)}>
+            <AvailableInput amount={amount} available={dPrimeBalance} gasPrice={gasPrice} handleChange={(value) => setAmount(value)}>
               <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
-                <div className="flex">
+                {/* <div className="flex">
                   <div>Expected Output</div>
                   <div className="ml-auto">{amount} dPRIME</div>
-                </div>
+                </div> */}
                 <div className="flex">
                   <div>Teleport Fee</div>
-                  <div className="ml-auto">0 dPRIME</div>
+                  <div className="ml-auto">~{destinationNetwork.name == 'Moonbase' ? teleportFees.moonbase+ " ETH" : teleportFees.rinkeby + "GLMR" }</div>
                 </div>
                 <div className="flex">
                   <div>Gas fee</div>

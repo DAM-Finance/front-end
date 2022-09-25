@@ -17,6 +17,7 @@ import CollateralJoinDecAbi from '../../constants/abis/CollateralJoinDecimals.js
 import PSMAbi from '../../constants/abis/PSM.json'
 import ERC20Abi from '../../constants/abis/ERC20.json'
 import { IBalances } from './IBalances'
+import { ITeleportFees } from './ITeleportFees'
 
 
 export const supportedNetworks = [
@@ -46,6 +47,7 @@ const initialWalletProvider = {
 
 const connectedContracts = {} as IContractInstances
 const initBalances = {} as IBalances
+const initTeleportFees = {} as ITeleportFees
 
 export const useAppStore = create<IAppStore>((set, get) => ({
   supportedNetworks,
@@ -54,6 +56,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   metamask: new Metamask(),
   portfolio: null,
   balances: initBalances,
+  teleportFees: initTeleportFees,
   setSelectedNetwork: (network: ISupportedNetwork) =>
     set(
       produce((state: IAppStore) => {
@@ -153,6 +156,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     if(networkInfo.chainId == rinkeby_testnet_id) {
       get().getUSDCBalance()
     }
+    get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
 
@@ -247,6 +251,47 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     let txComplete = await res.wait()
     console.log(txComplete)
     return txComplete
-  }
+  },
+  estimateTeleportFees: async () => {
+    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    let networkInfo = await web3Provider.getNetwork();
+
+    const accounts = await web3Provider.listAccounts()
+
+    //TODO: Make this much more elegant
+    if(networkInfo.chainId == rinkeby_testnet_id){
+      let teleportFee = await connectedContracts.dPrime.estimateSendFee(
+        LayerZeroChainIds.moonbase,
+        accounts[0],
+        fwad("10"), //Convert from decimal number (type: string still) into 18 dec amount
+        false,
+        []
+      );
+
+      set(
+        produce((state: IAppStore) => {
+          state.teleportFees.moonbase = pwad(teleportFee.nativeFee)
+        })
+      )
+
+    }else if(networkInfo.chainId == moonbase_testnet_id){
+
+       let teleportFee = await connectedContracts.dPrime.estimateSendFee(
+        LayerZeroChainIds.rinkeby_testnet,
+        accounts[0],
+        fwad("10"), //Convert from decimal number (type: string still) into 18 dec amount
+        false,
+        []
+      );
+
+      set(
+        produce((state: IAppStore) => {
+          state.teleportFees.rinkeby = pwad(teleportFee.nativeFee)
+        })
+      )
+    }
+  
+  },
+
 
 }))

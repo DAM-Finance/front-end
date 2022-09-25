@@ -34,8 +34,7 @@ const Swaper: FC = () => {
 
       const gasPrice = await web3Provider.getGasPrice()
       const priceInGwei = ethersUtils.formatUnits(gasPrice, 'gwei')
-      const roundedPrice = Math.round(+priceInGwei * 10) / 10
-      setGasPrice(roundedPrice.toString())
+      setGasPrice(priceInGwei.toString())
     }
     getGasPrice()
   }, [appStore.walletProvider?.web3Provider])
