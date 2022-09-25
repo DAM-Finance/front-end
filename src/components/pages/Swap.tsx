@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import Disclaimer from '../Disclaimer'
-import Swaper from '../Swaper'
+import Swaper from '../swap/Swaper'
 
 // interface DDPrimeProps {}
 

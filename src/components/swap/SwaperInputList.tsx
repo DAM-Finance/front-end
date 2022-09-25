@@ -1,10 +1,10 @@
 import { FC } from 'react'
-import SwaperBalance from './SwaperBalance'
 
 interface SwaperInputListProps {
   value?: string
   coins: Coin[]
   selectedCoin: Coin
+  children?: any
   handleChange: (elem: string) => void
   handleListChange: (coin: Coin) => void
 }
@@ -15,7 +15,7 @@ interface Coin {
   balance: string
 }
 
-const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selectedCoin, handleChange, handleListChange }) => {
+const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selectedCoin, handleChange, handleListChange, children }) => {
   const changeSelected = (ev: any) => {
     const selectedCoin = coins.find((coin) => coin.name === ev.target.value) || coins[0]
     handleListChange(selectedCoin)
@@ -28,7 +28,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
           value={value}
           onChange={(ev) => handleChange(ev.target.value)}
           type="text"
-          className="bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
+          className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
         />
         <div className="flex mx-4 my-2 px-2 ml-auto bg-damgray rounded-3xl">
           <img className="py-2 pr-1" src={selectedCoin.icon} width={46} alt="selected coin" />
@@ -41,9 +41,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
           </select>
         </div>
       </div>
-      <div className="ml-auto">
-        <SwaperBalance value={selectedCoin.balance} coin={selectedCoin.name}></SwaperBalance>
-      </div>
+      {children}
     </div>
   )
 }
