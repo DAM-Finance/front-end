@@ -16,7 +16,6 @@ import CollateralJoinAbi from '../../constants/abis/CollateralJoin.json'
 import CollateralJoinDecAbi from '../../constants/abis/CollateralJoinDecimals.json'
 import PSMAbi from '../../constants/abis/PSM.json'
 import ERC20Abi from '../../constants/abis/ERC20.json'
-import { Console } from 'console'
 import { IBalances } from './IBalances'
 
 
@@ -28,7 +27,8 @@ export const supportedNetworks = [
 ]
 
 function fwad(wad: string) { return ethers.utils.parseEther(wad) }
-function fusdc(wad: string){ return ethers.utils.parseEther(wad).div("1000000000000")}
+function fusdc(wad: string) { return ethers.utils.parseEther(wad).div("1000000000000")}
+function pwad(wad: string) {return ethers.utils.formatUnits(wad, 18)}
 //BYTES
 let USDCBytes = ethers.utils.formatBytes32String("PSM-USDC");
 
@@ -193,27 +193,25 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       {value: teleportFee.nativeFee}
     );
   },
-  //Not working
   getDPrimeBalance: async () => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider(), 'any')
     const accounts = await web3Provider.listAccounts()
     let balance = await connectedContracts.dPrime.balanceOf(accounts[0])
-    console.log("dPRIME: ", balance)
+    let formatedBalance = ethers.utils.formatUnits(balance, 18)
     set(
       produce((state: IAppStore) => {
-        state.balances.dPrime = balance
+        state.balances.dPrime = formatedBalance
       })
     )
   },
-  //Not working
   getUSDCBalance: async () => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider(), 'any')
     const accounts = await web3Provider.listAccounts()
     let balance  = await connectedContracts.usdc.balanceOf(accounts[0])
-    console.log("USDC: ", balance)
+    let formatedBalance = ethers.utils.formatUnits(balance, 6)
     set(
       produce((state: IAppStore) => {
-        state.balances.usdc = balance
+        state.balances.usdc = formatedBalance
       })
     )
   },

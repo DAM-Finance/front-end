@@ -7,16 +7,21 @@ import SwaperInputList from './SwaperInputList'
 // interface DDPrimeProps {}
 
 const Swaper: FC = () => {
+  const appStore = useAppStore()
+  let dPrimeBalance = appStore.balances.dPrime;
+  let usdcBalance = appStore.balances.usdc;
+
+  console.log("USDC: " + usdcBalance);
   const [stableCoins] = useState([
-    { name: 'USDC', icon: utils.getImageSrc('usdc.svg'), balance: '10' },
-    { name: 'DAI', icon: utils.getImageSrc('DAI.svg'), balance: '30' }
+    { name: 'USDC', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance },
+    { name: 'DAI', icon: utils.getImageSrc('DAI.svg'), balance: "0.0" }
   ])
 
   const [firstCoin, setFirstCoin] = useState('0')
   const [secondCoin, setSecondCoin] = useState('0')
   const [selectedStableCoin, setSelectedStableCoin] = useState(stableCoins[0])
   const [isInverted, setIsInverted] = useState(false)
-  const appStore = useAppStore()
+  
 
   let swaperFirstElement = (
     <SwaperInputList
@@ -27,8 +32,10 @@ const Swaper: FC = () => {
       handleListChange={(coin) => setSelectedStableCoin(coin)}
     ></SwaperInputList>
   )
-  let swaperSecondElement = <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} balance="0.0"></SwaperInput>
+  
+  let swaperSecondElement = <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} balance={dPrimeBalance}></SwaperInput>
 
+  
   if (isInverted) {
     const temp = swaperSecondElement
     swaperSecondElement = swaperFirstElement
