@@ -1,11 +1,16 @@
 import { FC, useState } from 'react'
 import utils from '../../constants/utils'
+import { useAppStore } from '../../stores/appStore/appStore'
 import AvailableInput from '../AvailableInput'
 
 // interface BorrowProps {
 // }
 
 const Borrow: FC = () => {
+  const appStore = useAppStore()
+  const dPrimeBalance = appStore.balances.dPrime
+  const teleportFees = appStore.teleportFees
+
   const borrowIcon = utils.getImageSrc('borrow-icon.svg')
   const [amount, setAmount] = useState('0')
   const [available] = useState('1030')
@@ -31,7 +36,7 @@ const Borrow: FC = () => {
             </>
           </div>
         </div>
-        <AvailableInput amount={amount} available={available} handleChange={(value) => setAmount(value)}></AvailableInput>
+        <AvailableInput amount={amount} available={dPrimeBalance} handleChange={(value) => setAmount(value)}></AvailableInput>
         <button className="flex justify-center items-center gap-2 rounded-full py-4 px-6 bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
           <img src={borrowIcon} alt="Burrow icon" />
           <span>Borrow</span>
