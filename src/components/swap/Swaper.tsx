@@ -25,6 +25,11 @@ const Swaper: FC = () => {
   const [isInverted, setIsInverted] = useState(false)
   const [gasPrice, setGasPrice] = useState('')
 
+  function swapIt(amount: string){
+    //Change to make this accept multiple types when more PSM are deployed
+    appStore.stableSwap(amount);
+  }
+
   useEffect(() => {
     const getGasPrice = async () => {
       const web3Provider = appStore.walletProvider?.web3Provider
@@ -104,9 +109,12 @@ const Swaper: FC = () => {
         <img src={utils.getImageSrc('invertswap.svg')} alt="invert swap" />
       </button>
       {swaperSecondElement}
-      <button className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
+      <button 
+        onClick = {() => swapIt(firstCoin)}
+        className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
         <span>Swap</span>
       </button>
+      <div className="text-damlightyellow text-sm font-light">Note: If the stablecoin lacks approval, two pop ups will appear, the first one asking for approval, and the second making the swap</div>
     </div>
   )
 }

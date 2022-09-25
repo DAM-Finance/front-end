@@ -78,7 +78,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         state.walletProvider.connected = !!state.walletProvider.accounts?.length
         if (state.walletProvider.connected) {
           state.portfolio = {
-            dPrime: 0,
+            dPrime: "0.0",
             cushion: 21,
             portfolioValue: 23324
           }
@@ -155,6 +155,12 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().getDPrimeBalance()
     if(networkInfo.chainId == rinkeby_testnet_id) {
       get().getUSDCBalance()
+    }else{
+      set(
+        produce((state: IAppStore) => {
+          state.balances.usdc = '0.0'
+        })
+      )
     }
     get().estimateTeleportFees()
   },
@@ -235,20 +241,31 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     console.log(connectedContracts.usdc.address);
     const allowance = await connectedContracts.usdc.allowance(accounts[0], rinkeby_testnet_addresses.USDCJoin)
 
+    let txWait;
+
     if(allowance < formattedAmount){
       console.log("Allowance: " + allowance)
       get().approveUSDC(formattedAmount).then((data: any) =>{
-        connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
+        txWait = connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
       });
     }else{
-      await connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
+      txWait = await connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
     }
     console.log("Amount: " + formattedAmount);
+
+    let txDone = await txWait.wait();
+
 
     let networkInfo = await web3Provider.getNetwork();
     get().getDPrimeBalance()
     if(networkInfo.chainId == rinkeby_testnet_id) {
       get().getUSDCBalance()
+    }else{
+      set(
+        produce((state: IAppStore) => {
+          state.balances.usdc = '0.0'
+        })
+      )
     }
 
    
