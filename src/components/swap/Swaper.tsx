@@ -10,9 +10,13 @@ import SwapperBalanceWithFees from './SwaperBalanceWithFees'
 // interface DDPrimeProps {}
 
 const Swaper: FC = () => {
+  const appStore = useAppStore()
+  const dPrimeBalance = appStore.balances.dPrime
+  const usdcBalance = appStore.balances.usdc
+
   const [stableCoins] = useState([
-    { name: 'USDC', icon: utils.getImageSrc('usdc.svg'), balance: '10' },
-    { name: 'DAI', icon: utils.getImageSrc('DAI.svg'), balance: '30' }
+    { name: 'USDC', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance },
+    { name: 'DAI', icon: utils.getImageSrc('DAI.svg'), balance: '0.0' }
   ])
 
   const [firstCoin, setFirstCoin] = useState('0')
@@ -20,7 +24,6 @@ const Swaper: FC = () => {
   const [selectedStableCoin, setSelectedStableCoin] = useState(stableCoins[0])
   const [isInverted, setIsInverted] = useState(false)
   const [gasPrice, setGasPrice] = useState('')
-  const appStore = useAppStore()
 
   useEffect(() => {
     const getGasPrice = async () => {
@@ -65,10 +68,10 @@ const Swaper: FC = () => {
     )
 
     let balanceComponent = (
-      <SwaperBalance balance={isSecondCoin ? '300' : selectedStableCoin.balance} coinName={isSecondCoin ? 'dPRIME' : selectedStableCoin.name}></SwaperBalance>
+      <SwaperBalance balance={isSecondCoin ? dPrimeBalance : usdcBalance} coinName={isSecondCoin ? 'dPRIME' : selectedStableCoin.name}></SwaperBalance>
     )
     if (!isFirstInput) {
-      balanceComponent = <SwapperBalanceWithFees available={coin} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
+      balanceComponent = <SwapperBalanceWithFees available={isSecondCoin ? dPrimeBalance : usdcBalance} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
     }
 
     let component = (
