@@ -78,7 +78,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         state.walletProvider.connected = !!state.walletProvider.accounts?.length
         if (state.walletProvider.connected) {
           state.portfolio = {
-            dPrime: 15347,
+            dPrime: 0,
             cushion: 21,
             portfolioValue: 23324
           }
@@ -205,6 +205,11 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     set(
       produce((state: IAppStore) => {
         state.balances.dPrime = formatedBalance
+        state.portfolio = {
+          dPrime: formatedBalance,
+          cushion: 21,
+          portfolioValue: 23324
+        }
       })
     )
   },
@@ -239,6 +244,12 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       await connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
     }
     console.log("Amount: " + formattedAmount);
+
+    let networkInfo = await web3Provider.getNetwork();
+    get().getDPrimeBalance()
+    if(networkInfo.chainId == rinkeby_testnet_id) {
+      get().getUSDCBalance()
+    }
 
    
 
