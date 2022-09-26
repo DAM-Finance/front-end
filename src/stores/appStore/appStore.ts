@@ -7,6 +7,8 @@ import { IAppStore } from './IAppStore'
 import { ISupportedNetwork } from './ISupportedNetwork'
 import { IWalletProvider } from './IWalletProvider'
 import { IContractInstances } from './IContractInstances'
+import { IBalances } from './IBalances'
+import { ITeleportFees } from './ITeleportFees'
 
 import dPrimeAbi from '../../constants/abis/dPrime.json'
 import dPrimeJoinAbi from '../../constants/abis/dPrimeJoin.json'
@@ -16,9 +18,6 @@ import CollateralJoinAbi from '../../constants/abis/CollateralJoin.json'
 import CollateralJoinDecAbi from '../../constants/abis/CollateralJoinDecimals.json'
 import PSMAbi from '../../constants/abis/PSM.json'
 import ERC20Abi from '../../constants/abis/ERC20.json'
-import { IBalances } from './IBalances'
-import { ITeleportFees } from './ITeleportFees'
-
 
 export const supportedNetworks = [
   // { name: 'Moonbeam', symbol: 'GLMR', chainId: '0x504', id: 1284, iconName: 'moonbeamneticon.png' },
@@ -27,11 +26,17 @@ export const supportedNetworks = [
   { name: 'Rinkeby', symbol: 'RETH', chainId: '0x4', id: 4, iconName: 'ethneticon.png' }
 ]
 
-function fwad(wad: string) { return ethers.utils.parseEther(wad) }
-function fusdc(wad: string) { return ethers.utils.parseEther(wad).div("1000000000000")}
-function pwad(wad: string) {return ethers.utils.formatUnits(wad, 18)}
+function fwad(wad: string) {
+  return ethers.utils.parseEther(wad)
+}
+function fusdc(wad: string) {
+  return ethers.utils.parseEther(wad).div('1000000000000')
+}
+function pwad(wad: string) {
+  return ethers.utils.formatUnits(wad, 18)
+}
 //BYTES
-let USDCBytes = ethers.utils.formatBytes32String("PSM-USDC");
+let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
 
 const initialWalletProvider = {
   metamask: null,
@@ -43,7 +48,6 @@ const initialWalletProvider = {
   connected: false,
   connectWallet: async () => false
 } as IWalletProvider
-
 
 const connectedContracts = {} as IContractInstances
 const initBalances = {} as IBalances
@@ -78,7 +82,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         state.walletProvider.connected = !!state.walletProvider.accounts?.length
         if (state.walletProvider.connected) {
           state.portfolio = {
-            dPrime: "0.0",
+            dPrime: '0.0',
             cushion: 21,
             portfolioValue: 23324
           }
@@ -98,8 +102,8 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const chainId = await get().metamask.getChainId(provider)
     const web3Provider = new ethers.providers.Web3Provider(provider)
 
-    initialWalletProvider.web3Provider = web3Provider;
-    initialWalletProvider.accounts = await web3Provider.listAccounts();
+    initialWalletProvider.web3Provider = web3Provider
+    initialWalletProvider.accounts = await web3Provider.listAccounts()
 
     get().metamask.subscribeEvents(provider, (data: any) => {
       get().setWalletProvider(data)
@@ -123,39 +127,37 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const provider = get().walletProvider.provider
 
     await metamask.switchNetwork(provider, chainId)
-    get().attachContracts(new ethers.providers.Web3Provider(await get().metamask.detectProvider()));
+    get().attachContracts(new ethers.providers.Web3Provider(await get().metamask.detectProvider()))
   },
   attachContracts: async (web3Provider: ethers.providers.Web3Provider) => {
     const accounts = await web3Provider.listAccounts()
-    const networkInfo = await web3Provider.getNetwork();
+    const networkInfo = await web3Provider.getNetwork()
 
-    const signer = web3Provider.getSigner();
+    const signer = web3Provider.getSigner()
 
-    if(networkInfo.chainId == rinkeby_testnet_id){
-      console.log("Rinkeby attach")
-      
-      connectedContracts.lmcv       = new ethers.Contract(rinkeby_testnet_addresses.LMCV, LMCVAbi, signer);
-      connectedContracts.lmcvProxy  = new ethers.Contract(rinkeby_testnet_addresses.LMCVProxy, LMCVProxyAbi, signer);
-      connectedContracts.dPrime     = new ethers.Contract(rinkeby_testnet_addresses.dPrime, dPrimeAbi, signer);
-      connectedContracts.dPrimeJoin = new ethers.Contract(rinkeby_testnet_addresses.dPrimeJoin, dPrimeJoinAbi, signer);
-      connectedContracts.usdc       = new ethers.Contract(rinkeby_testnet_addresses.USDC, ERC20Abi, signer);
-      connectedContracts.usdcJoin   = new ethers.Contract(rinkeby_testnet_addresses.USDCJoin, CollateralJoinDecAbi, signer);
-      connectedContracts.usdcPSM    = new ethers.Contract(rinkeby_testnet_addresses.USDCPSM, PSMAbi, signer);
-      
-    }else if(networkInfo.chainId == moonbase_testnet_id){
-      console.log("Moonbase attach")
+    if (networkInfo.chainId == rinkeby_testnet_id) {
+      console.log('Rinkeby attach')
+
+      connectedContracts.lmcv = new ethers.Contract(rinkeby_testnet_addresses.LMCV, LMCVAbi, signer)
+      connectedContracts.lmcvProxy = new ethers.Contract(rinkeby_testnet_addresses.LMCVProxy, LMCVProxyAbi, signer)
+      connectedContracts.dPrime = new ethers.Contract(rinkeby_testnet_addresses.dPrime, dPrimeAbi, signer)
+      connectedContracts.dPrimeJoin = new ethers.Contract(rinkeby_testnet_addresses.dPrimeJoin, dPrimeJoinAbi, signer)
+      connectedContracts.usdc = new ethers.Contract(rinkeby_testnet_addresses.USDC, ERC20Abi, signer)
+      connectedContracts.usdcJoin = new ethers.Contract(rinkeby_testnet_addresses.USDCJoin, CollateralJoinDecAbi, signer)
+      connectedContracts.usdcPSM = new ethers.Contract(rinkeby_testnet_addresses.USDCPSM, PSMAbi, signer)
+    } else if (networkInfo.chainId == moonbase_testnet_id) {
+      console.log('Moonbase attach')
 
       //Only dPrime deployed moonbase
-      connectedContracts.dPrime     = new ethers.Contract(moonbase_addresses.dPrime, dPrimeAbi, signer);
-
-    }else {
-      console.log("LMCV Not implemented yet");
+      connectedContracts.dPrime = new ethers.Contract(moonbase_addresses.dPrime, dPrimeAbi, signer)
+    } else {
+      console.log('LMCV Not implemented yet')
     }
 
     get().getDPrimeBalance()
-    if(networkInfo.chainId == rinkeby_testnet_id) {
+    if (networkInfo.chainId == rinkeby_testnet_id) {
       get().getUSDCBalance()
-    }else{
+    } else {
       set(
         produce((state: IAppStore) => {
           state.balances.usdc = '0.0'
@@ -165,19 +167,18 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
-
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
-    let networkInfo = await web3Provider.getNetwork();
-    let teleportFee;
+    let networkInfo = await web3Provider.getNetwork()
+    let teleportFee
 
     const accounts = await web3Provider.listAccounts()
 
     //TODO: Make this much more elegant
-    let dstChainId = "0";
-    if(dstChainName == "Moonbase"){
-      dstChainId = LayerZeroChainIds.moonbase;
-    }else if(dstChainName == "Rinkeby"){
-      dstChainId = LayerZeroChainIds.rinkeby_testnet;
+    let dstChainId = '0'
+    if (dstChainName == 'Moonbase') {
+      dstChainId = LayerZeroChainIds.moonbase
+    } else if (dstChainName == 'Rinkeby') {
+      dstChainId = LayerZeroChainIds.rinkeby_testnet
     }
 
     console.log(dstChainName)
@@ -190,18 +191,18 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       fwad(dPrimeAmount), //Convert from decimal number (type: string still) into 18 dec amount
       false,
       []
-    );
+    )
 
     await connectedContracts.dPrime.sendFrom(
-      accounts[0],                      //address _from, 
-      dstChainId,                       //uint16 _dstChainId,
-      accounts[0],                      //bytes memory _toAddress,
-      fwad(dPrimeAmount),               //uint _amount, 
-      accounts[0],                      //address payable _refundAddress, 
-      accounts[0],                      //address _zroPaymentAddress, 
-      [],                               //bytes memory _adapterParams
-      {value: teleportFee.nativeFee}
-    );
+      accounts[0], //address _from,
+      dstChainId, //uint16 _dstChainId,
+      accounts[0], //bytes memory _toAddress,
+      fwad(dPrimeAmount), //uint _amount,
+      accounts[0], //address payable _refundAddress,
+      accounts[0], //address _zroPaymentAddress,
+      [], //bytes memory _adapterParams
+      { value: teleportFee.nativeFee }
+    )
   },
   getDPrimeBalance: async () => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider(), 'any')
@@ -222,7 +223,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   getUSDCBalance: async () => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider(), 'any')
     const accounts = await web3Provider.listAccounts()
-    let balance  = await connectedContracts.usdc.balanceOf(accounts[0])
+    let balance = await connectedContracts.usdc.balanceOf(accounts[0])
     let formatedBalance = ethers.utils.formatUnits(balance, 6)
     set(
       produce((state: IAppStore) => {
@@ -231,86 +232,82 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
   },
   stableSwap: async (amount: string) => {
-    if(amount == "0"){
+    if (amount == '0') {
       return
     }
-    let formattedAmount = fusdc(amount).toString();
+    let formattedAmount = fusdc(amount).toString()
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
     const accounts = await web3Provider.listAccounts()
 
-    console.log(connectedContracts.usdc.address);
+    console.log(connectedContracts.usdc.address)
     const allowance = await connectedContracts.usdc.allowance(accounts[0], rinkeby_testnet_addresses.USDCJoin)
 
-    let txWait;
+    let txWait
 
-    if(allowance < formattedAmount){
-      console.log("Allowance: " + allowance)
-      get().approveUSDC(formattedAmount).then((data: any) =>{
-        txWait = connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
-      });
-    }else{
+    if (allowance < formattedAmount) {
+      console.log('Allowance: ' + allowance)
+      get()
+        .approveUSDC(formattedAmount)
+        .then((data: any) => {
+          txWait = connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
+        })
+    } else {
       txWait = await connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
     }
-    console.log("Amount: " + formattedAmount);
+    console.log('Amount: ' + formattedAmount)
 
-    let txDone = await txWait.wait();
+    let txDone = await txWait.wait()
 
-
-    let networkInfo = await web3Provider.getNetwork();
+    let networkInfo = await web3Provider.getNetwork()
     get().getDPrimeBalance()
-    if(networkInfo.chainId == rinkeby_testnet_id) {
+    if (networkInfo.chainId == rinkeby_testnet_id) {
       get().getUSDCBalance()
-    }else{
+    } else {
       set(
         produce((state: IAppStore) => {
           state.balances.usdc = '0.0'
         })
       )
     }
-
-   
-
   },
   approveUSDC: async (amount: string) => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
     const accounts = await web3Provider.listAccounts()
 
-    let res = await connectedContracts.usdc.approve(rinkeby_testnet_addresses.USDCJoin, amount);
+    let res = await connectedContracts.usdc.approve(rinkeby_testnet_addresses.USDCJoin, amount)
     let txComplete = await res.wait()
     console.log(txComplete)
     return txComplete
   },
   estimateTeleportFees: async () => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
-    let networkInfo = await web3Provider.getNetwork();
+    let networkInfo = await web3Provider.getNetwork()
 
     const accounts = await web3Provider.listAccounts()
 
     //TODO: Make this much more elegant
-    if(networkInfo.chainId == rinkeby_testnet_id){
+    if (networkInfo.chainId == rinkeby_testnet_id) {
       let teleportFee = await connectedContracts.dPrime.estimateSendFee(
         LayerZeroChainIds.moonbase,
         accounts[0],
-        fwad("10"), //Convert from decimal number (type: string still) into 18 dec amount
+        fwad('10'), //Convert from decimal number (type: string still) into 18 dec amount
         false,
         []
-      );
+      )
 
       set(
         produce((state: IAppStore) => {
           state.teleportFees.moonbase = pwad(teleportFee.nativeFee)
         })
       )
-
-    }else if(networkInfo.chainId == moonbase_testnet_id){
-
-       let teleportFee = await connectedContracts.dPrime.estimateSendFee(
+    } else if (networkInfo.chainId == moonbase_testnet_id) {
+      let teleportFee = await connectedContracts.dPrime.estimateSendFee(
         LayerZeroChainIds.rinkeby_testnet,
         accounts[0],
-        fwad("10"), //Convert from decimal number (type: string still) into 18 dec amount
+        fwad('10'), //Convert from decimal number (type: string still) into 18 dec amount
         false,
         []
-      );
+      )
 
       set(
         produce((state: IAppStore) => {
@@ -318,8 +315,5 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         })
       )
     }
-  
-  },
-
-
+  }
 }))
