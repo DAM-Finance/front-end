@@ -80,12 +80,17 @@ const Swaper: FC = () => {
       )
     }
 
+    const updateBothInputs = (value: string) => {
+      setFirstCoin(value)
+      setSecondCoin(value)
+    }
+
     let component = (
       <SwaperInputList
         value={firstCoin}
         coins={stableCoins}
         selectedCoin={selectedStableCoin}
-        handleChange={(value) => setFirstCoin(value)}
+        handleChange={updateBothInputs}
         handleListChange={(coin) => setSelectedStableCoin(coin)}
       >
         <div className="">{balanceComponent}</div>
@@ -93,7 +98,7 @@ const Swaper: FC = () => {
     )
     if (isSecondCoin) {
       component = (
-        <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin}>
+        <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin}>
           {balanceComponent}
         </SwaperInput>
       )
