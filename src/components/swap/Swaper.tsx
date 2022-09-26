@@ -25,9 +25,9 @@ const Swaper: FC = () => {
   const [isInverted, setIsInverted] = useState(false)
   const [gasPrice, setGasPrice] = useState('')
 
-  function swapIt(amount: string){
+  function swapIt(amount: string) {
     //Change to make this accept multiple types when more PSM are deployed
-    appStore.stableSwap(amount);
+    appStore.stableSwap(amount)
   }
 
   useEffect(() => {
@@ -75,7 +75,9 @@ const Swaper: FC = () => {
       <SwaperBalance balance={isSecondCoin ? dPrimeBalance : usdcBalance} coinName={isSecondCoin ? 'dPRIME' : selectedStableCoin.name}></SwaperBalance>
     )
     if (!isFirstInput) {
-      balanceComponent = <SwapperBalanceWithFees available={isSecondCoin ? dPrimeBalance : usdcBalance} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
+      balanceComponent = (
+        <SwapperBalanceWithFees available={isSecondCoin ? dPrimeBalance : usdcBalance} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
+      )
     }
 
     let component = (
@@ -105,16 +107,23 @@ const Swaper: FC = () => {
   return (
     <div className="flex flex-col items-center gap-4 bg-damgray rounded-2xl p-6">
       {swaperFirstElement}
-      <button onClick={() => setIsInverted(!isInverted)} className="w-fit p-4 bg-damdarkgray rounded-full">
+      <button
+        onClick={() => setIsInverted(!isInverted)}
+        style={{ backgroundColor: 'rgba(255, 184, 0, 0.05)' }}
+        className="w-fit p-4 bg-damdarkgray rounded-full"
+      >
         <img src={utils.getImageSrc('invertswap.svg')} alt="invert swap" />
       </button>
       {swaperSecondElement}
-      <button 
-        onClick = {() => swapIt(firstCoin)}
-        className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold">
+      <button
+        onClick={() => swapIt(firstCoin)}
+        className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold"
+      >
         <span>Swap</span>
       </button>
-      <div className="text-damlightyellow text-sm font-light">Note: If the stablecoin lacks approval, two pop ups will appear, the first one asking for approval, and the second making the swap</div>
+      <div className="text-damlightyellow text-sm font-light">
+        Note: If the stablecoin lacks approval, two pop ups will appear, the first one asking for approval, and the second making the swap
+      </div>
     </div>
   )
 }
