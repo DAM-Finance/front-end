@@ -31,7 +31,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
           className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
         />
         <div className="flex mx-4 my-2 px-2 ml-auto bg-damgray rounded-3xl">
-          <img className="py-2 pr-1" src={selectedCoin.icon} width={46} alt="selected coin" />
+          <img className="py-2 pr-1" src={selectedCoin.icon} style={{ maxHeight: '48px' }} alt="selected coin" />
           <select className="bg-transparent outline-none" value={selectedCoin.name} onChange={changeSelected} name="coins" id="coins">
             {coins?.map((coin) => (
               <option key={coin.name} value={coin.name}>

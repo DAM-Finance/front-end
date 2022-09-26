@@ -93,7 +93,7 @@ const Swaper: FC = () => {
     )
     if (isSecondCoin) {
       component = (
-        <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin} minHeight="75px">
+        <SwaperInput handleChange={(value) => setSecondCoin(value)} coin={'dPRIME'} value={secondCoin}>
           {balanceComponent}
         </SwaperInput>
       )
