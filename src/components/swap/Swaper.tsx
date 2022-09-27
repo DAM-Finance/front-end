@@ -46,11 +46,6 @@ const Swaper: FC = () => {
 
   const generateComponent = (isFirstInput = true) => {
     const isSecondCoin = (!isFirstInput && !isInverted) || (isFirstInput && isInverted)
-    let coin = firstCoin
-
-    if (isSecondCoin) {
-      coin = secondCoin
-    }
 
     const gasDetails = (
       <div className="flex flex-col gap-1 text-sm text-damlabelgray2">

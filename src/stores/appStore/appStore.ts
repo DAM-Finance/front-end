@@ -129,12 +129,12 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().attachContracts(new ethers.providers.Web3Provider(await get().metamask.detectProvider()))
   },
   attachContracts: async (web3Provider: ethers.providers.Web3Provider) => {
-    const accounts = await web3Provider.listAccounts()
+    // const accounts = await web3Provider.listAccounts()
     const networkInfo = await web3Provider.getNetwork()
 
     const signer = web3Provider.getSigner()
 
-    if (networkInfo.chainId == rinkeby_testnet_id) {
+    if (networkInfo.chainId === rinkeby_testnet_id) {
       console.log('Rinkeby attach')
 
       connectedContracts.lmcv = new ethers.Contract(rinkeby_testnet_addresses.LMCV, LMCVAbi, signer)
@@ -144,7 +144,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       connectedContracts.usdc = new ethers.Contract(rinkeby_testnet_addresses.USDC, ERC20Abi, signer)
       connectedContracts.usdcJoin = new ethers.Contract(rinkeby_testnet_addresses.USDCJoin, CollateralJoinDecAbi, signer)
       connectedContracts.usdcPSM = new ethers.Contract(rinkeby_testnet_addresses.USDCPSM, PSMAbi, signer)
-    } else if (networkInfo.chainId == moonbase_testnet_id) {
+    } else if (networkInfo.chainId === moonbase_testnet_id) {
       console.log('Moonbase attach')
 
       //Only dPrime deployed moonbase
@@ -154,7 +154,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
 
     get().getDPrimeBalance()
-    if (networkInfo.chainId == rinkeby_testnet_id) {
+    if (networkInfo.chainId === rinkeby_testnet_id) {
       get().getUSDCBalance()
     } else {
       set(
@@ -167,16 +167,16 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
-    let networkInfo = await web3Provider.getNetwork()
+    // let networkInfo = await web3Provider.getNetwork()
     let teleportFee
 
     const accounts = await web3Provider.listAccounts()
 
     //TODO: Make this much more elegant
     let dstChainId = '0'
-    if (dstChainName == 'Moonbase') {
+    if (dstChainName === 'Moonbase') {
       dstChainId = LayerZeroChainIds.moonbase
-    } else if (dstChainName == 'Rinkeby') {
+    } else if (dstChainName === 'Rinkeby') {
       dstChainId = LayerZeroChainIds.rinkeby_testnet
     }
 
@@ -231,7 +231,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
   },
   stableSwap: async (amount: string) => {
-    if (amount == '0') {
+    if (amount === '0') {
       return
     }
     let formattedAmount = fusdc(amount).toString()
@@ -255,11 +255,11 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
     console.log('Amount: ' + formattedAmount)
 
-    let txDone = await txWait.wait()
+    await txWait.wait()
 
     let networkInfo = await web3Provider.getNetwork()
     get().getDPrimeBalance()
-    if (networkInfo.chainId == rinkeby_testnet_id) {
+    if (networkInfo.chainId === rinkeby_testnet_id) {
       get().getUSDCBalance()
     } else {
       set(
@@ -270,8 +270,8 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
   },
   approveUSDC: async (amount: string) => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
-    const accounts = await web3Provider.listAccounts()
+    // let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    // const accounts = await web3Provider.listAccounts()
 
     let res = await connectedContracts.usdc.approve(rinkeby_testnet_addresses.USDCJoin, amount)
     let txComplete = await res.wait()
@@ -285,7 +285,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const accounts = await web3Provider.listAccounts()
 
     //TODO: Make this much more elegant
-    if (networkInfo.chainId == rinkeby_testnet_id) {
+    if (networkInfo.chainId === rinkeby_testnet_id) {
       let teleportFee = await connectedContracts.dPrime.estimateSendFee(
         LayerZeroChainIds.moonbase,
         accounts[0],
@@ -299,7 +299,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
           state.teleportFees.moonbase = pwad(teleportFee.nativeFee)
         })
       )
-    } else if (networkInfo.chainId == moonbase_testnet_id) {
+    } else if (networkInfo.chainId === moonbase_testnet_id) {
       let teleportFee = await connectedContracts.dPrime.estimateSendFee(
         LayerZeroChainIds.rinkeby_testnet,
         accounts[0],
