@@ -6,11 +6,11 @@ import { IPortfolio } from '../../features/dashboard'
 // interface PortfolioProps {}
 
 const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
-  const portfolioImg = utils.getImageSrc('portfolio-placeholder.svg')
+  const portfolioImg = utils.getImageSrc('portfolio-placeholder.png')
   const assetsUrl = utils.getImageSrc('assets.svg')
 
   let portfolioPage = (
-    <>
+    <div className="flex gap-2">
       <div className="flex flex-col justify-center flex-wrap gap-6">
         <div>
           <span className="text-2xl">Take your stablecoin liquidity anywhere through </span>
@@ -27,7 +27,7 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
         </div>
       </div>
       <img src={portfolioImg} alt="Portfolio" />
-    </>
+    </div>
   )
 
   if (portfolio.hasOwnProperty('portfolioValue')) {
