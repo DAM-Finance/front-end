@@ -4,20 +4,19 @@ import create from 'zustand'
 import { LayerZeroChainIds, moonbase_addresses, moonbase_testnet_id, rinkeby_testnet_addresses, rinkeby_testnet_id } from '../../constants/config'
 import Metamask from './../../wallet/metamask'
 import { IAppStore } from './IAppStore'
-import { ISupportedNetwork } from './ISupportedNetwork'
-import { IWalletProvider } from './IWalletProvider'
-import { IContractInstances } from './IContractInstances'
 import { IBalances } from './IBalances'
+import { IContractInstances } from './IContractInstances'
+import { ISupportedNetwork } from './ISupportedNetwork'
 import { ITeleportFees } from './ITeleportFees'
+import { IWalletProvider } from './IWalletProvider'
 
+import CollateralJoinDecAbi from '../../constants/abis/CollateralJoinDecimals.json'
 import dPrimeAbi from '../../constants/abis/dPrime.json'
 import dPrimeJoinAbi from '../../constants/abis/dPrimeJoin.json'
+import ERC20Abi from '../../constants/abis/ERC20.json'
 import LMCVAbi from '../../constants/abis/LMCV.json'
 import LMCVProxyAbi from '../../constants/abis/LMCVProxy.json'
-import CollateralJoinAbi from '../../constants/abis/CollateralJoin.json'
-import CollateralJoinDecAbi from '../../constants/abis/CollateralJoinDecimals.json'
 import PSMAbi from '../../constants/abis/PSM.json'
-import ERC20Abi from '../../constants/abis/ERC20.json'
 
 export const supportedNetworks = [
   // { name: 'Moonbeam', symbol: 'GLMR', chainId: '0x504', id: 1284, iconName: 'moonbeamneticon.png' },
@@ -83,7 +82,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         if (state.walletProvider.connected) {
           state.portfolio = {
             dPrime: '0.0',
-            cushion: 21,
+            // cushion: 21,
             portfolioValue: 23324
           }
         } else {
@@ -214,7 +213,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         state.balances.dPrime = formatedBalance
         state.portfolio = {
           dPrime: formatedBalance,
-          cushion: 21,
+          // cushion: 21,
           portfolioValue: 23324
         }
       })
