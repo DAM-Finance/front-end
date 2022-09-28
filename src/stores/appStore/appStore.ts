@@ -17,6 +17,7 @@ import ERC20Abi from '../../constants/abis/ERC20.json'
 import LMCVAbi from '../../constants/abis/LMCV.json'
 import LMCVProxyAbi from '../../constants/abis/LMCVProxy.json'
 import PSMAbi from '../../constants/abis/PSM.json'
+import utils from '../../constants/utils'
 
 export const supportedNetworks = [
   // { name: 'Moonbeam', symbol: 'GLMR', chainId: '0x504', id: 1284, iconName: 'moonbeamneticon.png' },
@@ -25,15 +26,6 @@ export const supportedNetworks = [
   { name: 'Rinkeby', symbol: 'RETH', chainId: '0x4', id: 4, iconName: 'ethneticon.png' }
 ]
 
-function fwad(wad: string) {
-  return ethers.utils.parseEther(wad)
-}
-function fusdc(wad: string) {
-  return ethers.utils.parseEther(wad).div('1000000000000')
-}
-function pwad(wad: string) {
-  return ethers.utils.formatUnits(wad, 18)
-}
 //BYTES
 let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
 
@@ -187,7 +179,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     teleportFee = await connectedContracts.dPrime.estimateSendFee(
       dstChainId,
       accounts[0],
-      fwad(dPrimeAmount), //Convert from decimal number (type: string still) into 18 dec amount
+      utils.fwad(dPrimeAmount), //Convert from decimal number (type: string still) into 18 dec amount
       false,
       []
     )
@@ -196,7 +188,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       accounts[0], //address _from,
       dstChainId, //uint16 _dstChainId,
       accounts[0], //bytes memory _toAddress,
-      fwad(dPrimeAmount), //uint _amount,
+      utils.fwad(dPrimeAmount), //uint _amount,
       accounts[0], //address payable _refundAddress,
       accounts[0], //address _zroPaymentAddress,
       [], //bytes memory _adapterParams
@@ -234,7 +226,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     if (amount === '0') {
       return
     }
-    let formattedAmount = fusdc(amount).toString()
+    let formattedAmount = utils.fusdc(amount).toString()
     let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
     const accounts = await web3Provider.listAccounts()
 
@@ -270,9 +262,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
   },
   approveUSDC: async (amount: string) => {
-    // let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
-    // const accounts = await web3Provider.listAccounts()
-
     let res = await connectedContracts.usdc.approve(rinkeby_testnet_addresses.USDCJoin, amount)
     let txComplete = await res.wait()
     console.log(txComplete)
@@ -289,28 +278,28 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       let teleportFee = await connectedContracts.dPrime.estimateSendFee(
         LayerZeroChainIds.moonbase,
         accounts[0],
-        fwad('10'), //Convert from decimal number (type: string still) into 18 dec amount
+        utils.fwad('10'), //Convert from decimal number (type: string still) into 18 dec amount
         false,
         []
       )
 
       set(
         produce((state: IAppStore) => {
-          state.teleportFees.moonbase = pwad(teleportFee.nativeFee)
+          state.teleportFees.moonbase = utils.pwad(teleportFee.nativeFee)
         })
       )
     } else if (networkInfo.chainId === moonbase_testnet_id) {
       let teleportFee = await connectedContracts.dPrime.estimateSendFee(
         LayerZeroChainIds.rinkeby_testnet,
         accounts[0],
-        fwad('10'), //Convert from decimal number (type: string still) into 18 dec amount
+        utils.fwad('10'), //Convert from decimal number (type: string still) into 18 dec amount
         false,
         []
       )
 
       set(
         produce((state: IAppStore) => {
-          state.teleportFees.rinkeby = pwad(teleportFee.nativeFee)
+          state.teleportFees.rinkeby = utils.pwad(teleportFee.nativeFee)
         })
       )
     }

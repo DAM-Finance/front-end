@@ -1,3 +1,5 @@
+import * as ethers from 'ethers'
+
 export class Utils {
   getImageSrc(img: string) {
     if (!img) {
@@ -11,6 +13,16 @@ export class Utils {
 
   shortenWalletAddress = (wallet: string) => {
     return `${wallet.slice(0, 5)}...${wallet.slice(-4, wallet.length)}`
+  }
+
+  fwad(wad: string) {
+    return ethers.utils.parseEther(wad)
+  }
+  fusdc(wad: string) {
+    return ethers.utils.parseEther(wad).div('1000000000000')
+  }
+  pwad(wad: string) {
+    return ethers.utils.formatUnits(wad, 18)
   }
 }
 
