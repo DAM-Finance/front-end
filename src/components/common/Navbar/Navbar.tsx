@@ -4,11 +4,13 @@ import utils from '../../../constants/utils'
 import ConnectButton from './../../wallet/ConnectButton'
 import TVLButton from './../../wallet/TVLButton'
 import SwitchNetworkSelector from './../../wallet/SwitchNetworkSelector'
+import { useAppStore } from '../../../stores/appStore/appStore'
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = () => {
   const logoUrl = utils.getImageSrc('damlogo.svg')
+  const appStore = useAppStore()
 
   return (
     <nav className="flex items-center flex-wrap gap-12 bg-damgray px-4 md:px-24 py-5">
@@ -33,9 +35,13 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
       </NavLink>
 
       <div className="flex ml-auto gap-4">
-        <TVLButton />
-        <SwitchNetworkSelector />
-        <ConnectButton />
+        {!appStore.walletProvider.loading && (
+          <>
+            <TVLButton />
+            <SwitchNetworkSelector />
+            <ConnectButton />
+          </>
+        )}
       </div>
     </nav>
   )

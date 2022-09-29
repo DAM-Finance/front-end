@@ -38,7 +38,10 @@ class Metamask {
   }
 
   subscribeEvents(provider, handler) {
-    if (!this.isValidProvider(provider)) return
+    if (!this.isValidProvider(provider)) {
+      console.error('Invalid provider', provider)
+      return
+    }
 
     provider.on('connect', () => handler({ connectedToChain: provider.isConnected() }))
     provider.on('disconnect', () => handler({ connectedToChain: provider.isConnected() }))

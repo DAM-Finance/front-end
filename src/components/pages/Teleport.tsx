@@ -1,6 +1,6 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
-import { LayerZeroChainIds } from '../../constants/config'
+// import { LayerZeroChainIds } from '../../constants/config'
 import utils from '../../constants/utils'
 import { INetwork } from '../../features/Network'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -17,9 +17,8 @@ const Teleport: FC = () => {
 
   console.log(teleportFees)
 
-
   const [amount, setAmount] = useState('0')
-  const [available] = useState('1020')
+  // const [available] = useState('1020')
   const [networks] = useState<INetwork[]>([
     // { name: 'Ethereum', symbol: 'eth' },
     // { name: 'Moonbeam', symbol: 'glmr' }
@@ -44,8 +43,8 @@ const Teleport: FC = () => {
     getGasPrice()
   }, [appStore.walletProvider?.web3Provider])
 
-  function teleportTo(dPrimeAmount: string, dstChainName: string){
-    appStore.teleport(dPrimeAmount, dstChainName);
+  function teleportTo(dPrimeAmount: string, dstChainName: string) {
+    appStore.teleport(dPrimeAmount, dstChainName)
   }
 
   return (
@@ -78,7 +77,7 @@ const Teleport: FC = () => {
                 </div> */}
                 <div className="flex">
                   <div>Teleport Fee</div>
-                  <div className="ml-auto">~{destinationNetwork.name == 'Moonbase' ? teleportFees.moonbase+ " ETH" : teleportFees.rinkeby + "GLMR" }</div>
+                  <div className="ml-auto">~{destinationNetwork.name === 'Moonbase' ? teleportFees.moonbase + ' ETH' : teleportFees.rinkeby + 'GLMR'}</div>
                 </div>
                 <div className="flex">
                   <div>Gas fee</div>

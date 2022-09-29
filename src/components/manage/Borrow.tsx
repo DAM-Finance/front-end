@@ -9,11 +9,11 @@ import AvailableInput from '../AvailableInput'
 const Borrow: FC = () => {
   const appStore = useAppStore()
   const dPrimeBalance = appStore.balances.dPrime
-  const teleportFees = appStore.teleportFees
+  // const teleportFees = appStore.teleportFees
 
   const borrowIcon = utils.getImageSrc('borrow-icon.svg')
   const [amount, setAmount] = useState('0')
-  const [available] = useState('1030')
+  // const [available] = useState('1030')
 
   return (
     <>

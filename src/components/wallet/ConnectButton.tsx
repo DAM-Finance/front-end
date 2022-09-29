@@ -23,6 +23,9 @@ const ConnectButton: FC = () => {
       </div>
     )
   }
+  if (appStore.walletProvider.loading) {
+    connectBtn = <></>
+  }
 
   return <>{connectBtn}</>
 }

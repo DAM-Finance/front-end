@@ -6,9 +6,10 @@ import Metamask from './../../wallet/metamask'
 import { IAppStore } from './IAppStore'
 import { IBalances } from './IBalances'
 import { IContractInstances } from './IContractInstances'
+import { IGateway } from './IGateway'
 import { ISupportedNetwork } from './ISupportedNetwork'
 import { ITeleportFees } from './ITeleportFees'
-import { IWalletProvider } from './IWalletProvider'
+import { initialWalletProvider, IWalletProvider } from './IWalletProvider'
 
 import CollateralJoinDecAbi from '../../constants/abis/CollateralJoinDecimals.json'
 import dPrimeAbi from '../../constants/abis/dPrime.json'
@@ -28,18 +29,6 @@ export const supportedNetworks = [
 
 //BYTES
 let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
-
-const initialWalletProvider = {
-  metamask: null,
-  provider: null,
-  web3Provider: null,
-  connectedToChain: false,
-  chainId: '',
-  accounts: [],
-  connected: false,
-  connectWallet: async () => false
-} as IWalletProvider
-
 const connectedContracts = {} as IContractInstances
 const initBalances = {} as IBalances
 const initTeleportFees = {} as ITeleportFees
@@ -48,7 +37,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   supportedNetworks,
   selectedNetwork: supportedNetworks[0],
   walletProvider: initialWalletProvider,
-  metamask: new Metamask(),
+  gateway: null,
   portfolio: null,
   balances: initBalances,
   teleportFees: initTeleportFees,
@@ -64,71 +53,70 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         state.portfolio = data
       })
     ),
+  setGateway: (gateway: IGateway) =>
+    set(
+      produce((state: IAppStore) => {
+        state.gateway = gateway
+      })
+    ),
   setWalletProvider: (wallet: Partial<IWalletProvider>) =>
     set(
       produce((state: IAppStore) => {
+        debugger
         Object.keys(wallet).forEach((key) => {
           state.walletProvider[key as keyof IWalletProvider] = wallet[key as keyof IWalletProvider] as never
         })
         state.walletProvider.connected = !!state.walletProvider.accounts?.length
-        if (state.walletProvider.connected) {
-          state.portfolio = {
-            dPrime: '0.0',
-            // cushion: 21,
-            portfolioValue: 23324
-          }
-        } else {
-          state.portfolio = null
-        }
+        state.walletProvider.loading = false
       })
     ),
 
-  // Move to a Wallet service?
+  // Might be extended to support new gateways
+  chooseGateway: (): IGateway => {
+    const gateway = new Metamask()
+    return gateway
+  },
   connectWallet: async () => {
-    const accounts = await get().metamask.connect(get().walletProvider.provider)
+    const accounts = await get().gateway?.connect(get().walletProvider.provider)
     get().setWalletProvider({ accounts } as any)
+    get().attachContracts()
   },
-  setupWallet: async () => {
-    const provider = await get().metamask.detectProvider()
-    const chainId = await get().metamask.getChainId(provider)
-    const web3Provider = new ethers.providers.Web3Provider(provider)
-
-    initialWalletProvider.web3Provider = web3Provider
-    initialWalletProvider.accounts = await web3Provider.listAccounts()
-
-    get().metamask.subscribeEvents(provider, (data: any) => {
-      get().setWalletProvider(data)
-    })
-
-    const walletData = { provider, web3Provider, chainId, connectWallet: get().connectWallet }
-    get().setWalletProvider(walletData as any)
-    get().autoConnect(web3Provider)
-    get().attachContracts(web3Provider)
-  },
-  autoConnect: async (web3Provider: ethers.providers.Web3Provider) => {
-    const accounts = await web3Provider.listAccounts()
-
-    if (!accounts.length) {
-      return
+  initWeb3: async () => {
+    if (!get().gateway) {
+      const gateway = get().chooseGateway()
+      get().setGateway(gateway)
     }
-    get().connectWallet()
+
+    const provider = await get().gateway?.detectProvider()
+    const chainId = await get().gateway?.getChainId(provider)
+    const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
+    const accounts = await web3Provider.listAccounts()
+    // const network = await get().walletProvider.web3Provider!.getNetwork()
+
+    get().gateway?.subscribeEvents(provider, get().setWalletProvider)
+
+    const walletData: Partial<IWalletProvider> = { provider, web3Provider, chainId }
+    if (accounts) {
+      walletData.accounts = accounts
+    }
+
+    get().setWalletProvider(walletData)
+    get().attachContracts()
   },
   switchNetwork: async (chainId: string) => {
-    const metamask = get().metamask
     const provider = get().walletProvider.provider
-
-    await metamask.switchNetwork(provider, chainId)
-    get().attachContracts(new ethers.providers.Web3Provider(await get().metamask.detectProvider()))
+    await get().gateway?.switchNetwork(provider, chainId)
+    get().attachContracts()
   },
-  attachContracts: async (web3Provider: ethers.providers.Web3Provider) => {
-    // const accounts = await web3Provider.listAccounts()
-    const networkInfo = await web3Provider.getNetwork()
-
-    const signer = web3Provider.getSigner()
+  attachContracts: async () => {
+    if (!get().walletProvider.accounts || !get().walletProvider.accounts.length) {
+      return
+    }
+    const networkInfo = await get().walletProvider.web3Provider!.getNetwork()
+    const signer = get().walletProvider?.web3Provider?.getSigner()
 
     if (networkInfo.chainId === rinkeby_testnet_id) {
       console.log('Rinkeby attach')
-
       connectedContracts.lmcv = new ethers.Contract(rinkeby_testnet_addresses.LMCV, LMCVAbi, signer)
       connectedContracts.lmcvProxy = new ethers.Contract(rinkeby_testnet_addresses.LMCVProxy, LMCVProxyAbi, signer)
       connectedContracts.dPrime = new ethers.Contract(rinkeby_testnet_addresses.dPrime, dPrimeAbi, signer)
@@ -138,7 +126,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       connectedContracts.usdcPSM = new ethers.Contract(rinkeby_testnet_addresses.USDCPSM, PSMAbi, signer)
     } else if (networkInfo.chainId === moonbase_testnet_id) {
       console.log('Moonbase attach')
-
       //Only dPrime deployed moonbase
       connectedContracts.dPrime = new ethers.Contract(moonbase_addresses.dPrime, dPrimeAbi, signer)
     } else {
@@ -158,7 +145,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    let web3Provider = new ethers.providers.Web3Provider(await get().gateway?.detectProvider())
     // let networkInfo = await web3Provider.getNetwork()
     let teleportFee
 
@@ -196,7 +183,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
   },
   getDPrimeBalance: async () => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider(), 'any')
+    let web3Provider = new ethers.providers.Web3Provider(await get().gateway?.detectProvider(), 'any')
     const accounts = await web3Provider.listAccounts()
     let balance = await connectedContracts.dPrime.balanceOf(accounts[0])
     let formatedBalance = ethers.utils.formatUnits(balance, 18)
@@ -212,7 +199,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
   },
   getUSDCBalance: async () => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider(), 'any')
+    let web3Provider = new ethers.providers.Web3Provider(await get().gateway?.detectProvider(), 'any')
     const accounts = await web3Provider.listAccounts()
     let balance = await connectedContracts.usdc.balanceOf(accounts[0])
     let formatedBalance = ethers.utils.formatUnits(balance, 6)
@@ -227,7 +214,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       return
     }
     let formattedAmount = utils.fusdc(amount).toString()
-    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    let web3Provider = new ethers.providers.Web3Provider(await get().gateway?.detectProvider())
     const accounts = await web3Provider.listAccounts()
 
     console.log(connectedContracts.usdc.address)
@@ -268,7 +255,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     return txComplete
   },
   estimateTeleportFees: async () => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().metamask.detectProvider())
+    let web3Provider = new ethers.providers.Web3Provider(await get().gateway?.detectProvider())
     let networkInfo = await web3Provider.getNetwork()
 
     const accounts = await web3Provider.listAccounts()

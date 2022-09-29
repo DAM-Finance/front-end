@@ -13,7 +13,7 @@ const App = () => {
   }, [appStore.walletProvider.chainId])
 
   useEffect(() => {
-    appStore.setupWallet()
+    appStore.initWeb3()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

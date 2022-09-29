@@ -7,5 +7,15 @@ export interface IWalletProvider {
   chainId: string
   accounts: any[]
   connected: boolean
-  connectWallet: () => Promise<boolean>
+  loading: boolean
+}
+
+export const initialWalletProvider: IWalletProvider = {
+  provider: null,
+  web3Provider: null,
+  connectedToChain: false,
+  chainId: '',
+  accounts: [],
+  connected: false,
+  loading: true
 }
