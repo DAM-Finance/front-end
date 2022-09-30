@@ -43,10 +43,10 @@ class Metamask {
       return
     }
 
-    provider.on('connect', () => handler({ connectedToChain: provider.isConnected() }))
-    provider.on('disconnect', () => handler({ connectedToChain: provider.isConnected() }))
-    provider.on('chainChanged', (chainId) => handler({ chainId }))
-    provider.on('accountsChanged', (accounts) => handler({ accounts }))
+    provider.on('connect', () => handler({ type: 'connect', connectedToChain: provider.isConnected() }))
+    provider.on('disconnect', () => handler({ type: 'disconnect', connectedToChain: provider.isConnected() }))
+    provider.on('chainChanged', (chainId) => handler({ type: 'chainChanged', chainId }))
+    provider.on('accountsChanged', (accounts) => handler({ type: 'accountsChanged', accounts }))
   }
 
   unsubscribeEvents(provider, handler) {

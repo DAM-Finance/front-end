@@ -19,6 +19,7 @@ import LMCVAbi from '../../constants/abis/LMCV.json'
 import LMCVProxyAbi from '../../constants/abis/LMCVProxy.json'
 import PSMAbi from '../../constants/abis/PSM.json'
 import utils from '../../constants/utils'
+import { IGatewayEvent } from './IGatewayEvent'
 
 export const supportedNetworks = [
   // { name: 'Moonbeam', symbol: 'GLMR', chainId: '0x504', id: 1284, iconName: 'moonbeamneticon.png' },
@@ -34,7 +35,6 @@ const initBalances = {} as IBalances
 const initTeleportFees = {} as ITeleportFees
 
 export const useAppStore = create<IAppStore>((set, get) => ({
-  supportedNetworks,
   selectedNetwork: supportedNetworks[0],
   walletProvider: initialWalletProvider,
   gateway: null,
@@ -59,18 +59,17 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         state.gateway = gateway
       })
     ),
-  setWalletProvider: (wallet: Partial<IWalletProvider>) =>
+  setWalletProvider: (wallet: Partial<IWalletProvider>) => {
     set(
       produce((state: IAppStore) => {
-        debugger
         Object.keys(wallet).forEach((key) => {
           state.walletProvider[key as keyof IWalletProvider] = wallet[key as keyof IWalletProvider] as never
         })
         state.walletProvider.connected = !!state.walletProvider.accounts?.length
         state.walletProvider.loading = false
       })
-    ),
-
+    )
+  },
   // Might be extended to support new gateways
   chooseGateway: (): IGateway => {
     const gateway = new Metamask()
@@ -78,8 +77,20 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   connectWallet: async () => {
     const accounts = await get().gateway?.connect(get().walletProvider.provider)
-    get().setWalletProvider({ accounts } as any)
+    get().setWalletProvider({ accounts })
     get().attachContracts()
+    get().updateBalances()
+  },
+  gatewayEventHandler: (event: IGatewayEvent) => {
+    switch (event.type) {
+      case 'connect':
+      case 'disconnect':
+      case 'chainChanged':
+      case 'accountsChanged':
+        const newEvent: Partial<IGatewayEvent> = event
+        delete newEvent.type
+        get().setWalletProvider(newEvent)
+    }
   },
   initWeb3: async () => {
     if (!get().gateway) {
@@ -102,11 +113,13 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     get().setWalletProvider(walletData)
     get().attachContracts()
+    get().updateBalances()
   },
   switchNetwork: async (chainId: string) => {
     const provider = get().walletProvider.provider
     await get().gateway?.switchNetwork(provider, chainId)
     get().attachContracts()
+    get().updateBalances()
   },
   attachContracts: async () => {
     if (!get().walletProvider.accounts || !get().walletProvider.accounts.length) {
@@ -132,24 +145,11 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       console.log('LMCV Not implemented yet')
     }
 
-    get().getDPrimeBalance()
-    if (networkInfo.chainId === rinkeby_testnet_id) {
-      get().getUSDCBalance()
-    } else {
-      set(
-        produce((state: IAppStore) => {
-          state.balances.usdc = '0.0'
-        })
-      )
-    }
     get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().gateway?.detectProvider())
-    // let networkInfo = await web3Provider.getNetwork()
     let teleportFee
-
-    const accounts = await web3Provider.listAccounts()
+    const { accounts } = get().walletProvider
 
     //TODO: Make this much more elegant
     let dstChainId = '0'
@@ -182,26 +182,34 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       { value: teleportFee.nativeFee }
     )
   },
+  updateBalances: async () => {
+    const networkInfo = await get().walletProvider.web3Provider!.getNetwork()
+    get().getDPrimeBalance()
+    if (networkInfo.chainId === rinkeby_testnet_id) {
+      get().getUSDCBalance()
+    } else {
+      set(
+        produce((state: IAppStore) => {
+          state.balances.usdc = '0.0'
+        })
+      )
+    }
+  },
   getDPrimeBalance: async () => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().gateway?.detectProvider(), 'any')
-    const accounts = await web3Provider.listAccounts()
-    let balance = await connectedContracts.dPrime.balanceOf(accounts[0])
-    let formatedBalance = ethers.utils.formatUnits(balance, 18)
+    let dPrimeBalance = await connectedContracts.dPrime.balanceOf(get().walletProvider.accounts[0])
+    let formatedBalance = ethers.utils.formatUnits(dPrimeBalance, 18)
     set(
       produce((state: IAppStore) => {
         state.balances.dPrime = formatedBalance
         state.portfolio = {
-          dPrime: formatedBalance,
-          // cushion: 21,
-          portfolioValue: 23324
+          dPrime: formatedBalance
         }
       })
     )
   },
   getUSDCBalance: async () => {
-    let web3Provider = new ethers.providers.Web3Provider(await get().gateway?.detectProvider(), 'any')
-    const accounts = await web3Provider.listAccounts()
-    let balance = await connectedContracts.usdc.balanceOf(accounts[0])
+    const address = get().walletProvider.accounts[0]
+    let balance = await connectedContracts.usdc.balanceOf(address)
     let formatedBalance = ethers.utils.formatUnits(balance, 6)
     set(
       produce((state: IAppStore) => {

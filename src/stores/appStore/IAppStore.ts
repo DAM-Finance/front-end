@@ -7,7 +7,6 @@ import { ITeleportFees } from './ITeleportFees'
 import { IWalletProvider } from './IWalletProvider'
 
 export interface IAppStore {
-  supportedNetworks: ISupportedNetwork[]
   selectedNetwork: ISupportedNetwork | null
   walletProvider: IWalletProvider
 
@@ -28,6 +27,7 @@ export interface IAppStore {
   attachContracts: () => void
   getDPrimeBalance: () => void
   getUSDCBalance: () => void
+  updateBalances: () => void
   stableSwap: (amount: string) => void
   approveUSDC: (amount: string) => any
   teleport: (dPrimeAmount: string, dstChainName: string) => void

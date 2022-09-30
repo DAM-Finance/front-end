@@ -41,7 +41,7 @@ const SwitchNetworkSelector: FC = () => {
           value={appStore.walletProvider?.chainId}
           onChange={(evt) => appStore.switchNetwork(evt.target.value)}
         >
-          {appStore.supportedNetworks.map((network) => (
+          {supportedNetworks.map((network) => (
             <option className="bg-damgray text-white" key={network.symbol} value={network.chainId}>
               {network.name}
             </option>
