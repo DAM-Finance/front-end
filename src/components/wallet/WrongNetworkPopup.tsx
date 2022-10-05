@@ -1,6 +1,7 @@
 import { FC } from 'react'
+import { supportedNetworks } from '../../constants/config'
 import utils from '../../constants/utils'
-import { supportedNetworks, useAppStore } from '../../stores/appStore/appStore'
+import { useAppStore } from '../../stores/appStore/appStore'
 
 interface WrongNetworkPopupProps {
   show: boolean

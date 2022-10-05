@@ -15,7 +15,7 @@ const Teleport: FC = () => {
   const dPrimeBalance = appStore.balances.dPrime
   const teleportFees = appStore.teleportFees
 
-  console.log(teleportFees)
+  // console.log('teleportFees::::::::::', teleportFees)
 
   const [amount, setAmount] = useState('0')
   // const [available] = useState('1020')

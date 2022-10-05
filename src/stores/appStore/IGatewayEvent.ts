@@ -2,19 +2,19 @@ export type IGatewayEvent = IConnectGatewayEvent | IDisconnectGatewayEvent | ICh
 
 export interface IConnectGatewayEvent {
   type: GatewayEventType
-  connectedToChain: boolean
+  connectedToChain?: boolean
 }
 export interface IDisconnectGatewayEvent {
   type: GatewayEventType
-  connectedToChain: boolean
+  connectedToChain?: boolean
 }
 export interface IChainChangedGatewayEvent {
   type: GatewayEventType
-  chainId: string
+  chainId?: string
 }
 export interface IAccountsChangedGatewayEvent {
   type: GatewayEventType
-  accounts: string[]
+  accounts?: string[]
 }
 
 type GatewayEventType = 'connect' | 'disconnect' | 'chainChanged' | 'accountsChanged'

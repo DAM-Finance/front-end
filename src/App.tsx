@@ -3,14 +3,15 @@ import Routes from './components/common/Routes/Routes'
 import WrongNetworkPop from './components/wallet/WrongNetworkPopup'
 
 import { useCallback, useEffect } from 'react'
-import { supportedNetworks, useAppStore } from './stores/appStore/appStore'
+import { useAppStore } from './stores/appStore/appStore'
+import { supportedNetworks } from './constants/config'
 
 const App = () => {
   const appStore = useAppStore()
 
   const isSelectedNetworkSupported = useCallback(() => {
-    return !!supportedNetworks.find((network) => network.chainId === appStore.walletProvider.chainId)
-  }, [appStore.walletProvider.chainId])
+    return !!supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
+  }, [appStore.selectedNetwork])
 
   useEffect(() => {
     appStore.initWeb3()
