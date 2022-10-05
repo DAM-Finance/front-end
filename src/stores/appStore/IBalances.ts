@@ -1,4 +1,4 @@
 export interface IBalances {
-    dPrime: string,
-    usdc: string
+  dPrime: string
+  usdc: string
 }

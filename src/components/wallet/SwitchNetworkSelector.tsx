@@ -28,11 +28,11 @@ const SwitchNetworkSelector: FC = () => {
     )
   }
 
-  if (appStore.walletProvider.connected && isSelectedNetworkSupported()) {
+  if (appStore.walletProvider.connected && !!appStore.selectedNetwork) {
     switchNeworkSelector = (
       <div className="relative">
         <div className="flex px-2 py-1 gap-2 rounded-full border-solid border-[1px] border-damyellow">
-          <img className="" width={29} height={29} src={utils.getImageSrc(appStore.selectedNetwork!.iconName as string)} alt="selected network" />
+          <img className="" width={29} height={29} src={utils.getImageSrc(appStore.selectedNetwork?.iconName as string)} alt="selected network" />
           <ChevronDownIcon width={14} className="text-damyellow"></ChevronDownIcon>
         </div>
         <select

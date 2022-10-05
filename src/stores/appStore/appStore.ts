@@ -7,7 +7,8 @@ import {
   // moonbase_testnet_id,
   // rinkeby_testnet_addresses,
   // rinkeby_testnet_id,
-  supportedNetworks
+  supportedNetworks,
+  supportedTokens
 } from '../../constants/config'
 import Metamask from './../../wallet/metamask'
 import { IAppStore } from './IAppStore'
@@ -32,7 +33,7 @@ import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
 const connectedContracts = {} as IContractInstances | any
 const initBalances = {} as IBalances
-const initTeleportFees = {} as ITeleportFees
+// const initTeleportFees = {} as ITeleportFees
 
 const abis = {
   usdcJoin: CollateralJoinDecAbi,
@@ -50,7 +51,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   gateway: null,
   portfolio: null,
   balances: initBalances,
-  teleportFees: initTeleportFees,
+  teleportFees: '0',
   setSelectedNetwork: (network: ISupportedNetwork) =>
     set(
       produce((state: IAppStore) => {
@@ -80,6 +81,20 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       })
     )
   },
+  setTeleportFees: (fees: string) => {
+    set(
+      produce((state: IAppStore) => {
+        state.teleportFees = fees
+      })
+    )
+  },
+  setBalances: (token: keyof typeof supportedTokens, balance: string) => {
+    set(
+      produce((state: IAppStore) => {
+        state.balances[token] = balance
+      })
+    )
+  },
   // Might be extended to support new gateways
   chooseGateway: (): IGateway => {
     const gateway = new Metamask()
@@ -102,6 +117,9 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     switch (event.type) {
       case 'chainChanged':
         await get().refreshNetwork()
+        if (!get().selectedNetwork) {
+          return
+        }
         get().attachContracts()
         get().updateBalances()
         return
@@ -134,8 +152,12 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     get().setWalletProvider(walletData)
     await get().refreshNetwork()
+    if (!get().selectedNetwork) {
+      return
+    }
+
     get().attachContracts()
-    get().updateBalances()
+    // get().updateBalances()
   },
   switchNetwork: async (chainId: string) => {
     const provider = get().walletProvider.provider
@@ -145,9 +167,12 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     if (!get().walletProvider.accounts || !get().walletProvider.accounts.length) {
       return
     }
+    const addresses = get().selectedNetwork?.addresses as any
 
-    const supportedNetwork = supportedNetworks.find((supportedNetwork) => supportedNetwork.id === get().walletProvider.network?.chainId)
-    const addresses = supportedNetwork!.addresses as any
+    if (!addresses) {
+      return
+    }
+
     Object.keys(addresses).forEach((addressKey) => {
       if (!abis[addressKey]) {
         return
@@ -190,39 +215,20 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     // )
   },
   updateBalances: async () => {
-    // const networkInfo = await get().walletProvider.web3Provider!.getNetwork()
-    // get().getDPrimeBalance()
-    // if (networkInfo.chainId === rinkeby_testnet_id) {
-    //   get().getUSDCBalance()
-    // } else {
-    //   set(
-    //     produce((state: IAppStore) => {
-    //       state.balances.usdc = '0.0'
-    //     })
-    //   )
-    // }
+    get().getTokenBalance('dPrime')
+    if (get().selectedNetwork?.name === 'Rinkeby') {
+      get().getTokenBalance('usdc')
+    } else {
+      get().setBalances('usdc', '0.0')
+    }
   },
-  getDPrimeBalance: async () => {
-    // let dPrimeBalance = await connectedContracts.dPrime.balanceOf(get().walletProvider.accounts[0])
-    // let formatedBalance = ethers.utils.formatUnits(dPrimeBalance, 18)
-    // set(
-    //   produce((state: IAppStore) => {
-    //     state.balances.dPrime = formatedBalance
-    //     state.portfolio = {
-    //       dPrime: formatedBalance
-    //     }
-    //   })
-    // )
-  },
-  getUSDCBalance: async () => {
-    const address = get().walletProvider.accounts[0]
-    let balance = await connectedContracts.usdc.balanceOf(address)
-    let formatedBalance = ethers.utils.formatUnits(balance, 6)
-    set(
-      produce((state: IAppStore) => {
-        state.balances.usdc = formatedBalance
-      })
-    )
+  getTokenBalance: async (token: keyof typeof supportedTokens) => {
+    const account = get().walletProvider.accounts[0]
+    const units = supportedTokens[token].units
+
+    let balance = await connectedContracts[token].balanceOf(account)
+    let formatedBalance = ethers.utils.formatUnits(balance, units)
+    get().setBalances(token, formatedBalance)
   },
   stableSwap: async (amount: string) => {
     // if (amount === '0') {
@@ -258,15 +264,21 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     //   )
     // }
   },
+  // Remove and replace by generic approveToken
   approveUSDC: async (amount: string) => {
-    // let res = await connectedContracts.usdc.approve(rinkeby_testnet_addresses.USDCJoin, amount)
-    // let txComplete = await res.wait()
-    // console.log(txComplete)
-    // return txComplete
+    let res = await connectedContracts.usdc.approve(get().selectedNetwork?.addresses?.usdcJoin, amount)
+    let txComplete = await res.wait()
+    return txComplete
+  },
+  approveToken: async (amount: string, token: keyof typeof supportedTokens, tokenJoin: string) => {
+    const joinContract = (get().selectedNetwork?.addresses as any)[tokenJoin]
+    let res = await connectedContracts[token].approve(joinContract, amount)
+    let txComplete = await res.wait()
+    return txComplete
   },
   estimateTeleportFees: async () => {
     const { accounts } = get().walletProvider
-    console.log('get().selectedNetwork', get().selectedNetwork)
+
     const teleportFee = await connectedContracts.dPrime.estimateSendFee(
       get().selectedNetwork!.layerZeroChainIds,
       accounts[0],
@@ -274,32 +286,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       false,
       []
     )
-    console.log('teleportfees', get().selectedNetwork!.layerZeroChainIds, accounts[0], utils.pwad(teleportFee.nativeFee))
-    set(
-      produce((state: IAppStore) => {
-        state.teleportFees.rinkeby = utils.pwad(teleportFee.nativeFee)
-      })
-    )
+    get().setTeleportFees(utils.pwad(teleportFee.nativeFee))
   }
-  // if (networkInfo.chainId === rinkeby_testnet_id) {
-  //   let teleportFee = await connectedContracts.dPrime.estimateSendFee(
-  //     LayerZeroChainIds.moonbase,
-  //     accounts[0],
-  //     utils.fwad('10'), //Convert from decimal number (type: string still) into 18 dec amount
-  //     false,
-  //     []
-  //   )
-  //   set(
-  //     produce((state: IAppStore) => {
-  //       state.teleportFees.moonbase = utils.pwad(teleportFee.nativeFee)
-  //     })
-  //   )
-  // } else if (networkInfo.chainId === moonbase_testnet_id) {
-  //   let teleportFee = await connectedContracts.dPrime.estimateSendFee(
-  //     LayerZeroChainIds.rinkeby_testnet,
-  //     accounts[0],
-  //     utils.fwad('10'), //Convert from decimal number (type: string still) into 18 dec amount
-  //     false,
-  //     []
-  //   )
 }))

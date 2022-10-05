@@ -58,3 +58,14 @@ export const supportedNetworks: ISupportedNetwork[] = [
   // { name: 'Moonbeam', symbol: 'GLMR', chainId: '0x504', id: 1284, iconName: 'moonbeamneticon.png' },
   // { name: 'Ethereum', symbol: 'ETH', chainId: '0x1', id: 1, iconName: 'ethneticon.png' },
 ]
+
+export const supportedTokens = {
+  dPrime: {
+    name: 'dPrime',
+    units: 18
+  },
+  usdc: {
+    name: 'usdc',
+    units: 6
+  }
+}

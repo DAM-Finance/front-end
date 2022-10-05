@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { supportedTokens } from '../../constants/config'
 import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 import Metamask from '../../wallet/metamask'
 import { IBalances } from './IBalances'
@@ -15,8 +16,12 @@ export interface IAppStore {
   setGateway: (gateway: IGateway) => void
 
   portfolio: any // TODO: remove when smart contracts are called
+
   balances: IBalances
-  teleportFees: ITeleportFees
+  setBalances: (token: keyof typeof supportedTokens, balance: string) => void
+
+  teleportFees: string
+  setTeleportFees: (fees: string) => void
 
   chooseGateway: () => IGateway
   gatewayEventHandler: (event: IGatewayEvent) => void
@@ -28,8 +33,9 @@ export interface IAppStore {
   switchNetwork: (chainId: string) => void
   attachContracts: () => void
   refreshNetwork: () => void
-  getDPrimeBalance: () => void
-  getUSDCBalance: () => void
+
+  getTokenBalance: (token: keyof typeof supportedTokens) => void
+
   updateBalances: () => void
   stableSwap: (amount: string) => void
   approveUSDC: (amount: string) => any

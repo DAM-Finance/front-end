@@ -13,9 +13,6 @@ import SelectNetwork from '../SelectNetwork'
 const Teleport: FC = () => {
   const appStore = useAppStore()
   const dPrimeBalance = appStore.balances.dPrime
-  const teleportFees = appStore.teleportFees
-
-  // console.log('teleportFees::::::::::', teleportFees)
 
   const [amount, setAmount] = useState('0')
   // const [available] = useState('1020')
@@ -77,7 +74,7 @@ const Teleport: FC = () => {
                 </div> */}
                 <div className="flex">
                   <div>Teleport Fee</div>
-                  <div className="ml-auto">~{destinationNetwork.name === 'Moonbase' ? teleportFees.moonbase + ' ETH' : teleportFees.rinkeby + 'GLMR'}</div>
+                  <div className="ml-auto">{appStore.teleportFees}</div>
                 </div>
                 <div className="flex">
                   <div>Gas fee</div>
