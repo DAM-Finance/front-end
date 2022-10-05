@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
-import { FC, useCallback } from 'react'
+import { FC } from 'react'
 import { supportedNetworks } from '../../constants/config'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -7,13 +7,9 @@ import { useAppStore } from '../../stores/appStore/appStore'
 const SwitchNetworkSelector: FC = () => {
   const appStore = useAppStore()
 
-  // const getSelectedNetwork = useCallback(() => {
-  //   return supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork)
+  // const isSelectedNetworkSupported = useCallback(() => {
+  //   return !!supportedNetworks.find((network) => network.chainId === appStore.walletProvider.chainId)
   // }, [appStore.walletProvider.chainId])
-
-  const isSelectedNetworkSupported = useCallback(() => {
-    return !!supportedNetworks.find((network) => network.chainId === appStore.walletProvider.chainId)
-  }, [appStore.walletProvider.chainId])
 
   let switchNeworkSelector = <></>
 
