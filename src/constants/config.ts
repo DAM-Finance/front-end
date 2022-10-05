@@ -42,19 +42,19 @@ export const supportedNetworks: ISupportedNetwork[] = [
       lzEndpoint: '0x79a63d6d8BBD5c6dfc774dA79bCcD948EAcb53FA'
     },
     layerZeroChainIds: '10001'
-  },
-  {
-    name: 'BSC Testnet',
-    symbol: 'BNB',
-    chainId: '0x61',
-    id: 97,
-    iconName: 'ethneticon.png',
-    addresses: {
-      dPrime: '0xf209894986d921b2868821E728eFa57145Fed3f7',
-      lzEndpoint: '0x6Fcb97553D41516Cb228ac03FdC8B9a0a9df04A1'
-    },
-    layerZeroChainIds: '10002'
   }
+  // {
+  //   name: 'BSC Testnet',
+  //   symbol: 'BNB',
+  //   chainId: '0x61',
+  //   id: 97,
+  //   iconName: 'ethneticon.png',
+  //   addresses: {
+  //     dPrime: '0xf209894986d921b2868821E728eFa57145Fed3f7',
+  //     lzEndpoint: '0x6Fcb97553D41516Cb228ac03FdC8B9a0a9df04A1'
+  //   },
+  //   layerZeroChainIds: '10002'
+  // }
   // { name: 'Moonbeam', symbol: 'GLMR', chainId: '0x504', id: 1284, iconName: 'moonbeamneticon.png' },
   // { name: 'Ethereum', symbol: 'ETH', chainId: '0x1', id: 1, iconName: 'ethneticon.png' },
 ]

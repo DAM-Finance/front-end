@@ -178,7 +178,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       connectedContracts[addressKey] = new ethers.Contract(addresses[addressKey], abis[addressKey], get().walletProvider.signer!)
     })
 
-    // console.log('connectedContracts', connectedContracts, get().walletProvider.network)
     get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
