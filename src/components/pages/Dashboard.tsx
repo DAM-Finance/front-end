@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { useAppStore } from '../../stores/appStore/appStore'
+import BorrowingSoon from '../dashboard/BorrowingSoon'
 import Cushion from '../dashboard/Cushion'
 import DDPrime from '../dashboard/DDPrime'
 import DPrime from '../dashboard/DPrime'
@@ -16,7 +17,8 @@ const Home: FC = () => {
         </div>
         <div className="grid grid-rows-2 flex-col gap-4">
           <DPrime {...portfolio}></DPrime>
-          <Cushion {...portfolio}></Cushion>
+          {/* <Cushion {...portfolio}></Cushion> */}
+          <BorrowingSoon></BorrowingSoon>
         </div>
       </div>
       <DDPrime />
