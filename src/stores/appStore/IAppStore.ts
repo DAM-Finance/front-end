@@ -1,16 +1,16 @@
-import { ethers } from 'ethers'
 import { supportedTokens } from '../../constants/config'
 import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
-import Metamask from '../../wallet/metamask'
 import { IBalances } from './IBalances'
 import { IGateway } from './IGateway'
 import { IGatewayEvent } from './IGatewayEvent'
-import { ITeleportFees } from './ITeleportFees'
 import { IWalletProvider } from './IWalletProvider'
 
 export interface IAppStore {
   selectedNetwork: ISupportedNetwork | null
   walletProvider: IWalletProvider
+
+  showConnectingWalletPopup: boolean
+  setShowConnectingWalletPopup: (isConnecting: boolean) => void
 
   gateway: IGateway | null
   setGateway: (gateway: IGateway) => void
@@ -29,6 +29,8 @@ export interface IAppStore {
   setPortfolio: (data: any) => void // TODO: remove when smart contracts are called
   initWeb3: () => void
   setWalletProvider: (wallet: Partial<IWalletProvider>) => void
+
+  ensureConnected: () => void
   connectWallet: () => void
   switchNetwork: (chainId: string) => void
   attachContracts: () => void

@@ -5,6 +5,7 @@ import WrongNetworkPop from './components/wallet/WrongNetworkPopup'
 import { useCallback, useEffect } from 'react'
 import { useAppStore } from './stores/appStore/appStore'
 import { supportedNetworks } from './constants/config'
+import WaitingForConfirmationPopup from './components/wallet/WaitingForConfirmationPopup'
 
 const App = () => {
   const appStore = useAppStore()
@@ -27,6 +28,10 @@ const App = () => {
         </div>
       </div>
       <WrongNetworkPop show={appStore.walletProvider.connected && !isSelectedNetworkSupported()} handleClose={() => {}} />
+      <WaitingForConfirmationPopup
+        handleClose={() => appStore.setShowConnectingWalletPopup(false)}
+        show={appStore.showConnectingWalletPopup}
+      ></WaitingForConfirmationPopup>
     </>
   )
 }

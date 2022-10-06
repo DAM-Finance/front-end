@@ -51,6 +51,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   portfolio: null,
   balances: initBalances,
   teleportFees: '0',
+  showConnectingWalletPopup: false,
   setSelectedNetwork: (network: ISupportedNetwork) =>
     set(
       produce((state: IAppStore) => {
@@ -94,12 +95,25 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       })
     )
   },
+  setShowConnectingWalletPopup: (isConnecting: boolean) => {
+    set(
+      produce((state: IAppStore) => {
+        state.showConnectingWalletPopup = isConnecting
+      })
+    )
+  },
   // Might be extended to support new gateways
   chooseGateway: (): IGateway => {
     const gateway = new Metamask()
     return gateway
   },
+  ensureConnected: async () => {
+    if (!get().walletProvider.connected) {
+      await get().connectWallet()
+    }
+  },
   connectWallet: async () => {
+    get().setShowConnectingWalletPopup(true)
     const accounts = await get().gateway?.connect(get().walletProvider.provider)
     get().setWalletProvider({ accounts })
     get().attachContracts()
@@ -109,9 +123,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const network = await get().walletProvider!.web3Provider!.getNetwork() // update network?
     const selectedNetwork = supportedNetworks.find((supportedNetwork) => supportedNetwork.id === network.chainId)
     get().setSelectedNetwork(selectedNetwork!)
-    console.log('selectedNetwork', selectedNetwork)
   },
   gatewayEventHandler: async (event: IGatewayEvent) => {
+    // TODO: refactor (dry)
+    const newEvent: Partial<IGatewayEvent> = event
     switch (event.type) {
       case 'chainChanged':
         await get().refreshNetwork()
@@ -122,9 +137,16 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         get().updateBalances()
         return
       case 'connect':
+        get().setShowConnectingWalletPopup(false)
+        delete newEvent.type
+        get().setWalletProvider(newEvent)
+        return
       case 'disconnect':
+        delete newEvent.type
+        get().setWalletProvider(newEvent)
+        return
       case 'accountsChanged':
-        const newEvent: Partial<IGatewayEvent> = event
+        get().setShowConnectingWalletPopup(false)
         delete newEvent.type
         get().setWalletProvider(newEvent)
     }
@@ -181,6 +203,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
+    await get().ensureConnected()
     const { accounts } = get().walletProvider
 
     let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.layerZeroChainIds
@@ -203,7 +226,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
   },
   updateBalances: async () => {
-    get().getTokenBalance('dPrime')
+    await get().getTokenBalance('dPrime')
     if (get().selectedNetwork?.name === 'Rinkeby') {
       get().getTokenBalance('usdc')
     } else {
@@ -219,7 +242,9 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().setBalances(token, formatedBalance)
   },
   stableSwap: async (amount: string) => {
-    if (amount === '0') {
+    await get().ensureConnected()
+
+    if (amount === '0' || !get().selectedNetwork) {
       return
     }
 
@@ -229,7 +254,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const allowance = await connectedContracts.usdc.allowance(accounts[0], get().selectedNetwork?.addresses.usdcJoin)
     let txWait
     if (allowance < formattedAmount) {
-      console.log('Allowance: ' + allowance)
       get()
         .approveUSDC(formattedAmount)
         .then((data: any) => {
@@ -238,7 +262,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     } else {
       txWait = await connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
     }
-    console.log('Amount: ' + formattedAmount)
     await txWait.wait()
 
     get().updateBalances()

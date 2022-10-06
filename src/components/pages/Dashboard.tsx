@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import { useAppStore } from '../../stores/appStore/appStore'
 import BorrowingSoon from '../dashboard/BorrowingSoon'
-import Cushion from '../dashboard/Cushion'
 import DDPrime from '../dashboard/DDPrime'
 import DPrime from '../dashboard/DPrime'
 import Portfolio from '../dashboard/Portfolio'
