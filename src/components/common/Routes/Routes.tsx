@@ -4,6 +4,7 @@ import Borrow from '../../manage/Borrow'
 import Deposit from '../../manage/Deposit'
 import Repay from '../../manage/Repay'
 import Withdraw from '../../manage/Withdraw'
+import Analytics from '../../pages/Analytics'
 import Earn from '../../pages/Earn'
 import Manage from '../../pages/Manage'
 import Swap from '../../pages/Swap'
@@ -17,6 +18,7 @@ const AppRoutes: FC = () => {
     <div>
       <Routes>
         <Route path="" element={<Dashboard />} />
+        <Route path="analytics" element={<Analytics />} />
         <Route path="swap" element={<Swap />} />
 
         <Route path="manage" element={<Manage />}>
