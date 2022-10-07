@@ -27,7 +27,12 @@ const App = () => {
           <Routes />
         </div>
       </div>
-      <WrongNetworkPop show={appStore.walletProvider.connected && !isSelectedNetworkSupported()} handleClose={() => {}} />
+      <WrongNetworkPop
+        show={appStore.isWrongNetworkPopupEnabled && appStore.walletProvider.connected && !isSelectedNetworkSupported()}
+        handleClose={() => {
+          appStore.setIsWrongNetworkPopupEnabled(false)
+        }}
+      />
       <WaitingForConfirmationPopup
         handleClose={() => appStore.setShowConnectingWalletPopup(false)}
         show={appStore.showConnectingWalletPopup}

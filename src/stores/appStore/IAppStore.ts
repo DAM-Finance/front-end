@@ -12,6 +12,9 @@ export interface IAppStore {
   showConnectingWalletPopup: boolean
   setShowConnectingWalletPopup: (isConnecting: boolean) => void
 
+  isWrongNetworkPopupEnabled: boolean
+  setIsWrongNetworkPopupEnabled: (isWrongNetwork: boolean) => void
+
   gateway: IGateway | null
   setGateway: (gateway: IGateway) => void
 

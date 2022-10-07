@@ -52,6 +52,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   balances: initBalances,
   teleportFees: '0',
   showConnectingWalletPopup: false,
+  isWrongNetworkPopupEnabled: true,
   setSelectedNetwork: (network: ISupportedNetwork) =>
     set(
       produce((state: IAppStore) => {
@@ -102,6 +103,13 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       })
     )
   },
+  setIsWrongNetworkPopupEnabled: (isWrongNetwork: boolean) => {
+    set(
+      produce((state: IAppStore) => {
+        state.isWrongNetworkPopupEnabled = isWrongNetwork
+      })
+    )
+  },
   // Might be extended to support new gateways
   chooseGateway: (): IGateway => {
     const gateway = new Metamask()
@@ -130,6 +138,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     switch (event.type) {
       case 'chainChanged':
         await get().refreshNetwork()
+        get().setIsWrongNetworkPopupEnabled(true)
         if (!get().selectedNetwork) {
           return
         }
