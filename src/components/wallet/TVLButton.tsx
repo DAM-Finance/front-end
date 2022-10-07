@@ -1,12 +1,15 @@
 import { FC } from 'react'
+import { NavLink } from 'react-router-dom'
 import utils from '../../constants/utils'
 
 const TVLButton: FC = () => {
   return (
-    <div className="flex items-center px-4 py-2 gap-2 rounded-full bg-dambackgroundgrayed text-white">
-      <div>$2B TVL</div>
-      <img className="pb-1" src={utils.getImageSrc('link-external.svg')} alt="wallet" />
-    </div>
+    <NavLink to="/analytics">
+      <div className="flex items-center px-4 py-2 gap-2 rounded-full bg-dambackgroundgrayed text-white">
+        <div>Stats</div>
+        <img className="pb-1" src={utils.getImageSrc('link-external.svg')} alt="wallet" />
+      </div>
+    </NavLink>
   )
 }
 
