@@ -18,6 +18,10 @@ export interface IAppStore {
   gateway: IGateway | null
   setGateway: (gateway: IGateway) => void
 
+  analytics: any // TODO: SET THE PROPER TYPE (unknown for now)
+  setAnalytics: (data: any) => void
+  queryAnalytics: () => any
+
   portfolio: any // TODO: remove when smart contracts are called
 
   balances: IBalances

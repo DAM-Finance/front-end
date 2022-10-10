@@ -11,6 +11,10 @@ export class Utils {
     return `${process.env.PUBLIC_URL}${img}`
   }
 
+  round(value: number, decimals: number): number {
+    return Math.floor(value * Math.pow(10, decimals)) / Math.pow(10, decimals)
+  }
+
   shortenWalletAddress = (wallet: string) => {
     return `${wallet.slice(0, 5)}...${wallet.slice(-4, wallet.length)}`
   }

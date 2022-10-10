@@ -51,6 +51,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   portfolio: null,
   balances: initBalances,
   teleportFees: '0',
+  analytics: null,
   showConnectingWalletPopup: false,
   isWrongNetworkPopupEnabled: true,
   setSelectedNetwork: (network: ISupportedNetwork) =>
@@ -107,6 +108,13 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     set(
       produce((state: IAppStore) => {
         state.isWrongNetworkPopupEnabled = isWrongNetwork
+      })
+    )
+  },
+  setAnalytics: (data: any) => {
+    set(
+      produce((state: IAppStore) => {
+        state.analytics = data
       })
     )
   },
@@ -298,5 +306,22 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       []
     )
     get().setTeleportFees(utils.pwad(teleportFee.nativeFee))
+  },
+  queryAnalytics: async () => {
+    const data = await Promise.resolve({
+      collateralRatio: '155%',
+      tvl: {
+        Ethereum: '$1.2bn',
+        Moonbeam: '$1.2bn',
+        Rinkeby: '$0.9bn'
+      },
+      dPrime: {
+        Ethereum: 0.6,
+        Moonbeam: 0.5,
+        Rinkeby: 0.3
+      }
+    })
+    get().setAnalytics(data)
+    return data
   }
 }))
