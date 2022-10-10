@@ -4,7 +4,6 @@ import AnalyticsDPrime from '../analytics/AnalyticsDPrime'
 import AuditBanner from '../analytics/AuditBanner'
 import CollateralRatio from '../analytics/CollateralRatio'
 import TotalValueLocked from '../analytics/TotalValueLocked'
-import DPrime from '../dashboard/DPrime'
 
 const Analytics: FC = () => {
   const appStore = useAppStore()

@@ -4,7 +4,7 @@ import { useAppStore } from '../../stores/appStore/appStore'
 
 const TotalValueLocked: FC = () => {
   const appStore = useAppStore()
-  const [selectedNetwork, setSelectedNetwork] = useState('')
+  const [selectedNetwork] = useState('')
   const [networks, setNetworks] = useState<any>([])
 
   useEffect(() => {
@@ -29,6 +29,7 @@ const TotalValueLocked: FC = () => {
 
     return utils.round(total, 2)
   }, [selectedNetwork, networks, appStore.analytics])
+  getDPrimeTotal()
 
   return (
     <div className="bg-damgray h-full rounded-xl">
