@@ -311,9 +311,9 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const data = await Promise.resolve({
       collateralRatio: '155%',
       tvl: {
-        Ethereum: '$1.2bn',
-        Moonbeam: '$1.2bn',
-        Rinkeby: '$0.9bn'
+        Ethereum: 0.8,
+        Moonbeam: 1.1,
+        Rinkeby: 0.4
       },
       dPrime: {
         Ethereum: 0.6,
