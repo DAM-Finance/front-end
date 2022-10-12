@@ -23,9 +23,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
       <NavLink to="/swap" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         dPRIME Swap
       </NavLink>
-      <NavLink to="/manage" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
+      {/* <NavLink to="/manage" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         Manage
-      </NavLink>
+      </NavLink> */}
       <NavLink to="/teleport" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         Teleport
       </NavLink>
