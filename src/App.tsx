@@ -2,13 +2,15 @@ import Navbar from './components/common/Navbar/Navbar'
 import Routes from './components/common/Routes/Routes'
 import WrongNetworkPop from './components/wallet/WrongNetworkPopup'
 
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAppStore } from './stores/appStore/appStore'
 import { supportedNetworks } from './constants/config'
 import WaitingForConfirmationPopup from './components/wallet/WaitingForConfirmationPopup'
+import TermsAndConditionsPopup from './components/wallet/TermsAndConditionsPopup'
 
 const App = () => {
   const appStore = useAppStore()
+  const [agreedTCs, setAgreedTCs] = useState(localStorage.getItem('agreedTC') === 'true')
 
   const isSelectedNetworkSupported = useCallback(() => {
     return !!supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
@@ -18,6 +20,10 @@ const App = () => {
     appStore.initWeb3()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    localStorage.setItem('agreedTC', agreedTCs.toString())
+  }, [agreedTCs])
 
   return (
     <>
@@ -37,6 +43,11 @@ const App = () => {
         handleClose={() => appStore.setShowConnectingWalletPopup(false)}
         show={appStore.showConnectingWalletPopup}
       ></WaitingForConfirmationPopup>
+      <TermsAndConditionsPopup
+        handleDecline={() => (window.location.href = 'https://dam.finance')}
+        handleAgree={() => setAgreedTCs(true)}
+        show={appStore.walletProvider.connected && !agreedTCs}
+      ></TermsAndConditionsPopup>
     </>
   )
 }

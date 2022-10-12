@@ -30,9 +30,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         Teleport
       </NavLink>
 
-      <NavLink to="/earn" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
+      {/* <NavLink to="/earn" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         Earn
-      </NavLink>
+      </NavLink> */}
 
       <div className="flex ml-auto gap-4">
         {!appStore.walletProvider.loading && (

@@ -4,10 +4,11 @@ import Checkbox from '../Checkbox'
 
 interface TermsAndConditionsPopupProps {
   show: boolean
-  handleClose: () => void
+  handleDecline: () => void
+  handleAgree: () => void
 }
 
-const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handleClose }) => {
+const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handleDecline, handleAgree }) => {
   const [agreeTC, setAgreeTC] = useState(false)
   const [agreePP, setAgreePP] = useState(false)
 
@@ -53,16 +54,15 @@ const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handl
             </div>
             <div className="flex gap-4">
               <button
-                onClick={() => {
-                  handleClose()
-                }}
+                onClick={handleDecline}
                 className="flex items-center gap-2 rounded-full px-4 bg-damyellow bg-opacity-5 text-yellow-300 hover:bg-opacity-10"
               >
                 <span>Decline</span>
               </button>
               <button
-                onClick={() => {}}
-                className="flex items-center w-fit gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
+                onClick={handleAgree}
+                disabled={!agreeTC || !agreePP}
+                className="flex items-center w-fit gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold disabled:opacity-20 disabled:cursor-not-allowed"
               >
                 <span>Agree</span>
               </button>
