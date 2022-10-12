@@ -121,9 +121,6 @@ const Swaper: FC = () => {
       >
         <span>Swap</span>
       </button>
-      <div className="text-damlightyellow text-sm font-light">
-        Note: If the stablecoin lacks approval, two pop ups will appear, the first one asking for approval, and the second making the swap
-      </div>
     </div>
   )
 }
