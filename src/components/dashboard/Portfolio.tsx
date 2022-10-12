@@ -20,7 +20,7 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
         <div className="flex gap-4">
           <NavLink to="/swap">
             <button className="flex font-bold items-center gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200">
-              <span>Swap for dPRIME</span>
+              <span>Get dPRIME</span>
             </button>
           </NavLink>
           <button className="rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">Learn More</button>
