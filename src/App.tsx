@@ -40,8 +40,8 @@ const App = () => {
         }}
       />
       <WaitingForConfirmationPopup
-        handleClose={() => appStore.setShowConnectingWalletPopup(false)}
-        show={appStore.showConnectingWalletPopup}
+        handleClose={() => appStore.setShowWaitingForConfirmation(false)}
+        show={appStore.showWaitingForConfirmation}
       ></WaitingForConfirmationPopup>
       <TermsAndConditionsPopup
         handleDecline={() => (window.location.href = 'https://dam.finance')}

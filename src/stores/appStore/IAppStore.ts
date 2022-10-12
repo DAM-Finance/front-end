@@ -9,8 +9,8 @@ export interface IAppStore {
   selectedNetwork: ISupportedNetwork | null
   walletProvider: IWalletProvider
 
-  showConnectingWalletPopup: boolean
-  setShowConnectingWalletPopup: (isConnecting: boolean) => void
+  showWaitingForConfirmation: boolean
+  setShowWaitingForConfirmation: (isConnecting: boolean) => void
 
   isWrongNetworkPopupEnabled: boolean
   setIsWrongNetworkPopupEnabled: (isWrongNetwork: boolean) => void

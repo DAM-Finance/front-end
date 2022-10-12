@@ -52,7 +52,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   balances: initBalances,
   teleportFees: '0',
   analytics: null,
-  showConnectingWalletPopup: false,
+  showWaitingForConfirmation: false,
   isWrongNetworkPopupEnabled: true,
   setSelectedNetwork: (network: ISupportedNetwork) =>
     set(
@@ -97,10 +97,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       })
     )
   },
-  setShowConnectingWalletPopup: (isConnecting: boolean) => {
+  setShowWaitingForConfirmation: (isConnecting: boolean) => {
     set(
       produce((state: IAppStore) => {
-        state.showConnectingWalletPopup = isConnecting
+        state.showWaitingForConfirmation = isConnecting
       })
     )
   },
@@ -129,7 +129,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
   },
   connectWallet: async () => {
-    get().setShowConnectingWalletPopup(true)
     const accounts = await get().gateway?.connect(get().walletProvider.provider)
     get().setWalletProvider({ accounts })
     get().attachContracts()
@@ -154,7 +153,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         get().updateBalances()
         return
       case 'connect':
-        get().setShowConnectingWalletPopup(false)
         delete newEvent.type
         get().setWalletProvider(newEvent)
         return
@@ -163,7 +161,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         get().setWalletProvider(newEvent)
         return
       case 'accountsChanged':
-        get().setShowConnectingWalletPopup(false)
         delete newEvent.type
         get().setWalletProvider(newEvent)
     }
