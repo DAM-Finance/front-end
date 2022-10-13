@@ -13,7 +13,7 @@ const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, chil
         <input
           value={value}
           onChange={(ev) => handleChange(ev.target.value)}
-          type="text"
+          type="number"
           className="w-full bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
         />
         <div className="flex items-center pr-4 text-2xl">{coin}</div>

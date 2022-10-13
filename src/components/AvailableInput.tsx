@@ -19,7 +19,7 @@ const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasP
         <input
           value={amount}
           onChange={(ev) => handleChange(ev.target.value)}
-          type="text"
+          type="number"
           className="w-full bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
         />
         <button

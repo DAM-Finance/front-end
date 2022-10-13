@@ -27,7 +27,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
         <input
           value={value}
           onChange={(ev) => handleChange(ev.target.value)}
-          type="text"
+          type="number"
           className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
         />
         <div className="flex mx-4 my-2 px-2 ml-auto bg-damgray rounded-3xl">
