@@ -117,7 +117,7 @@ const Swaper: FC = () => {
       </button>
 
       {!isInverted ? (
-        <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin}>
+        <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin} disabled>
           <SwapperBalanceWithFees available={dPrimeBalance} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
         </SwaperInput>
       ) : (
@@ -127,6 +127,7 @@ const Swaper: FC = () => {
           selectedCoin={selectedStableCoin}
           handleChange={updateBothInputs}
           handleListChange={(coin) => setSelectedStableCoin(coin)}
+          disabled={true}
         >
           <div className="">
             <SwapperBalanceWithFees available={usdcBalance} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
