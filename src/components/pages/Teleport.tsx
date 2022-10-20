@@ -1,5 +1,6 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
+import { supportedNetworks } from '../../constants/config'
 // import { LayerZeroChainIds } from '../../constants/config'
 import utils from '../../constants/utils'
 import { INetwork } from '../../features/Network'
@@ -16,14 +17,14 @@ const Teleport: FC = () => {
 
   const [amount, setAmount] = useState('0')
   // const [available] = useState('1020')
-  const [networks] = useState<INetwork[]>([
-    // { name: 'Ethereum', symbol: 'eth' },
-    // { name: 'Moonbeam', symbol: 'glmr' }
-    { name: 'Rinkeby', symbol: 'eth' },
-    { name: 'Moonbase', symbol: 'glmr' }
-  ])
-  const [originNetwork, setOriginNetwork] = useState(networks[0])
-  const [destinationNetwork, setDestinationNetwork] = useState(networks[1])
+  // const [networks] = useState<INetwork[]>([
+  //   // { name: 'Ethereum', symbol: 'eth' },
+  //   // { name: 'Moonbeam', symbol: 'glmr' }
+  //   { name: 'Rinkeby', symbol: 'eth' },
+  //   { name: 'Moonbase', symbol: 'glmr' }
+  // ])
+  const [originNetwork, setOriginNetwork] = useState(supportedNetworks[0])
+  const [destinationNetwork, setDestinationNetwork] = useState(supportedNetworks[1])
   const [gasPrice, setGasPrice] = useState('')
 
   useEffect(() => {
@@ -55,10 +56,10 @@ const Teleport: FC = () => {
           <div className="flex flex-col gap-2">
             <div>1. Select Network</div>
             <div className="flex gap-4">
-              <SelectNetwork networks={networks} selectedNetwork={originNetwork} handleChange={(network) => setOriginNetwork(network)}></SelectNetwork>
+              <SelectNetwork networks={supportedNetworks} selectedNetwork={originNetwork} handleChange={(network) => setOriginNetwork(network)}></SelectNetwork>
               <img src={utils.getImageSrc('right-arrow.svg')} alt="" />
               <SelectNetwork
-                networks={networks}
+                networks={supportedNetworks}
                 selectedNetwork={destinationNetwork}
                 handleChange={(network) => setDestinationNetwork(network)}
               ></SelectNetwork>

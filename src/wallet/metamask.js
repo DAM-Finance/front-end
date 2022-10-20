@@ -28,13 +28,8 @@ class Metamask {
   async connect(provider) {
     if (!this.isValidProvider(provider)) return []
 
-    try {
-      const accounts = await provider.request({ method: 'eth_requestAccounts' })
-      return accounts
-    } catch (err) {
-      console.log('Could not connect to metamask!')
-      return []
-    }
+    const accounts = await provider.request({ method: 'eth_requestAccounts' })
+    return accounts
   }
 
   subscribeEvents(provider, handler) {

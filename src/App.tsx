@@ -13,6 +13,8 @@ const App = () => {
   const [agreedTCs, setAgreedTCs] = useState(localStorage.getItem('agreedTC') === 'true')
 
   const isSelectedNetworkSupported = useCallback(() => {
+    console.log('SUPPORTED', supportedNetworks)
+    console.log('SELECTED', appStore.selectedNetwork)
     return !!supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
   }, [appStore.selectedNetwork])
 

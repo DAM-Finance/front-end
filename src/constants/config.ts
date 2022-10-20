@@ -1,13 +1,5 @@
 import { ISupportedNetwork } from './ISupportedNetworks'
 
-// export const rpcUrl ="https://rpc.api.moonbase.moonbeam.network";
-export const rpcUrl = 'http://127.0.0.1:8545'
-
-//chain ids
-export const bnb_testnet_id = 97
-export const rinkeby_testnet_id = 4
-export const moonbase_testnet_id = 1287
-
 export const supportedNetworks: ISupportedNetwork[] = [
   {
     name: 'Moonbase',
@@ -15,48 +7,37 @@ export const supportedNetworks: ISupportedNetwork[] = [
     chainId: '0x507',
     id: 1287,
     iconName: 'moonbeamneticon.svg',
+    teleportBgImg: 'moonbase-bg.png',
     addresses: {
-      dPrime: '0x95D8E71E2E31fB3B99aD398745856AEAbE2cf3ac'
-      // "lzEndpoint"    : "0xb23b28012ee92E8dE39DEb57Af31722223034747",
+      dPrime: '0x95D8E71E2E31fB3B99aD398745856AEAbE2cf3ac',
+      lzEndpoint: '0xb23b28012ee92E8dE39DEb57Af31722223034747'
     },
-    layerZeroChainIds: '10026'
+    layerZeroChainIds: '10126'
   },
   {
-    name: 'Rinkeby',
-    symbol: 'RETH',
-    chainId: '0x4',
-    id: 4,
+    name: 'Goerli',
+    symbol: 'GTH',
+    chainId: '0x5',
+    id: 5,
     iconName: 'ethneticon.png',
+    teleportBgImg: 'goerli-bg.png',
     addresses: {
-      dPrime: '0x75396167802c8719A85571c37240c3E16B2007c2',
-      dPrimeJoin: '0xbB5F842c2EFB6CfED9dE45b49f4f34E987b52C63',
-      lmcv: '0x6CD5fA2262bCD92b0644289A04B9fa6a8342CB37',
-      lmcvProxy: '0xE26182845FCC2732771B4A7b1eCC947B5f724965',
-      usdcJoin: '0xf209894986d921b2868821E728eFa57145Fed3f7', //DEC COLLAT JOIN
-      usdcPSM: '0xa2CEa9B8F6Af2d2e20B4dDB66De67cCB98EA5E3c',
-      usdc: '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
-      weth: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
-      wethJoin: '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
-      link: '0x01BE23585060835E02B77ef475b0Cc51aA1e0709',
-      linkJoin: '0xbb2EbebC17CAf0cD430965912632615aF9611273',
-      lzEndpoint: '0x79a63d6d8BBD5c6dfc774dA79bCcD948EAcb53FA'
+      lmcv: '0xDd92aF2acb2Dd66Abe5C2023c7D446989DF0af53',
+      lmcvProxy: '0x2FdA8c6783Aa36BeD645baD28a4cDC8769dCD252',
+      dPrime: '0x78D7480aFcB1c2310917fDa95e96cA4E1C06CcfF',
+      dPrimeJoin: '0x687007C510Cd174f815cdaDA4De51d66BA73544d',
+      usdcPSM: '0xceE15Ca9fF2dA87080b34ca922AB8C195aD6D6EB',
+      usdcJoin: '0xB1fbcD7415F9177F5EBD3d9700eD5F15B476a5Fe', //DEC COLLAT JOIN
+      usdc: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F', // '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
+      lzEndpoint: '0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23', // '0x79a63d6d8BBD5c6dfc774dA79bCcD948EAcb53FA'
+
+      weth: '', // '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+      wethJoin: '', // '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
+      link: '', // '0x01BE23585060835E02B77ef475b0Cc51aA1e0709',
+      linkJoin: '' // '0xbb2EbebC17CAf0cD430965912632615aF9611273',
     },
-    layerZeroChainIds: '10001'
+    layerZeroChainIds: '10121'
   }
-  // {
-  //   name: 'BSC Testnet',
-  //   symbol: 'BNB',
-  //   chainId: '0x61',
-  //   id: 97,
-  //   iconName: 'ethneticon.png',
-  //   addresses: {
-  //     dPrime: '0xf209894986d921b2868821E728eFa57145Fed3f7',
-  //     lzEndpoint: '0x6Fcb97553D41516Cb228ac03FdC8B9a0a9df04A1'
-  //   },
-  //   layerZeroChainIds: '10002'
-  // }
-  // { name: 'Moonbeam', symbol: 'GLMR', chainId: '0x504', id: 1284, iconName: 'moonbeamneticon.png' },
-  // { name: 'Ethereum', symbol: 'ETH', chainId: '0x1', id: 1, iconName: 'ethneticon.png' },
 ]
 
 export const supportedTokens = {

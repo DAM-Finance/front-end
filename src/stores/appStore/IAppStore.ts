@@ -1,5 +1,5 @@
 import { supportedTokens } from '../../constants/config'
-import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
+import { ISupportedNetwork, ISupportedNetworkAddresses } from '../../constants/ISupportedNetworks'
 import { IBalances } from './IBalances'
 import { IGateway } from './IGateway'
 import { IGatewayEvent } from './IGatewayEvent'
@@ -41,13 +41,14 @@ export interface IAppStore {
   connectWallet: () => void
   switchNetwork: (chainId: string) => void
   attachContracts: () => void
-  refreshNetwork: () => void
+  refreshSelectedNetwork: () => void
 
   getTokenBalance: (token: keyof typeof supportedTokens) => void
 
   updateBalances: () => void
   stableSwap: (amount: string) => void
   approveUSDC: (amount: string) => any
+  tokenRequiresApproval: (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses) => Promise<boolean>
   teleport: (dPrimeAmount: string, dstChainName: string) => void
   estimateTeleportFees: () => void
 }
