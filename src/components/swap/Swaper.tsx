@@ -4,7 +4,7 @@ import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
 import SwaperBalance from './SwaperBalance'
 import SwaperInput from './SwaperInput'
-import SwaperInputList from './SwaperInputList'
+import SwaperInputList, { Coin } from './SwaperInputList'
 import SwapperBalanceWithFees from './SwaperBalanceWithFees'
 
 // interface DDPrimeProps {}
@@ -14,9 +14,9 @@ const Swaper: FC = () => {
   const appStore = useAppStore()
   const dPrimeBalance = appStore.balances.dPrime
   const usdcBalance = appStore.balances.usdc
-  const [stableCoins] = useState([
-    { name: 'USDC', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance },
-    { name: 'DAI', icon: utils.getImageSrc('DAI.svg'), balance: '0.0' }
+  const [stableCoins] = useState<Coin[]>([
+    { name: 'USDC', balancesMapper: 'usdc', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance }
+    // { name: 'DAI', balancesMapper: 'usdc', icon: utils.getImageSrc('DAI.svg'), balance: '0.0' }
   ])
 
   const [firstCoin, setFirstCoin] = useState('0')
@@ -99,7 +99,7 @@ const Swaper: FC = () => {
           handleListChange={(coin) => setSelectedStableCoin(coin)}
         >
           <div className="">
-            <SwaperBalance balance={usdcBalance} coinName={selectedStableCoin.name}></SwaperBalance>
+            <SwaperBalance balance={appStore.balances[selectedStableCoin.balancesMapper]} coinName={selectedStableCoin.name}></SwaperBalance>
           </div>
         </SwaperInputList>
       ) : (
@@ -134,6 +134,7 @@ const Swaper: FC = () => {
         </SwaperInputList>
       )}
 
+      {/* Swap / Approve */}
       <div className="flex w-full gap-4">
         {approveButtonState === 'ShowApprove' && (
           <>

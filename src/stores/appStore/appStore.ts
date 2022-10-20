@@ -199,7 +199,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
 
     get().attachContracts()
-    // get().updateBalances()
+    get().updateBalances()
   },
   switchNetwork: async (chainId: string) => {
     const provider = get().walletProvider.provider
@@ -249,11 +249,12 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   updateBalances: async () => {
     await get().getTokenBalance('dPrime')
-    if (get().selectedNetwork?.name === 'Rinkeby') {
-      get().getTokenBalance('usdc')
-    } else {
-      get().setBalances('usdc', '0.0')
-    }
+    await get().getTokenBalance('usdc')
+
+    // if (get().selectedNetwork?.name === 'Rinkeby') {
+    // } else {
+    //   get().setBalances('usdc', '0.0')
+    // }
   },
   getTokenBalance: async (token: keyof typeof supportedTokens) => {
     const account = get().walletProvider.accounts[0]

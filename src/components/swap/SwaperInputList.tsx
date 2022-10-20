@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { IBalances } from '../../stores/appStore/IBalances'
 
 interface SwaperInputListProps {
   value?: string
@@ -9,8 +10,9 @@ interface SwaperInputListProps {
   handleListChange: (coin: Coin) => void
 }
 
-interface Coin {
+export interface Coin {
   name: string
+  balancesMapper: keyof IBalances
   icon: string
   balance: string
 }
