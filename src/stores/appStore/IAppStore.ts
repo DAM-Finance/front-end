@@ -46,8 +46,9 @@ export interface IAppStore {
   getTokenBalance: (token: keyof typeof supportedTokens) => void
 
   updateBalances: () => void
-  stableSwap: (amount: string) => void
-  approveUSDC: (amount: string) => any
+  swapStableToDPrime: (token: keyof typeof supportedTokens, tokenPsm: string | undefined, tokenJoin: string | undefined, amount: string) => Promise<any>
+  // stableSwap: (amount: string) => void
+  approveToken: (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, amount?: string) => void
   tokenRequiresApproval: (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses) => Promise<boolean>
   teleport: (dPrimeAmount: string, dstChainName: string) => void
   estimateTeleportFees: () => void

@@ -7,6 +7,7 @@ export interface ISupportedNetwork {
   teleportBgImg: string
   addresses: ISupportedNetworkAddresses
   layerZeroChainIds: string
+  suggestedGasLimit: number
 }
 
 export interface ISupportedNetworkAddresses {

@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { ISupportedNetworkAddresses } from '../../constants/ISupportedNetworks'
 import { IBalances } from '../../stores/appStore/IBalances'
 
 interface SwaperInputListProps {
@@ -14,6 +15,7 @@ interface SwaperInputListProps {
 export interface Coin {
   name: string
   balancesMapper: keyof IBalances
+  tokenJoin: keyof ISupportedNetworkAddresses
   icon: string
   balance: string
 }

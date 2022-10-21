@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { ISupportedNetwork } from './ISupportedNetworks'
 
 export const supportedNetworks: ISupportedNetwork[] = [
@@ -12,7 +13,8 @@ export const supportedNetworks: ISupportedNetwork[] = [
       dPrime: '0x95D8E71E2E31fB3B99aD398745856AEAbE2cf3ac',
       lzEndpoint: '0xb23b28012ee92E8dE39DEb57Af31722223034747'
     },
-    layerZeroChainIds: '10126'
+    layerZeroChainIds: '10126',
+    suggestedGasLimit: 500000
   },
   {
     name: 'Goerli',
@@ -36,17 +38,20 @@ export const supportedNetworks: ISupportedNetwork[] = [
       link: '', // '0x01BE23585060835E02B77ef475b0Cc51aA1e0709',
       linkJoin: '' // '0xbb2EbebC17CAf0cD430965912632615aF9611273',
     },
-    layerZeroChainIds: '10121'
+    layerZeroChainIds: '10121',
+    suggestedGasLimit: 500000
   }
 ]
 
 export const supportedTokens = {
   dPrime: {
     name: 'dPrime',
-    units: 18
+    units: 18,
+    bytes: 0x0
   },
   usdc: {
     name: 'usdc',
-    units: 6
+    units: 6,
+    bytes: ethers.utils.formatBytes32String('PSM-USDC')
   }
 }

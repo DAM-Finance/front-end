@@ -30,7 +30,7 @@ import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
 
 //BYTES
-let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
+// let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
 const connectedContracts = {} as IContractInstances | any
 const initBalances = {} as IBalances
 const maxApprove = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
@@ -221,7 +221,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       }
       connectedContracts[addressKey] = new ethers.Contract(addresses[addressKey], abis[addressKey], get().walletProvider.signer!)
     })
-    console.log(connectedContracts)
+    // console.log(connectedContracts)
     // get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
@@ -264,31 +264,20 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     let formatedBalance = ethers.utils.formatUnits(balance, units)
     get().setBalances(token, formatedBalance)
   },
-  stableSwap: async (amount: string) => {
+  swapStableToDPrime: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, tokenJoin: string | undefined, amount: string) => {
     await get().ensureConnected()
 
-    if (amount === '0' || !get().selectedNetwork) {
+    if (amount === '0' || !get().selectedNetwork || !get().walletProvider.connected) {
       return
     }
 
-    let formattedAmount = utils.fusdc(amount).toString()
+    const decimals = supportedTokens[token].units
+    const swapAmount = ethers.utils.parseUnits(amount, decimals).toString()
+    const tokenBytes = supportedTokens[token].bytes
     const { accounts } = get().walletProvider
-
-    const allowance = await connectedContracts.usdc.allowance(accounts[0], get().selectedNetwork?.addresses.usdcJoin)
-    let txWait
-    if (allowance < maxApprove) {
-      get()
-        .approveUSDC(maxApprove)
-        .then((data: any) => {
-          txWait = connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
-        })
-    } else {
-      txWait = connectedContracts.usdcPSM.createDPrime(accounts[0], [USDCBytes], [formattedAmount])
-    }
-
-    await txWait.wait()
-
-    get().updateBalances()
+    const gasLimit = get().selectedNetwork?.suggestedGasLimit
+    // const tx = await connectedContracts.usdcPSM.createDPrime(accounts[0], [tokenBytes], [swapAmount], )
+    return connectedContracts[tokenPsm as any].createDPrime(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
   },
   tokenRequiresApproval: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses) => {
     const { accounts } = get().walletProvider
@@ -299,12 +288,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const allowance = await connectedContracts[token].allowance(accounts[0], joinContract)
     return allowance < maxApprove
   },
-  approveUSDC: async (amount: string) => {
-    let res = await connectedContracts.usdc.approve(get().selectedNetwork?.addresses?.usdcJoin, amount)
-    let txComplete = await res.wait()
-    return txComplete
-  },
-  approveToken: async (amount: string, token: keyof typeof supportedTokens, tokenJoin: string) => {
+  approveToken: async (token: keyof typeof supportedTokens, tokenJoin: string, amount = maxApprove) => {
     const joinContract = (get().selectedNetwork?.addresses as any)[tokenJoin]
     let res = await connectedContracts[token].approve(joinContract, amount)
     let txComplete = await res.wait()

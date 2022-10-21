@@ -6,16 +6,20 @@ import SwaperBalance from './SwaperBalance'
 import SwaperInput from './SwaperInput'
 import SwaperInputList, { Coin } from './SwaperInputList'
 import SwapperBalanceWithFees from './SwaperBalanceWithFees'
+import { supportedNetworks } from '../../constants/config'
+import WaitingForConfirmationPopup from '../wallet/WaitingForConfirmationPopup'
+import TransactionInProgressPopup from '../wallet/TransactionInProgressPopup'
 
 // interface DDPrimeProps {}
 type ApproveButtonState = 'ShowApprove' | 'HideApprove' | 'loading'
+type ITxState = 'none' | 'waiting' | 'inprogress' | 'completed' | 'failed'
 
 const Swaper: FC = () => {
   const appStore = useAppStore()
   const dPrimeBalance = appStore.balances.dPrime
   const usdcBalance = appStore.balances.usdc
   const [stableCoins] = useState<Coin[]>([
-    { name: 'USDC', balancesMapper: 'usdc', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance }
+    { name: 'USDC', balancesMapper: 'usdc', tokenJoin: 'usdcJoin', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance }
     // { name: 'DAI', balancesMapper: 'usdc', icon: utils.getImageSrc('DAI.svg'), balance: '0.0' }
   ])
 
@@ -25,10 +29,42 @@ const Swaper: FC = () => {
   const [isInverted, setIsInverted] = useState(false)
   const [gasPrice, setGasPrice] = useState('')
   const [approveButtonState, setApproveButtonState] = useState<ApproveButtonState>('loading')
+  const [txState, setTxState] = useState<ITxState>()
 
-  function swapIt(amount: string) {
-    //Change to make this accept multiple types when more PSM are deployed
-    appStore.stableSwap(amount)
+  const approve = async () => {
+    if (!isInverted) {
+      try {
+        setTxState('waiting')
+        await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
+        // TODO: SHOW TX completed
+        // & REFRESH
+      } catch (err: any) {
+        setTxState('none')
+        if (err.code === 4001) {
+          // alert('User rejected approve process')
+        }
+      }
+    }
+  }
+
+  const swapIt = async (amount: string) => {
+    try {
+      let swapCall
+
+      if (!isInverted) {
+        swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', appStore.selectedNetwork?.addresses.usdcJoin, amount)
+      } else if (isInverted) {
+        swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', appStore.selectedNetwork?.addresses.usdcJoin, amount)
+      }
+
+      const tx = await swapCall
+      // TODO: Show requesting connection
+      const res = await tx.wait()
+      // TODO: Show SUCCESS
+      appStore.updateBalances()
+    } catch (err) {
+      // TODO: Show FAILURE
+    }
   }
 
   const checkNeedsApprove = async () => {
@@ -36,7 +72,7 @@ const Swaper: FC = () => {
       if (!appStore.selectedNetwork || !appStore.walletProvider.connected) {
         return
       }
-      const requiresApproval = await appStore.tokenRequiresApproval('usdc', 'usdcJoin')
+      const requiresApproval = await appStore.tokenRequiresApproval(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
       setApproveButtonState(requiresApproval ? 'ShowApprove' : 'HideApprove')
     } catch (err: any) {
       if (err.message === 'Contracts not set') {
@@ -117,7 +153,7 @@ const Swaper: FC = () => {
       </button>
 
       {!isInverted ? (
-        <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin} disabled>
+        <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin} disabled={true}>
           <SwapperBalanceWithFees available={dPrimeBalance} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
         </SwaperInput>
       ) : (
@@ -136,11 +172,11 @@ const Swaper: FC = () => {
       )}
 
       {/* Swap / Approve */}
-      <div className="flex w-full gap-4">
+      <div className="flex w-full pt-4 gap-4">
         {approveButtonState === 'ShowApprove' && (
           <>
             <button
-              onClick={() => swapIt(firstCoin)}
+              onClick={approve}
               className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold"
             >
               <span>Approve</span>
@@ -163,8 +199,20 @@ const Swaper: FC = () => {
           </button>
         )}
 
-        {approveButtonState === 'loading' && <div>Loading...</div>}
+        {/* Loading */}
+        {approveButtonState === 'loading' && appStore.walletProvider?.connected && <div></div>}
+
+        {approveButtonState === 'loading' && !appStore.walletProvider?.connected && (
+          <button
+            onClick={() => swapIt(firstCoin)}
+            className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold"
+          >
+            <span>Connect</span>
+          </button>
+        )}
       </div>
+      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={true}></TransactionInProgressPopup>
+      <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
     </div>
   )
 }
