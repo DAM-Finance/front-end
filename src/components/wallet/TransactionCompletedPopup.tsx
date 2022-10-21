@@ -1,23 +1,23 @@
 import { FC } from 'react'
 import utils from '../../constants/utils'
 
-interface TransactionInProgressPopupProps {
+interface TransactionCompletedPopupProps {
   show: boolean
   handleClose: () => void
 }
 
-const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({ show, handleClose }) => {
+const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({ show, handleClose }) => {
   return (
     <>
       {show && (
         <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
           <div className="fixed bg-damgray px-32 py-12 rounded-xl text-white">
             <div className="flex flex-col items-center gap-4">
-              <img width="240" src={utils.getImageSrc('tip.svg')} alt="transaction in progress" />
-              <div className="font-light text-2xl pt-4">Transaction in progress</div>
+              <img width="240" src={utils.getImageSrc('tcompleted.svg')} alt="transaction in progress" />
+              <div className="font-light text-2xl pt-4">Transaction completed!</div>
               <div className="flex gap-1 hover:cursor-pointer">
                 <div className="text-sm text-damlabelgray">
-                  <span>Follow the </span>
+                  <span>See the </span>
                   <span className="text-damyellow">transaction</span>
                 </div>
                 <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
@@ -33,4 +33,4 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({ show,
   )
 }
 
-export default TransactionInProgressPopup
+export default TransactionCompletedPopup

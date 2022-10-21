@@ -9,6 +9,8 @@ import SwapperBalanceWithFees from './SwaperBalanceWithFees'
 import { supportedNetworks } from '../../constants/config'
 import WaitingForConfirmationPopup from '../wallet/WaitingForConfirmationPopup'
 import TransactionInProgressPopup from '../wallet/TransactionInProgressPopup'
+import TransactionCompletedPopup from '../wallet/TransactionCompletedPopup'
+import TransactionFailedPopup from '../wallet/TransactionFailedPopup'
 
 // interface DDPrimeProps {}
 type ApproveButtonState = 'ShowApprove' | 'HideApprove' | 'loading'
@@ -36,10 +38,10 @@ const Swaper: FC = () => {
       try {
         setTxState('waiting')
         await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
-        // TODO: SHOW TX completed
+        setTxState('none')
         // & REFRESH
       } catch (err: any) {
-        setTxState('none')
+        setTxState('failed')
         if (err.code === 4001) {
           // alert('User rejected approve process')
         }
@@ -57,13 +59,14 @@ const Swaper: FC = () => {
         swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', appStore.selectedNetwork?.addresses.usdcJoin, amount)
       }
 
+      setTxState('waiting')
       const tx = await swapCall
-      // TODO: Show requesting connection
+      setTxState('inprogress')
       const res = await tx.wait()
-      // TODO: Show SUCCESS
+      setTxState('completed')
       appStore.updateBalances()
     } catch (err) {
-      // TODO: Show FAILURE
+      setTxState('failed')
     }
   }
 
@@ -211,7 +214,9 @@ const Swaper: FC = () => {
           </button>
         )}
       </div>
-      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={true}></TransactionInProgressPopup>
+      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'}></TransactionInProgressPopup>
+      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'}></TransactionCompletedPopup>
+      <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'}></TransactionFailedPopup>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
     </div>
   )
