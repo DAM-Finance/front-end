@@ -6,7 +6,6 @@ import SwaperBalance from './SwaperBalance'
 import SwaperInput from './SwaperInput'
 import SwaperInputList, { Coin } from './SwaperInputList'
 import SwapperBalanceWithFees from './SwaperBalanceWithFees'
-import { supportedNetworks } from '../../constants/config'
 import WaitingForConfirmationPopup from '../wallet/WaitingForConfirmationPopup'
 import TransactionInProgressPopup from '../wallet/TransactionInProgressPopup'
 import TransactionCompletedPopup from '../wallet/TransactionCompletedPopup'
@@ -90,7 +89,7 @@ const Swaper: FC = () => {
       setTxState('waiting')
       const tx = await swapCall
       setTxState('inprogress')
-      const res = await tx.wait()
+      await tx.wait()
       setTxState('completed')
       appStore.updateBalances()
     } catch (err) {
