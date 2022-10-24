@@ -34,6 +34,8 @@ import { IGatewayEvent } from './IGatewayEvent'
 const connectedContracts = {} as IContractInstances | any
 const initBalances = {} as IBalances
 const maxApprove = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+const minApprove = 10000000000
+
 // const initTeleportFees = {} as ITeleportFees
 
 const abis = {
@@ -264,7 +266,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     let formatedBalance = ethers.utils.formatUnits(balance, units)
     get().setBalances(token, formatedBalance)
   },
-  swapStableToDPrime: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, tokenJoin: string | undefined, amount: string) => {
+  swapStableToDPrime: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => {
     await get().ensureConnected()
 
     if (amount === '0' || !get().selectedNetwork || !get().walletProvider.connected) {
@@ -276,8 +278,21 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const tokenBytes = supportedTokens[token].bytes
     const { accounts } = get().walletProvider
     const gasLimit = get().selectedNetwork?.suggestedGasLimit
-    // const tx = await connectedContracts.usdcPSM.createDPrime(accounts[0], [tokenBytes], [swapAmount], )
     return connectedContracts[tokenPsm as any].createDPrime(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
+  },
+  swapDPrimeToStable: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => {
+    await get().ensureConnected()
+
+    if (amount === '0' || !get().selectedNetwork || !get().walletProvider.connected) {
+      return
+    }
+
+    const decimals = supportedTokens[token].units
+    const swapAmount = ethers.utils.parseUnits(amount, decimals).toString()
+    const tokenBytes = supportedTokens[token].bytes
+    const { accounts } = get().walletProvider
+    const gasLimit = get().selectedNetwork?.suggestedGasLimit
+    return connectedContracts[tokenPsm as any].getCollateral(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
   },
   tokenRequiresApproval: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses) => {
     const { accounts } = get().walletProvider
@@ -286,10 +301,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       throw new Error('Contracts not set')
     }
     const allowance = await connectedContracts[token].allowance(accounts[0], joinContract)
-    return allowance < maxApprove
+    return allowance < minApprove
   },
-  approveToken: async (token: keyof typeof supportedTokens, tokenJoin: string, amount = maxApprove) => {
-    const joinContract = (get().selectedNetwork?.addresses as any)[tokenJoin]
+  approveToken: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, amount = maxApprove) => {
+    const joinContract = get().selectedNetwork?.addresses[tokenJoin]
     let res = await connectedContracts[token].approve(joinContract, amount)
     let txComplete = await res.wait()
     return txComplete

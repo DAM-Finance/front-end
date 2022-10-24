@@ -36,7 +36,7 @@ const App = () => {
         </div>
       </div>
       <WrongNetworkPop
-        show={appStore.isWrongNetworkPopupEnabled && appStore.walletProvider.connected && !isSelectedNetworkSupported()}
+        show={appStore.isWrongNetworkPopupEnabled && !!appStore.selectedNetwork && appStore.walletProvider.connected && !isSelectedNetworkSupported()}
         handleClose={() => {
           appStore.setIsWrongNetworkPopupEnabled(false)
         }}

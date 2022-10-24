@@ -33,19 +33,47 @@ const Swaper: FC = () => {
   const [approveButtonState, setApproveButtonState] = useState<ApproveButtonState>('loading')
   const [txState, setTxState] = useState<ITxState>()
 
+  const checkNeedsApprove = async () => {
+    try {
+      if (!appStore.selectedNetwork || !appStore.walletProvider.connected) {
+        return
+      }
+
+      if (isInverted) {
+        const requiresApproval = await appStore.tokenRequiresApproval('dPrime', 'dPrimeJoin')
+        setApproveButtonState(requiresApproval ? 'ShowApprove' : 'HideApprove')
+      } else {
+        const requiresApproval = await appStore.tokenRequiresApproval(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
+        setApproveButtonState(requiresApproval ? 'ShowApprove' : 'HideApprove')
+      }
+    } catch (err: any) {
+      if (err.message === 'Contracts not set') {
+        // empty
+      } else {
+        throw err
+      }
+    }
+  }
+
   const approve = async () => {
-    if (!isInverted) {
-      try {
+    try {
+      if (isInverted) {
+        setTxState('waiting')
+        await appStore.approveToken(selectedStableCoin.balancesMapper, 'dPrimeJoin')
+        setTxState('none')
+        // & REFRESH
+      } else {
         setTxState('waiting')
         await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
         setTxState('none')
         // & REFRESH
-      } catch (err: any) {
-        setTxState('failed')
-        if (err.code === 4001) {
-          // alert('User rejected approve process')
-        }
       }
+    } catch (err: any) {
+      setTxState('failed')
+      if (err.code === 4001) {
+        // alert('User rejected approve process')
+      }
+      console.error(err)
     }
   }
 
@@ -54,9 +82,9 @@ const Swaper: FC = () => {
       let swapCall
 
       if (!isInverted) {
-        swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', appStore.selectedNetwork?.addresses.usdcJoin, amount)
+        swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', amount)
       } else if (isInverted) {
-        swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', appStore.selectedNetwork?.addresses.usdcJoin, amount)
+        swapCall = appStore.swapDPrimeToStable('usdc', 'usdcPSM', amount)
       }
 
       setTxState('waiting')
@@ -67,22 +95,6 @@ const Swaper: FC = () => {
       appStore.updateBalances()
     } catch (err) {
       setTxState('failed')
-    }
-  }
-
-  const checkNeedsApprove = async () => {
-    try {
-      if (!appStore.selectedNetwork || !appStore.walletProvider.connected) {
-        return
-      }
-      const requiresApproval = await appStore.tokenRequiresApproval(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
-      setApproveButtonState(requiresApproval ? 'ShowApprove' : 'HideApprove')
-    } catch (err: any) {
-      if (err.message === 'Contracts not set') {
-        // empty
-      } else {
-        throw err
-      }
     }
   }
 
@@ -126,7 +138,6 @@ const Swaper: FC = () => {
     setFirstCoin(value)
     setSecondCoin(value)
   }
-
   return (
     <div className="flex flex-col items-center gap-4 bg-damgray rounded-2xl p-6">
       {!isInverted ? (
@@ -202,7 +213,6 @@ const Swaper: FC = () => {
           </button>
         )}
 
-        {/* Loading */}
         {approveButtonState === 'loading' && appStore.walletProvider?.connected && <div></div>}
 
         {approveButtonState === 'loading' && !appStore.walletProvider?.connected && (

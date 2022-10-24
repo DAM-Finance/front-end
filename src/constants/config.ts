@@ -52,6 +52,6 @@ export const supportedTokens = {
   usdc: {
     name: 'usdc',
     units: 6,
-    bytes: ethers.utils.formatBytes32String('PSM-USDC')
+    bytes: ethers.utils.formatBytes32String('USDC') // TODO: Change to PSM-USDC on production
   }
 }
