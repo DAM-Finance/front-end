@@ -148,12 +148,17 @@ const Swaper: FC = () => {
           handleListChange={(coin) => setSelectedStableCoin(coin)}
         >
           <div className="">
-            <SwaperBalance balance={appStore.balances[selectedStableCoin.balancesMapper]} coinName={selectedStableCoin.name}></SwaperBalance>
+            <SwaperBalance
+              balance={appStore.balances[selectedStableCoin.balancesMapper]}
+              coinName={selectedStableCoin.name}
+              rightAligned={true}
+              decimals={2}
+            ></SwaperBalance>
           </div>
         </SwaperInputList>
       ) : (
         <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin}>
-          <SwaperBalance balance={dPrimeBalance} coinName={'dPRIME'}></SwaperBalance>
+          <SwaperBalance balance={dPrimeBalance} coinName={'dPRIME'} rightAligned={true} decimals={2}></SwaperBalance>
         </SwaperInput>
       )}
 
@@ -232,64 +237,3 @@ const Swaper: FC = () => {
 }
 
 export default Swaper
-
-// const generateComponent = (isFirstInput = true) => {
-//   const isSecondCoin = (!isFirstInput && !isInverted) || (isFirstInput && isInverted)
-
-//   const gasDetails = (
-//     <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
-//       <div className="flex">
-//         <div>Expected Output</div>
-//         <div className="ml-auto">
-//           {isInverted ? firstCoin : secondCoin} {isSecondCoin ? 'dPRIME' : selectedStableCoin.name}
-//         </div>
-//       </div>
-//       <div className="flex">
-//         <div>Teleport Fee</div>
-//         <div className="ml-auto">0 {isSecondCoin ? 'dPRIME' : selectedStableCoin.name}</div>
-//       </div>
-//       <div className="flex">
-//         <div>Gas fee</div>
-//         <div className="ml-auto">$0</div>
-//       </div>
-//     </div>
-//   )
-
-//   let balanceComponent = (
-//     <SwaperBalance balance={isSecondCoin ? dPrimeBalance : usdcBalance} coinName={isSecondCoin ? 'dPRIME' : selectedStableCoin.name}></SwaperBalance>
-//   )
-//   if (!isFirstInput) {
-//     balanceComponent = (
-//       <SwapperBalanceWithFees available={isSecondCoin ? dPrimeBalance : usdcBalance} children={gasDetails} gasPrice={gasPrice}></SwapperBalanceWithFees>
-//     )
-//   }
-
-//   const updateBothInputs = (value: string) => {
-//     setFirstCoin(value)
-//     setSecondCoin(value)
-//   }
-
-//   let component = (
-//     <SwaperInputList
-//       value={firstCoin}
-//       coins={stableCoins}
-//       selectedCoin={selectedStableCoin}
-//       handleChange={updateBothInputs}
-//       handleListChange={(coin) => setSelectedStableCoin(coin)}
-//     >
-//       <div className="">{balanceComponent}</div>
-//     </SwaperInputList>
-//   )
-//   if (isSecondCoin) {
-//     component = (
-//       <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin}>
-//         {balanceComponent}
-//       </SwaperInput>
-//     )
-//   }
-
-//   return component
-// }
-
-// const swaperFirstElement = generateComponent(true)
-// const swaperSecondElement = generateComponent(false)
