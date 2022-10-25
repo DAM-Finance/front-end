@@ -24,14 +24,16 @@ export const supportedNetworks: ISupportedNetwork[] = [
     iconName: 'ethneticon.png',
     teleportBgImg: 'goerli-bg.png',
     addresses: {
-      lmcv: '0xDd92aF2acb2Dd66Abe5C2023c7D446989DF0af53',
-      lmcvProxy: '0x2FdA8c6783Aa36BeD645baD28a4cDC8769dCD252',
-      dPrime: '0x78D7480aFcB1c2310917fDa95e96cA4E1C06CcfF',
-      dPrimeJoin: '0x687007C510Cd174f815cdaDA4De51d66BA73544d',
-      usdcPSM: '0xceE15Ca9fF2dA87080b34ca922AB8C195aD6D6EB',
-      usdcJoin: '0xB1fbcD7415F9177F5EBD3d9700eD5F15B476a5Fe', //DEC COLLAT JOIN
+      dPrime: '0x0c14d2bc2562b6aB953f21B24ddE8ad9e8cba2e1',
+      lmcv: '0x12fA0d79BCD21114D5F34A2789D9b2B5b1d7b42D',
+      dPrimeJoin: '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
+      usdcJoin: '0x7517b7900D845F18189e7e89707525E759a2eBb3', //DEC COLLAT JOIN
+      lzEndpoint: '0x82a6A0E313765510e63fBcc0114af5C8054bDA9F', // lzPipe
+      hyperlanePipe: '0x74487683a4E248b21A09DAA3d78B2e26cedBe5E8',
+      usdcPSM: '0xD264Daa2b0Ae259b7864e6532A30ebe6Ac93b3fd', // PSM
+      lmcvProxy: '0x0CAfb9c3b7Aa97505276908A928bc9eA0c228324',
+
       usdc: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F', // '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
-      lzEndpoint: '0xbfD2135BFfbb0B5378b56643c2Df8a87552Bfa23', // '0x79a63d6d8BBD5c6dfc774dA79bCcD948EAcb53FA'
 
       weth: '', // '0xc778417E063141139Fce010982780140Aa0cD5Ab',
       wethJoin: '', // '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
@@ -52,6 +54,6 @@ export const supportedTokens = {
   usdc: {
     name: 'usdc',
     units: 6,
-    bytes: ethers.utils.formatBytes32String('USDC') // TODO: Change to PSM-USDC on production
+    bytes: ethers.utils.formatBytes32String('PSM-USDC') // TODO: Change to PSM-USDC on production
   }
 }

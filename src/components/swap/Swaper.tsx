@@ -39,7 +39,7 @@ const Swaper: FC = () => {
       }
 
       if (isInverted) {
-        const requiresApproval = await appStore.tokenRequiresApproval('dPrime', 'dPrimeJoin')
+        const requiresApproval = await appStore.tokenRequiresApproval('dPrime', 'usdcPSM')
         setApproveButtonState(requiresApproval ? 'ShowApprove' : 'HideApprove')
       } else {
         const requiresApproval = await appStore.tokenRequiresApproval(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
@@ -58,7 +58,7 @@ const Swaper: FC = () => {
     try {
       if (isInverted) {
         setTxState('waiting')
-        await appStore.approveToken(selectedStableCoin.balancesMapper, 'dPrimeJoin')
+        await appStore.approveToken('dPrime', 'usdcPSM')
         setTxState('none')
         // & REFRESH
       } else {
@@ -68,7 +68,7 @@ const Swaper: FC = () => {
         // & REFRESH
       }
     } catch (err: any) {
-      setTxState('failed')
+      setTxState('none')
       if (err.code === 4001) {
         // alert('User rejected approve process')
       }

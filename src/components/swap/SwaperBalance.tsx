@@ -18,7 +18,7 @@ const SwaperBalance: FC<SwaperBalanceProps> = ({ balance, coinName: coin = '', r
   return (
     <div className="flex ml-4 gap-2 text-sm">
       <div className={`text-gray-600 font-light ${rightAligned ? 'ml-auto' : ''}`}>Balance</div>
-      <div className="text-gray-400 ">
+      <div className="text-gray-400 pr-4">
         {format(balance)} {coin}
       </div>
     </div>

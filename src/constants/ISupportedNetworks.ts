@@ -23,4 +23,5 @@ export interface ISupportedNetworkAddresses {
   link?: string
   linkJoin?: string
   lzEndpoint?: string
+  hyperlanePipe?: string
 }
