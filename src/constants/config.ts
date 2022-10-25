@@ -11,10 +11,14 @@ export const supportedNetworks: ISupportedNetwork[] = [
     teleportBgImg: 'moonbase-bg.png',
     addresses: {
       dPrime: '0x95D8E71E2E31fB3B99aD398745856AEAbE2cf3ac',
-      lzEndpoint: '0xb23b28012ee92E8dE39DEb57Af31722223034747'
+      lzPipe: '0xb23b28012ee92E8dE39DEb57Af31722223034747'
     },
     layerZeroChainIds: '10126',
-    suggestedGasLimit: 500000
+    suggestedGasLimit: 500000,
+    capabilities: {
+      canSwap: false,
+      canTeleport: true
+    }
   },
   {
     name: 'Goerli',
@@ -28,7 +32,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       lmcv: '0x12fA0d79BCD21114D5F34A2789D9b2B5b1d7b42D',
       dPrimeJoin: '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
       usdcJoin: '0x7517b7900D845F18189e7e89707525E759a2eBb3', //DEC COLLAT JOIN
-      lzEndpoint: '0x82a6A0E313765510e63fBcc0114af5C8054bDA9F', // lzPipe
+      lzPipe: '0x82a6A0E313765510e63fBcc0114af5C8054bDA9F', // lzPipe
       hyperlanePipe: '0x74487683a4E248b21A09DAA3d78B2e26cedBe5E8',
       usdcPSM: '0xD264Daa2b0Ae259b7864e6532A30ebe6Ac93b3fd', // PSM
       lmcvProxy: '0x0CAfb9c3b7Aa97505276908A928bc9eA0c228324',
@@ -41,7 +45,11 @@ export const supportedNetworks: ISupportedNetwork[] = [
       linkJoin: '' // '0xbb2EbebC17CAf0cD430965912632615aF9611273',
     },
     layerZeroChainIds: '10121',
-    suggestedGasLimit: 500000
+    suggestedGasLimit: 500000,
+    capabilities: {
+      canSwap: true,
+      canTeleport: true
+    }
   }
 ]
 

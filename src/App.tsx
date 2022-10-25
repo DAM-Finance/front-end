@@ -14,16 +14,27 @@ const App = () => {
   const location = useLocation()
   const [agreedTCs, setAgreedTCs] = useState(localStorage.getItem('agreedTC') === 'true')
 
-  const isSelectedNetworkSupported = useMemo(() => {
-    console.log('SUPPORTED', supportedNetworks)
-    console.log('SELECTED', appStore.selectedNetwork)
-    if (!appStore.isWrongNetworkPopupEnabled || !appStore.selectedNetwork || !appStore.walletProvider.connected) {
+  const showWrongNetwork = useMemo(() => {
+    if (!appStore.isWrongNetworkPopupEnabled) {
       return false
     }
 
-    // if (location.)
-    const isSelectedNetworkSupported = !!supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
-    return !isSelectedNetworkSupported
+    // TODO: BUG WRONG NET!!!!!!!!!!
+    if (location.pathname === '/teleport') {
+      const missingCapability = !!(appStore.selectedNetwork && appStore.walletProvider.connected && !appStore.selectedNetwork.capabilities.canTeleport)
+      const invalidNetwork = !!supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
+      return missingCapability || invalidNetwork
+    }
+
+    if (location.pathname === '/swap') {
+      const missingCapability = !!(appStore.selectedNetwork && appStore.walletProvider.connected && !appStore.selectedNetwork.capabilities.canSwap)
+      const invalidNetwork = !!supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
+      return missingCapability || invalidNetwork
+    }
+
+    return false
+    // const isSelectedNetworkSupported =
+    // return !isSelectedNetworkSupported
   }, [appStore.isWrongNetworkPopupEnabled, appStore.selectedNetwork, appStore.walletProvider.connected, location])
 
   useEffect(() => {
@@ -44,7 +55,7 @@ const App = () => {
         </div>
       </div>
       <WrongNetworkPop
-        show={isSelectedNetworkSupported}
+        show={showWrongNetwork}
         handleClose={() => {
           appStore.setIsWrongNetworkPopupEnabled(false)
         }}

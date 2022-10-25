@@ -25,6 +25,7 @@ import ERC20Abi from '../../constants/abis/ERC20.json'
 import LMCVAbi from '../../constants/abis/LMCV.json'
 import LMCVProxyAbi from '../../constants/abis/LMCVProxy.json'
 import PSMAbi from '../../constants/abis/PSM.json'
+import LZPipeAbi from '../../constants/abis/LZPipe.json'
 import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
@@ -45,7 +46,8 @@ const abis = {
   usdc: ERC20Abi,
   lmcv: LMCVAbi,
   lmcvProxy: LMCVProxyAbi,
-  usdcPSM: PSMAbi
+  usdcPSM: PSMAbi,
+  lzPipe: LZPipeAbi
 } as any
 
 export const useAppStore = create<IAppStore>((set, get) => ({
@@ -227,26 +229,28 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     // get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
+    debugger
     await get().ensureConnected()
     const { accounts } = get().walletProvider
 
     let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.layerZeroChainIds
-    const teleportFee = await connectedContracts.dPrime.estimateSendFee(
+    const teleportFee = await connectedContracts.lzPipe.estimateSendFee(
       dstChainId,
       accounts[0],
       utils.fwad(dPrimeAmount), //Convert from decimal number (type: string still) into 18 dec amount
       false,
       []
     )
-    await connectedContracts.dPrime.sendFrom(
+    const gasLimit = get().selectedNetwork?.suggestedGasLimit
+    await connectedContracts.lzPipe.sendFrom(
       accounts[0], //address _from,
       dstChainId, //uint16 _dstChainId,
-      accounts[0], //bytes memory _toAddress,
+      ethers.utils.hexZeroPad(accounts[0], 32), //bytes memory _toAddress,
       utils.fwad(dPrimeAmount), //uint _amount,
       accounts[0], //address payable _refundAddress,
       accounts[0], //address _zroPaymentAddress,
       [], //bytes memory _adapterParams
-      { value: teleportFee.nativeFee }
+      { value: teleportFee.nativeFee, gasLimit: gasLimit }
     )
   },
   updateBalances: async () => {

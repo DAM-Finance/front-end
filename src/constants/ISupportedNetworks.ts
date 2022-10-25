@@ -8,6 +8,10 @@ export interface ISupportedNetwork {
   addresses: ISupportedNetworkAddresses
   layerZeroChainIds: string
   suggestedGasLimit: number
+  capabilities: {
+    canSwap: boolean
+    canTeleport: boolean
+  }
 }
 
 export interface ISupportedNetworkAddresses {
@@ -22,6 +26,6 @@ export interface ISupportedNetworkAddresses {
   wethJoin?: string
   link?: string
   linkJoin?: string
-  lzEndpoint?: string
+  lzPipe?: string
   hyperlanePipe?: string
 }
