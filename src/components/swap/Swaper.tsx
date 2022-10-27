@@ -1,5 +1,5 @@
 import { utils as ethersUtils } from 'ethers'
-import { FC, useState, useEffect } from 'react'
+import { FC, useState, useEffect, useMemo } from 'react'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
 import SwaperBalance from './SwaperBalance'
@@ -98,6 +98,10 @@ const Swaper: FC = () => {
       setTxState('failed')
     }
   }
+
+  const isSwapBtnDisabled = useMemo(() => {
+    return Number(firstCoin) <= 0
+  }, [firstCoin])
 
   useEffect(() => {
     const getGasPrice = async () => {
@@ -214,7 +218,8 @@ const Swaper: FC = () => {
         {approveButtonState === 'HideApprove' && (
           <button
             onClick={() => swapIt(firstCoin)}
-            className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold"
+            className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isSwapBtnDisabled}
           >
             <span>Swap</span>
           </button>

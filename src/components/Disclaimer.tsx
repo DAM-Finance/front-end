@@ -17,7 +17,7 @@ const Disclaimer: FC<DisclaimerProps> = ({ infoTxt = '', actionTxt = '', canClos
   return (
     <>
       {showDisclaimer && (
-        <div className="flex flex-row gap-4 bg-damnavygreen rounded-2xl p-6">
+        <div className="flex flex-row gap-4 bg-damnavygreen rounded-2xl px-6 py-4">
           <div>
             <div className="text-white ">{infoTxt}</div>
             {actionTxt && <button className="text-damyellow opacity-50">Learn More</button>}

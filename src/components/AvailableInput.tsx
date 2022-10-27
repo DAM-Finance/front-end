@@ -16,12 +16,12 @@ const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasP
   const toogleShowFees = () => setShowFees(!showFees)
   return (
     <div className="w-full flex flex-col gap-1">
-      <div className="w-full flex text-gray-400 bg-damdarkgray border-solid border-[1px] border-damdarkgray outline-none focus:border-yellow-300 hover:border-yellow-300 rounded-2xl">
+      <div className="w-full flex text-gray-400 bg-damgray border-solid border-[1px] border-damlightyellow outline-none rounded-2xl">
         <input
           value={amount}
           onChange={(ev) => handleChange(ev.target.value)}
           type="number"
-          className="w-full bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
+          className="w-full bg-damgray p-4 text-2xl outline-none border-none rounded-2xl"
         />
         <button
           onClick={() => handleChange(available)}

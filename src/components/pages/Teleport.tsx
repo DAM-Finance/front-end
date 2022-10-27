@@ -1,5 +1,5 @@
 import { utils as ethersUtils } from 'ethers'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useMemo } from 'react'
 import { supportedNetworks } from '../../constants/config'
 // import { LayerZeroChainIds } from '../../constants/config'
 import utils from '../../constants/utils'
@@ -53,6 +53,10 @@ const Teleport: FC = () => {
     }
   }
 
+  const isTeleportBtnDisabled = useMemo(() => {
+    return Number(amount) <= 0
+  }, [amount])
+
   return (
     <div className="flex p-4 w-full justify-center py-24">
       <div className="flex flex-col max-w-7xl gap-6">
@@ -62,8 +66,7 @@ const Teleport: FC = () => {
           style={{ background: 'linear-gradient(124.57deg, #4B2BA5 -118.12%, #1F212C 57.01%)' }}
         >
           <div className="flex flex-col gap-2">
-            <div>1. Select Network</div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 justify-between">
               <SelectNetwork networks={supportedNetworks} selectedNetwork={originNetwork} handleChange={(network) => setOriginNetwork(network)}></SelectNetwork>
               <img src={utils.getImageSrc('right-arrow.svg')} alt="" />
               <SelectNetwork
@@ -74,7 +77,6 @@ const Teleport: FC = () => {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <div>2. Select the amount of dPRIME to teleport</div>
             <AvailableInput amount={amount} available={dPrimeBalance} gasPrice={gasPrice} handleChange={(value) => setAmount(value)} decimals={2}>
               <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
                 {/* <div className="flex">
@@ -95,9 +97,9 @@ const Teleport: FC = () => {
           <div className="flex flex-col gap-3">
             <button
               onClick={() => teleportTo(amount, destinationNetwork.name)}
-              className="flex items-center w-full justify-center gap-2 rounded-full py-4 px-6 text-black font-bold"
+              className="flex items-center w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed gap-2 rounded-full py-4 px-6 text-black font-bold"
               style={{ background: 'linear-gradient(90deg, #7742CD 5.88%, #F1DD79 100%)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
-              disabled={false}
+              disabled={isTeleportBtnDisabled}
             >
               <img src={utils.getImageSrc('teleport.svg')} alt="teleport" />
               Teleport
