@@ -20,7 +20,6 @@ const App = () => {
     }
 
     // TODO: BUG WRONG NET!!!!!!!!!!
-    debugger
     if (location.pathname === '/teleport') {
       const missingCapability = !!(appStore.selectedNetwork && appStore.walletProvider.connected && !appStore.selectedNetwork.capabilities.canTeleport)
       const invalidNetwork = !supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)

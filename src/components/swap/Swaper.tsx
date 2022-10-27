@@ -10,10 +10,10 @@ import WaitingForConfirmationPopup from '../wallet/WaitingForConfirmationPopup'
 import TransactionInProgressPopup from '../wallet/TransactionInProgressPopup'
 import TransactionCompletedPopup from '../wallet/TransactionCompletedPopup'
 import TransactionFailedPopup from '../wallet/TransactionFailedPopup'
+import { ITxState } from '../../constants/ITxState'
 
 // interface DDPrimeProps {}
 type ApproveButtonState = 'ShowApprove' | 'HideApprove' | 'loading'
-type ITxState = 'none' | 'waiting' | 'inprogress' | 'completed' | 'failed'
 
 const Swaper: FC = () => {
   const appStore = useAppStore()

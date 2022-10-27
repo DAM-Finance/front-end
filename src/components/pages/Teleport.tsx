@@ -7,6 +7,11 @@ import { useAppStore } from '../../stores/appStore/appStore'
 import AvailableInput from '../AvailableInput'
 import Disclaimer from '../Disclaimer'
 import SelectNetwork from '../SelectNetwork'
+import TransactionCompletedPopup from '../wallet/TransactionCompletedPopup'
+import TransactionInProgressPopup from '../wallet/TransactionInProgressPopup'
+import WaitingForConfirmationPopup from '../wallet/WaitingForConfirmationPopup'
+import TransactionFailedPopup from '../wallet/TransactionFailedPopup'
+import { ITxState } from '../../constants/ITxState'
 
 // interface DDPrimeProps {}
 
@@ -15,16 +20,10 @@ const Teleport: FC = () => {
   const dPrimeBalance = appStore.balances.dPrime
 
   const [amount, setAmount] = useState('0')
-  // const [available] = useState('1020')
-  // const [networks] = useState<INetwork[]>([
-  //   // { name: 'Ethereum', symbol: 'eth' },
-  //   // { name: 'Moonbeam', symbol: 'glmr' }
-  //   { name: 'Rinkeby', symbol: 'eth' },
-  //   { name: 'Moonbase', symbol: 'glmr' }
-  // ])
   const [originNetwork, setOriginNetwork] = useState(supportedNetworks[0])
   const [destinationNetwork, setDestinationNetwork] = useState(supportedNetworks[1])
   const [gasPrice, setGasPrice] = useState('')
+  const [txState, setTxState] = useState<ITxState>()
 
   useEffect(() => {
     const getGasPrice = async () => {
@@ -40,8 +39,18 @@ const Teleport: FC = () => {
     getGasPrice()
   }, [appStore.walletProvider?.web3Provider])
 
-  function teleportTo(dPrimeAmount: string, dstChainName: string) {
-    appStore.teleport(dPrimeAmount, dstChainName)
+  const teleportTo = async (dPrimeAmount: string, dstChainName: string) => {
+    try {
+      setTxState('waiting')
+      const tx = await appStore.teleport(dPrimeAmount, dstChainName)
+      setTxState('inprogress')
+      await tx.wait()
+      appStore.updateBalances()
+      setTxState('completed')
+    } catch (err) {
+      console.error(err)
+      setTxState('failed')
+    }
   }
 
   return (
@@ -100,6 +109,10 @@ const Teleport: FC = () => {
           </div>
         </div>
       </div>
+      <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
+      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'}></TransactionInProgressPopup>
+      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'}></TransactionCompletedPopup>
+      <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'}></TransactionFailedPopup>
     </div>
   )
 }

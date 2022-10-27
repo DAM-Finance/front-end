@@ -229,23 +229,16 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     // get().estimateTeleportFees()
   },
   teleport: async (dPrimeAmount: string, dstChainName: string) => {
-    debugger
     await get().ensureConnected()
     const { accounts } = get().walletProvider
 
     let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.layerZeroChainIds
-    const teleportFee = await connectedContracts.lzPipe.estimateSendFee(
-      dstChainId,
-      accounts[0],
-      utils.fwad(dPrimeAmount), //Convert from decimal number (type: string still) into 18 dec amount
-      false,
-      []
-    )
+    const teleportFee = await connectedContracts.lzPipe.estimateSendFee(dstChainId, accounts[0], utils.fwad(dPrimeAmount), false, [])
     const gasLimit = get().selectedNetwork?.suggestedGasLimit
-    await connectedContracts.lzPipe.sendFrom(
+    return connectedContracts.lzPipe.sendFrom(
       accounts[0], //address _from,
       dstChainId, //uint16 _dstChainId,
-      ethers.utils.hexZeroPad(accounts[0], 32), //bytes memory _toAddress,
+      accounts[0], //bytes memory _toAddress,
       utils.fwad(dPrimeAmount), //uint _amount,
       accounts[0], //address payable _refundAddress,
       accounts[0], //address _zroPaymentAddress,
@@ -255,14 +248,12 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   updateBalances: async () => {
     await get().getTokenBalance('dPrime')
-    await get().getTokenBalance('usdc')
-
-    // if (get().selectedNetwork?.name === 'Rinkeby') {
-    // } else {
-    //   get().setBalances('usdc', '0.0')
-    // }
+    if (get().selectedNetwork?.capabilities.hasUsdc) {
+      await get().getTokenBalance('usdc')
+    }
   },
   getTokenBalance: async (token: keyof typeof supportedTokens) => {
+    debugger
     const account = get().walletProvider.accounts[0]
     const units = supportedTokens[token].units
 
