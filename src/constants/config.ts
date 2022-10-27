@@ -10,14 +10,16 @@ export const supportedNetworks: ISupportedNetwork[] = [
     iconName: 'moonbeamneticon.svg',
     teleportBgImg: 'moonbase-bg.png',
     addresses: {
-      dPrime: '0x95D8E71E2E31fB3B99aD398745856AEAbE2cf3ac',
-      lzPipe: '0xb23b28012ee92E8dE39DEb57Af31722223034747'
+      dPrime: '0xA693E53a134457A2Dc0669a77f20F114B4aaea8E',
+      lzPipe: '0xe48dc47089bd1ED3BCB06a97741e9E9E1a619F13',
+      hyperlanePipe: '0x0B80E3704FC74f5621C875274203301168Ac7702'
     },
     layerZeroChainIds: '10126',
     suggestedGasLimit: 500000,
     capabilities: {
       canSwap: false,
-      canTeleport: true
+      canTeleport: true,
+      hasUsdc: false
     }
   },
   {
@@ -48,7 +50,8 @@ export const supportedNetworks: ISupportedNetwork[] = [
     suggestedGasLimit: 500000,
     capabilities: {
       canSwap: true,
-      canTeleport: true
+      canTeleport: true,
+      hasUsdc: true
     }
   }
 ]
