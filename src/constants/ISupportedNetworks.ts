@@ -11,6 +11,7 @@ export interface ISupportedNetwork {
   capabilities: {
     canSwap: boolean
     canTeleport: boolean
+    hasUsdc: boolean
   }
 }
 
