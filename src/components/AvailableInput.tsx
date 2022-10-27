@@ -8,9 +8,10 @@ interface AvailableInputProps {
   gasPrice?: string
   children?: any
   handleChange: (elem: string) => void
+  decimals?: number
 }
 
-const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasPrice, handleChange, children }) => {
+const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasPrice, handleChange, children, decimals = -1 }) => {
   const [showFees, setShowFees] = useState(false)
   const toogleShowFees = () => setShowFees(!showFees)
   return (
@@ -30,12 +31,12 @@ const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasP
         </button>
       </div>
       <div className="flex gap-2 ml-4">
-        <div className="text-damlabelgray2 ">{available}</div>
+        <div className="text-damlabelgray2 ">{utils.format(available, decimals)}</div>
         <div className="text-damlabelgray3 font-light text-sm">Available dPRIME</div>
         {gasPrice && (
           <div onClick={toogleShowFees} className="flex items-center gap-2 ml-auto mr-4 cursor-pointer text-damlabelgray2 hover:text-damNavGray">
             <img src={utils.getImageSrc('gaspump.svg')} alt="gas" />
-            <div className="text-sm">{gasPrice}</div>
+            <div className="text-sm">{utils.format(gasPrice, decimals)}</div>
             {showFees ? <ChevronUpIcon width={16}></ChevronUpIcon> : <ChevronDownIcon width={16}></ChevronDownIcon>}
           </div>
         )}

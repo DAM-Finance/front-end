@@ -6,20 +6,21 @@ interface SwaperBalanceWithFeesProps {
   available: string
   gasPrice?: string
   children?: any
+  decimals?: number
 }
 
-const SwaperBalanceWithFees: FC<SwaperBalanceWithFeesProps> = ({ available, gasPrice, children }) => {
+const SwaperBalanceWithFees: FC<SwaperBalanceWithFeesProps> = ({ available, gasPrice, children, decimals = -1 }) => {
   const [showFees, setShowFees] = useState(false)
   const toogleShowFees = () => setShowFees(!showFees)
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2 ml-4 text-sm">
         <div className="text-damlabelgray3 font-light">Balance</div>
-        <div className="text-damlabelgray2 mr-auto">{available}</div>
+        <div className="text-damlabelgray2 mr-auto">{utils.format(available, decimals)}</div>
         {gasPrice && (
           <div onClick={toogleShowFees} className="flex items-center gap-2 mr-4 cursor-pointer text-damlabelgray2 hover:text-damNavGray">
             <img src={utils.getImageSrc('gaspump.svg')} alt="gas" />
-            <div className="text-sm">{gasPrice}</div>
+            <div className="text-sm">{utils.format(gasPrice, decimals)}</div>
             {showFees ? <ChevronUpIcon width={16}></ChevronUpIcon> : <ChevronDownIcon width={16}></ChevronDownIcon>}
           </div>
         )}

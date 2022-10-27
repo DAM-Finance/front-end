@@ -19,6 +19,14 @@ export class Utils {
     return `${wallet.slice(0, 5)}...${wallet.slice(-4, wallet.length)}`
   }
 
+  format = (value: string | number, decimals: number) => {
+    const nValue = +value
+    if (decimals < 0) {
+      return value
+    }
+    return nValue.toFixed(decimals)
+  }
+
   fwad(wad: string) {
     return ethers.utils.parseEther(wad)
   }
