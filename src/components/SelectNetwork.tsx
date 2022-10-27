@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import { ISupportedNetwork } from '../constants/ISupportedNetworks'
 import utils from '../constants/utils'
-import { INetwork } from '../features/Network'
 
 interface SelectNetworkProps {
   selectedNetwork: ISupportedNetwork
