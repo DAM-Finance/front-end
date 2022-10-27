@@ -300,9 +300,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   approveToken: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, amount = maxApprove) => {
     const joinContract = get().selectedNetwork?.addresses[tokenJoin]
-    let res = await connectedContracts[token].approve(joinContract, amount)
-    let txComplete = await res.wait()
-    return txComplete
+    return connectedContracts[token].approve(joinContract, amount)
   },
   estimateTeleportFees: async () => {
     const { accounts } = get().walletProvider

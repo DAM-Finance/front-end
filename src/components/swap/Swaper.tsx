@@ -58,17 +58,19 @@ const Swaper: FC = () => {
     try {
       if (isInverted) {
         setTxState('waiting')
-        await appStore.approveToken('dPrime', 'usdcPSM')
-        setTxState('none')
-        // & REFRESH
+        const tx = await appStore.approveToken('dPrime', 'usdcPSM')
+        setTxState('inprogress')
+        await tx.wait()
+        setTxState('completed')
       } else {
         setTxState('waiting')
-        await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
-        setTxState('none')
-        // & REFRESH
+        const tx = await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
+        setTxState('inprogress')
+        await tx.wait()
+        setTxState('completed')
       }
     } catch (err: any) {
-      setTxState('none')
+      setTxState('failed')
       if (err.code === 4001) {
         // alert('User rejected approve process')
       }
@@ -111,6 +113,7 @@ const Swaper: FC = () => {
     getGasPrice()
   }, [appStore.walletProvider?.web3Provider])
 
+  console.log('checkNeedsApprove')
   checkNeedsApprove()
 
   // TODO: Fix this
