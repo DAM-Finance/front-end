@@ -18,10 +18,10 @@ import { ITxState } from '../../constants/ITxState'
 const Teleport: FC = () => {
   const appStore = useAppStore()
   const dPrimeBalance = appStore.balances.dPrime
-
   const [amount, setAmount] = useState('0')
   const [originNetwork, setOriginNetwork] = useState(supportedNetworks[0])
   const [destinationNetwork, setDestinationNetwork] = useState(supportedNetworks[1])
+  const [availableDestinations, setAvailableDestinations] = useState(supportedNetworks)
   const [gasPrice, setGasPrice] = useState('')
   const [txState, setTxState] = useState<ITxState>()
 
@@ -38,6 +38,17 @@ const Teleport: FC = () => {
     }
     getGasPrice()
   }, [appStore.walletProvider?.web3Provider])
+
+  useEffect(() => {
+    if (appStore.selectedNetwork) {
+      setOriginNetwork(appStore.selectedNetwork)
+      setAvailableDestinations(supportedNetworks.filter((network) => network.chainId !== appStore.selectedNetwork!.chainId))
+    }
+  }, [appStore.selectedNetwork])
+
+  useEffect(() => {
+    setDestinationNetwork(availableDestinations[0])
+  }, [availableDestinations])
 
   const teleportTo = async (dPrimeAmount: string, dstChainName: string) => {
     try {
@@ -72,10 +83,14 @@ const Teleport: FC = () => {
         >
           <div className="flex flex-col gap-2">
             <div className="flex gap-4 justify-between">
-              <SelectNetwork networks={supportedNetworks} selectedNetwork={originNetwork} handleChange={(network) => setOriginNetwork(network)}></SelectNetwork>
-              <img src={utils.getImageSrc('right-arrow.svg')} alt="" />
               <SelectNetwork
                 networks={supportedNetworks}
+                selectedNetwork={originNetwork}
+                handleChange={(network) => appStore.switchNetwork(network.chainId)}
+              ></SelectNetwork>
+              <img src={utils.getImageSrc('right-arrow.svg')} alt="" />
+              <SelectNetwork
+                networks={availableDestinations}
                 selectedNetwork={destinationNetwork}
                 handleChange={(network) => setDestinationNetwork(network)}
               ></SelectNetwork>
@@ -84,10 +99,6 @@ const Teleport: FC = () => {
           <div className="flex flex-col gap-2">
             <AvailableInput amount={amount} available={dPrimeBalance} gasPrice={gasPrice} handleChange={(value) => setAmount(value)} decimals={2}>
               <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
-                {/* <div className="flex">
-                  <div>Expected Output</div>
-                  <div className="ml-auto">{amount} dPRIME</div>
-                </div> */}
                 <div className="flex">
                   <div>Teleport Fee</div>
                   <div className="ml-auto">{appStore.teleportFees}</div>
