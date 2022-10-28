@@ -131,7 +131,7 @@ const Teleport: FC = () => {
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'} addTokenOption={false}>
         <div className="text-[14px] text-damlabelgray">
           <span>Teleporting dPRIME takes on </span>
-          <span className="text-damyellow font-bold">average 15min.</span>
+          <span className="text-damyellow font-bold">average 15 min.</span>
         </div>
       </WaitingForConfirmationPopup>
 
