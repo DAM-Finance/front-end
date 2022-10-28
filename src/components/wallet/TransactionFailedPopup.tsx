@@ -4,16 +4,17 @@ import utils from '../../constants/utils'
 interface TransactionCompletedPopupProps {
   show: boolean
   handleClose: () => void
+  imgName?: string
 }
 
-const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({ show, handleClose }) => {
+const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({ show, handleClose, imgName = 'tfailed.svg' }) => {
   return (
     <>
       {show && (
         <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
-          <div className="fixed bg-damgray px-32 py-12 rounded-xl text-white">
-            <div className="flex flex-col items-center gap-4">
-              <img width="240" src={utils.getImageSrc('tfailed.svg')} alt="transaction in progress" />
+          <div className="flex fixed bg-damgray px-32 py-12 rounded-xl text-white">
+            <div className="flex flex-col items-center gap-1">
+              <img width="240" src={utils.getImageSrc(imgName)} alt="transaction in progress" />
               <div className="font-light text-2xl pt-4">Transaction failed!</div>
               <div className="flex gap-1 hover:cursor-pointer">
                 <div className="text-sm text-damlabelgray">

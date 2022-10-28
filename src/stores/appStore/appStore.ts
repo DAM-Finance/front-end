@@ -207,7 +207,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   switchNetwork: async (chainId: string) => {
     const provider = get().walletProvider.provider
-    await get().gateway?.switchNetwork(provider, chainId)
+    return get().gateway?.switchNetwork(provider, chainId)
   },
   attachContracts: async () => {
     if (!get().walletProvider.accounts || !get().walletProvider.accounts.length) {

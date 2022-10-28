@@ -4,24 +4,38 @@ import utils from '../../constants/utils'
 interface TransactionCompletedPopupProps {
   show: boolean
   handleClose: () => void
+  message?: string
+  imgName?: string
+  children?: React.ReactNode
+  followTx?: boolean
 }
 
-const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({ show, handleClose }) => {
+const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({
+  show,
+  handleClose,
+  imgName = 'tcompleted.svg',
+  message = 'Transaction completed!',
+  children = <></>,
+  followTx = true
+}) => {
   return (
     <>
       {show && (
         <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
-          <div className="fixed bg-damgray px-32 py-12 rounded-xl text-white">
-            <div className="flex flex-col items-center gap-4">
-              <img width="240" src={utils.getImageSrc('tcompleted.svg')} alt="transaction in progress" />
-              <div className="font-light text-2xl pt-4">Transaction completed!</div>
-              <div className="flex gap-1 hover:cursor-pointer">
-                <div className="text-sm text-damlabelgray">
-                  <span>See the </span>
-                  <span className="text-damyellow">transaction</span>
+          <div className="flex fixed bg-damgray px-32 py-12 rounded-xl text-white">
+            <div className="flex flex-col items-center gap-1">
+              <img width="240" src={utils.getImageSrc(imgName)} alt="transaction in progress" />
+              <div className="font-light text-2xl pt-4">{message}</div>
+              {children}
+              {followTx && (
+                <div className="flex gap-1 hover:cursor-pointer">
+                  <div className="text-sm text-damlabelgray">
+                    <span>See the </span>
+                    <span className="text-damyellow">transaction</span>
+                  </div>
+                  <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
                 </div>
-                <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
-              </div>
+              )}
             </div>
             <button>
               <img onClick={handleClose} className="absolute top-3 right-3" src={utils.getImageSrc('x2.svg')} alt="close" />

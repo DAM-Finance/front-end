@@ -53,6 +53,11 @@ const Teleport: FC = () => {
     }
   }
 
+  const switchNetwork = async () => {
+    await appStore.switchNetwork(destinationNetwork.chainId)
+    setTxState('none')
+  }
+
   const isTeleportBtnDisabled = useMemo(() => {
     return Number(amount) <= 0
   }, [amount])
@@ -111,10 +116,42 @@ const Teleport: FC = () => {
           </div>
         </div>
       </div>
-      <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
-      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'}></TransactionInProgressPopup>
-      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'}></TransactionCompletedPopup>
-      <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'}></TransactionFailedPopup>
+
+      <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'} addTokenOption={false}>
+        <div className="text-[14px] text-damlabelgray">
+          <span>Teleporting dPRIME takes on </span>
+          <span className="text-damyellow font-bold">average 15min.</span>
+        </div>
+      </WaitingForConfirmationPopup>
+
+      <TransactionInProgressPopup
+        handleClose={() => setTxState('none')}
+        show={txState === 'inprogress'}
+        message="Teleport in progress!"
+        imgName="teleport-progress.svg"
+      ></TransactionInProgressPopup>
+
+      <TransactionCompletedPopup
+        handleClose={() => setTxState('none')}
+        show={txState === 'completed'}
+        imgName="teleport-completed.svg"
+        message="Teleport successful!"
+        followTx={false}
+      >
+        <div className="flex flex-col gap-6">
+          <div className="text-md text-damlabelgray">
+            <span>Switch network to use your dPRIME.</span>
+          </div>
+          <button
+            onClick={switchNetwork}
+            className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
+          >
+            <span>Switch Network</span>
+          </button>
+        </div>
+      </TransactionCompletedPopup>
+
+      <TransactionFailedPopup handleClose={() => setTxState('none')} imgName="teleport-failed.svg" show={txState === 'failed'}></TransactionFailedPopup>
     </div>
   )
 }

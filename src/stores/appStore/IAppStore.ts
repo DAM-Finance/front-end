@@ -40,7 +40,7 @@ export interface IAppStore {
 
   ensureConnected: () => void
   connectWallet: () => void
-  switchNetwork: (chainId: string) => void
+  switchNetwork: (chainId: string) => Promise<any>
   attachContracts: () => void
   refreshSelectedNetwork: () => void
 
