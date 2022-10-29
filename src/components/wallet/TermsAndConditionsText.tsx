@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import './TermsAndConditionsText.css'
 
 const TermsAndConditionsText: FC = () => {
   return (
