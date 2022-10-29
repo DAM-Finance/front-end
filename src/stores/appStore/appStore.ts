@@ -253,7 +253,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
   },
   getTokenBalance: async (token: keyof typeof supportedTokens) => {
-    debugger
     const account = get().walletProvider.accounts[0]
     const units = supportedTokens[token].units
 

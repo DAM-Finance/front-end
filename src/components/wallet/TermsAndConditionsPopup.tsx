@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
 import utils from '../../constants/utils'
 import Checkbox from '../Checkbox'
+import TermsAndConditionsText from './TermsAndConditionsText'
 
 interface TermsAndConditionsPopupProps {
   show: boolean
@@ -24,23 +25,8 @@ const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handl
                 <div className="text-xs text-damlabelgray3">Updated 09/04/22</div>
               </div>
             </div>
-            <div className="overflow-y-scroll damscroll max-h-48 text-sm my-4">
-              Title One Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Venenatis
-              cras sed felis eget velit. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Lectus nulla at volutpat diam ut
-              venenatis tellus. Id velit ut tortor pretium viverra. Dolor magna eget est lorem ipsum dolor sit amet. Adipiscing enim eu turpis egestas pretium.
-              Sapien et ligula ullamcorper malesuada proin libero nunc consequat interdum. Id consectetur purus tempor incididunt ut labore et dolore magna
-              aliqua. Venenatis cras sed felis eget velit. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Lectus nulla at
-              volutpat diam ut venenatis tellus. Id velit ut tortor pretium viverra. Dolor magna eget est lorem ipsum dolor sit amet. Adipiscing enim eu turpis
-              egestas pretium. Sapien et ligula ullamcorper malesuada proin libero nunc consequat interdum. Id consectetur purus uTitle One Lorem ipsum dolor
-              sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Venenatis cras sed felis eget velit.
-              Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Lectus nulla at volutpat diam ut venenatis tellus. Id velit ut
-              tortor pretium viverra. Dolor magna eget est lorem ipsum dolor sit amet. Adipiscing enim eu turpis egestas pretium. Sapien et ligula ullamcorper
-              malesuada proin libero nunc consequat interdum. Id consectetur purus tempor incididunt ut labore et dolore magna aliqua. Venenatis cras sed felis
-              eget velit. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Lectus nulla at volutpat diam ut venenatis tellus.
-              Id velit ut tortor pretium viverra. Dolor magna eget est lorem ipsum dolor sit amet. Adipiscing enim eu turpis egestas pretium. Sapien et ligula
-              ullamcorper malesuada proin libero nunc consequat interdum. Id consectetur purus uTitle One Lorem ipsum dolor sit amet, consectetur adipiscing
-              volutpat diam ut venenatis tellus. Id velit ut tortor pretium viverra. Dolor magna eget est lorem ipsum dolor sit amet. Adipiscing enim eu turpis
-              egestas pretium. Sapien et ligula ullamcorper malesuada proin libero nunc consequat interdum. Id consectetur purus u
+            <div className="overflow-y-scroll damscroll w-full max-h-64 text-sm my-4">
+              <TermsAndConditionsText></TermsAndConditionsText>
             </div>
             <div className="flex flex-col w-full gap-3">
               <Checkbox selected={agreeTC} handleClick={() => setAgreeTC(!agreeTC)}>
