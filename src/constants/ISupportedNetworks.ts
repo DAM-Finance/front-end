@@ -13,6 +13,7 @@ export interface ISupportedNetwork {
     canTeleport: boolean
     hasUsdc: boolean
   }
+  scanUrl: string
 }
 
 export interface ISupportedNetworkAddresses {

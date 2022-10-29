@@ -7,7 +7,7 @@ interface TransactionCompletedPopupProps {
   message?: string
   imgName?: string
   children?: React.ReactNode
-  followTx?: boolean
+  txLink?: string
 }
 
 const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({
@@ -16,7 +16,7 @@ const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({
   imgName = 'tcompleted.svg',
   message = 'Transaction completed!',
   children = <></>,
-  followTx = true
+  txLink = ''
 }) => {
   return (
     <>
@@ -27,14 +27,14 @@ const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({
               <img width="240" src={utils.getImageSrc(imgName)} alt="transaction in progress" />
               <div className="font-light text-2xl pt-4">{message}</div>
               {children}
-              {followTx && (
-                <div className="flex gap-1 hover:cursor-pointer">
+              {!!txLink && (
+                <a className="flex gap-1 hover:cursor-pointer" href={txLink} target="_blank" rel="noreferrer">
                   <div className="text-sm text-damlabelgray">
                     <span>See the </span>
                     <span className="text-damyellow">transaction</span>
                   </div>
                   <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
-                </div>
+                </a>
               )}
             </div>
             <button>

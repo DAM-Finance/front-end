@@ -24,6 +24,7 @@ const Teleport: FC = () => {
   const [availableDestinations, setAvailableDestinations] = useState(supportedNetworks)
   const [gasPrice, setGasPrice] = useState('')
   const [txState, setTxState] = useState<ITxState>()
+  const [txLink, setTxLink] = useState('')
 
   useEffect(() => {
     const getGasPrice = async () => {
@@ -54,8 +55,11 @@ const Teleport: FC = () => {
     try {
       setTxState('waiting')
       const tx = await appStore.teleport(dPrimeAmount, dstChainName)
+      const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
+      setTxLink(link)
       setTxState('inprogress')
       await tx.wait()
+      setTxLink('')
       appStore.updateBalances()
       setTxState('completed')
     } catch (err) {
@@ -140,6 +144,7 @@ const Teleport: FC = () => {
         show={txState === 'inprogress'}
         message="Teleport in progress!"
         imgName="teleport-progress.svg"
+        txLink={txLink}
       ></TransactionInProgressPopup>
 
       <TransactionCompletedPopup
@@ -147,7 +152,7 @@ const Teleport: FC = () => {
         show={txState === 'completed'}
         imgName="teleport-completed.svg"
         message="Teleport successful!"
-        followTx={false}
+        txLink={txLink}
       >
         <div className="flex flex-col gap-6">
           <div className="text-md text-damlabelgray">
@@ -162,7 +167,12 @@ const Teleport: FC = () => {
         </div>
       </TransactionCompletedPopup>
 
-      <TransactionFailedPopup handleClose={() => setTxState('none')} imgName="teleport-failed.svg" show={txState === 'failed'}></TransactionFailedPopup>
+      <TransactionFailedPopup
+        handleClose={() => setTxState('none')}
+        imgName="teleport-failed.svg"
+        show={txState === 'failed'}
+        txLink={txLink}
+      ></TransactionFailedPopup>
     </div>
   )
 }

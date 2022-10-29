@@ -1,4 +1,4 @@
-import { utils as ethersUtils } from 'ethers'
+import { Transaction, utils as ethersUtils } from 'ethers'
 import { FC, useState, useEffect, useMemo } from 'react'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -31,6 +31,7 @@ const Swaper: FC = () => {
   const [gasPrice, setGasPrice] = useState('')
   const [approveButtonState, setApproveButtonState] = useState<ApproveButtonState>('loading')
   const [txState, setTxState] = useState<ITxState>()
+  const [txLink, setTxLink] = useState('')
 
   const checkNeedsApprove = async () => {
     try {
@@ -59,12 +60,16 @@ const Swaper: FC = () => {
       if (isInverted) {
         setTxState('waiting')
         const tx = await appStore.approveToken('dPrime', 'usdcPSM')
+        const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
+        setTxLink(link)
         setTxState('inprogress')
         await tx.wait()
         setTxState('completed')
       } else {
         setTxState('waiting')
         const tx = await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
+        const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
+        setTxLink(link)
         setTxState('inprogress')
         await tx.wait()
         setTxState('completed')
@@ -78,7 +83,7 @@ const Swaper: FC = () => {
     }
   }
 
-  const swapIt = async (amount: string) => {
+  const swap = async (amount: string) => {
     try {
       let swapCall
 
@@ -90,12 +95,15 @@ const Swaper: FC = () => {
 
       setTxState('waiting')
       const tx = await swapCall
+      const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
+      setTxLink(link)
       setTxState('inprogress')
       await tx.wait()
       setTxState('completed')
       appStore.updateBalances()
     } catch (err) {
       setTxState('failed')
+      console.error(err)
     }
   }
 
@@ -217,7 +225,7 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'HideApprove' && (
           <button
-            onClick={() => swapIt(firstCoin)}
+            onClick={() => swap(firstCoin)}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isSwapBtnDisabled}
           >
@@ -229,16 +237,16 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'loading' && !appStore.walletProvider?.connected && (
           <button
-            onClick={() => swapIt(firstCoin)}
+            onClick={() => swap(firstCoin)}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold"
           >
             <span>Connect</span>
           </button>
         )}
       </div>
-      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'}></TransactionInProgressPopup>
-      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'}></TransactionCompletedPopup>
-      <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'}></TransactionFailedPopup>
+      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
+      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'} txLink={txLink}></TransactionCompletedPopup>
+      <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'} txLink={txLink}></TransactionFailedPopup>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
     </div>
   )

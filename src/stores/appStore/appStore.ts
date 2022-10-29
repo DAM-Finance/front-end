@@ -152,7 +152,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().setSelectedNetwork(selectedNetwork!)
   },
   gatewayEventHandler: async (event: IGatewayEvent) => {
-    // TODO: refactor (dry)
     const newEvent: Partial<IGatewayEvent> = event
     switch (event.type) {
       case 'chainChanged':
@@ -175,6 +174,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       case 'accountsChanged':
         delete newEvent.type
         get().setWalletProvider(newEvent)
+        get().updateBalances()
     }
   },
   initWeb3: async () => {
@@ -209,6 +209,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const provider = get().walletProvider.provider
     return get().gateway?.switchNetwork(provider, chainId)
   },
+  // addDPrimeToWallet
   attachContracts: async () => {
     if (!get().walletProvider.accounts || !get().walletProvider.accounts.length) {
       return

@@ -6,9 +6,16 @@ interface TransactionInProgressPopupProps {
   handleClose: () => void
   message?: string
   imgName?: string
+  txLink?: string
 }
 
-const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({ show, handleClose, message = 'Transaction in progress', imgName = 'tip.svg' }) => {
+const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
+  show,
+  handleClose,
+  message = 'Transaction in progress',
+  imgName = 'tip.svg',
+  txLink = ''
+}) => {
   return (
     <>
       {show && (
@@ -17,13 +24,16 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({ show,
             <div className="flex flex-col items-center gap-1">
               <img width="240" src={utils.getImageSrc(imgName)} alt="transaction in progress" />
               <div className="font-light text-2xl pt-4">{message}</div>
-              <div className="flex gap-1 hover:cursor-pointer">
-                <div className="text-sm text-damlabelgray">
-                  <span>Follow the </span>
-                  <span className="text-damyellow">transaction</span>
-                </div>
-                <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
-              </div>
+
+              {!!txLink && (
+                <a className="flex gap-1" href={txLink} target="_blank" rel="noreferrer">
+                  <div className="text-sm text-damlabelgray">
+                    <span>Follow the </span>
+                    <span className="text-damyellow">transaction</span>
+                  </div>
+                  <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
+                </a>
+              )}
             </div>
             <button>
               <img onClick={handleClose} className="absolute top-3 right-3" src={utils.getImageSrc('x2.svg')} alt="close" />

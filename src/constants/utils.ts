@@ -1,3 +1,5 @@
+import { scanUrlMask } from './config'
+import { ISupportedNetwork } from './ISupportedNetworks'
 import * as ethers from 'ethers'
 
 export class Utils {
@@ -25,6 +27,10 @@ export class Utils {
       return value
     }
     return nValue.toFixed(decimals)
+  }
+
+  getTxLink(network: ISupportedNetwork, txHash: string) {
+    return network.scanUrl.replace(scanUrlMask, txHash)
   }
 
   fwad(wad: string) {

@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { ISupportedNetwork } from './ISupportedNetworks'
 
+export const scanUrlMask = 'DAM__TX__ADDRESS'
 export const supportedNetworks: ISupportedNetwork[] = [
   {
     name: 'Moonbase',
@@ -20,7 +21,8 @@ export const supportedNetworks: ISupportedNetwork[] = [
       canSwap: false,
       canTeleport: true,
       hasUsdc: false
-    }
+    },
+    scanUrl: `https://moonbase.moonscan.io/tx/${scanUrlMask}`
   },
   {
     name: 'Goerli',
@@ -52,7 +54,8 @@ export const supportedNetworks: ISupportedNetwork[] = [
       canSwap: true,
       canTeleport: true,
       hasUsdc: true
-    }
+    },
+    scanUrl: `https://goerli.etherscan.io/tx/${scanUrlMask}`
   }
 ]
 
