@@ -62,12 +62,16 @@ export const supportedNetworks: ISupportedNetwork[] = [
 export const supportedTokens = {
   dPrime: {
     name: 'dPrime',
+    symbol: 'dPRI',
     units: 18,
+    imgUIrl: 'https://bitcoin.org/img/icons/opengraph.png?1666775325',
     bytes: 0x0
   },
   usdc: {
     name: 'usdc',
+    symbol: 'dPRI',
     units: 6,
+    imgUIrl: 'https://bitcoin.org/img/icons/opengraph.png?1666775325',
     bytes: ethers.utils.formatBytes32String('PSM-USDC') // TODO: Change to PSM-USDC on production
   }
 }

@@ -6,6 +6,21 @@ class Metamask {
     return this.isValidProvider(provider) ? provider : null
   }
 
+  async addTokenToWallet(provider, tokenAddress, tokenSymbol, tokenDecimals, tokenImage) {
+    return provider.request({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC20',
+        options: {
+          address: tokenAddress,
+          symbol: tokenSymbol,
+          decimals: tokenDecimals,
+          image: tokenImage
+        }
+      }
+    })
+  }
+
   isValidProvider(provider) {
     return provider && provider === window.ethereum && provider.isMetaMask
   }

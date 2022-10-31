@@ -209,7 +209,16 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const provider = get().walletProvider.provider
     return get().gateway?.switchNetwork(provider, chainId)
   },
-  // addDPrimeToWallet
+  addDPrimeToWallet: async () => {
+    const provider = get().walletProvider.provider
+    await get().gateway?.addTokenToWallet(
+      provider,
+      get().selectedNetwork?.addresses.dPrime,
+      supportedTokens.dPrime.symbol,
+      supportedTokens.dPrime.units,
+      supportedTokens.dPrime.imgUIrl
+    )
+  },
   attachContracts: async () => {
     if (!get().walletProvider.accounts || !get().walletProvider.accounts.length) {
       return

@@ -44,6 +44,8 @@ export interface IAppStore {
   attachContracts: () => void
   refreshSelectedNetwork: () => void
 
+  addDPrimeToWallet: () => any
+
   getTokenBalance: (token: keyof typeof supportedTokens) => void
 
   updateBalances: () => void

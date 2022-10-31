@@ -1,5 +1,7 @@
-import { FC } from 'react'
+import { FC, useState, useEffect } from 'react'
+import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
+import { useAppStore } from '../../stores/appStore/appStore'
 
 interface TransactionInProgressPopupProps {
   show: boolean
@@ -7,6 +9,7 @@ interface TransactionInProgressPopupProps {
   message?: string
   imgName?: string
   txLink?: string
+  addTokenOption?: boolean
 }
 
 const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
@@ -14,8 +17,29 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
   handleClose,
   message = 'Transaction in progress',
   imgName = 'tip.svg',
-  txLink = ''
+  txLink = '',
+  addTokenOption = true
 }) => {
+  const appStore = useAppStore()
+  const [localStorageKey, setLocalStorageKey] = useState(`${localStorageObjects.DPrimeAddedWallet}_${appStore.selectedNetwork?.id}`)
+  const [isDPrimeAddedWallet, setIsDPrimeAddedWallet] = useState(localStorage.getItem(localStorageKey))
+
+  const addDPrimeToWallet = async () => {
+    try {
+      await appStore.addDPrimeToWallet()
+      localStorage.setItem(localStorageKey, 'true')
+      setIsDPrimeAddedWallet('true')
+    } catch (err) {
+      // console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    const key = `${localStorageObjects.DPrimeAddedWallet}_${appStore.selectedNetwork?.id}`
+    setLocalStorageKey(key)
+    setIsDPrimeAddedWallet(localStorage.getItem(key))
+  }, [appStore.selectedNetwork])
+
   return (
     <>
       {show && (
@@ -24,7 +48,6 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
             <div className="flex flex-col items-center gap-1">
               <img width="240" src={utils.getImageSrc(imgName)} alt="transaction in progress" />
               <div className="font-light text-2xl pt-4">{message}</div>
-
               {!!txLink && (
                 <a className="flex gap-1" href={txLink} target="_blank" rel="noreferrer">
                   <div className="text-sm text-damlabelgray">
@@ -33,6 +56,22 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
                   </div>
                   <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
                 </a>
+              )}
+              {addTokenOption && !isDPrimeAddedWallet && (
+                <div className="flex flex-col gap-2 mt-6 items-center">
+                  <button
+                    onClick={addDPrimeToWallet}
+                    className="flex items-center  w-fit gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
+                  >
+                    <img width={18} src={utils.getImageSrc('add.svg')} alt="Add" />
+                    <span>Add</span>
+                  </button>
+                  <div className="text-damlightyellow">
+                    <span>Add </span>
+                    <span className="font-bold">dPRIME </span>
+                    <span>to Metamask</span>
+                  </div>
+                </div>
               )}
             </div>
             <button>
