@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import React from 'react'
 import utils from '../../constants/utils'
-import { useAppStore } from '../../stores/appStore/appStore'
 
 interface WaitingForConfirmationPopupProps {
   show: boolean
