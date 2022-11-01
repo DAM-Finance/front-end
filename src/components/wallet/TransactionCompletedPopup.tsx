@@ -26,7 +26,6 @@ const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({
             <div className="flex flex-col items-center gap-1">
               <img width="240" src={utils.getImageSrc(imgName)} alt="transaction in progress" />
               <div className="font-light text-2xl pt-4">{message}</div>
-              {children}
               {!!txLink && (
                 <a className="flex gap-1 hover:cursor-pointer" href={txLink} target="_blank" rel="noreferrer">
                   <div className="text-sm text-damlabelgray">
@@ -36,6 +35,7 @@ const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({
                   <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
                 </a>
               )}
+              {children}
             </div>
             <button>
               <img onClick={handleClose} className="absolute top-3 right-3" src={utils.getImageSrc('x2.svg')} alt="close" />

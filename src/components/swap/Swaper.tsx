@@ -1,5 +1,6 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useMemo, useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -125,7 +126,6 @@ const Swaper: FC = () => {
     getGasPrice()
   }, [appStore.walletProvider?.web3Provider])
 
-  console.log('checkNeedsApprove')
   checkNeedsApprove()
 
   // TODO: Fix this
@@ -244,10 +244,21 @@ const Swaper: FC = () => {
           </button>
         )}
       </div>
-      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
-      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'} txLink={txLink}></TransactionCompletedPopup>
-      <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'} txLink={txLink}></TransactionFailedPopup>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
+      <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
+      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'} txLink={txLink}>
+        <div className="flex flex-col gap-2 pt-6">
+          <div className="text-md text-damlabelgray">
+            <span>Want to teleport your dPRIME?</span>
+          </div>
+          <NavLink to="/teleport">
+            <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
+              <span>dSwap</span>
+            </button>
+          </NavLink>
+        </div>
+      </TransactionCompletedPopup>
+      <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'} txLink={txLink}></TransactionFailedPopup>
     </div>
   )
 }
