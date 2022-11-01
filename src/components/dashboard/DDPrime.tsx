@@ -17,8 +17,8 @@ const DDPrime: FC = () => {
     >
       <div>
         <div className="text-2xl text-white">
-          <span>Meet the dPRIME </span>
-          <span className="font-bold">Reservoir</span>
+          <span>Meet </span>
+          <span className="font-bold">dReservoir</span>
         </div>
         <div className="text-damlabellightgray text-sm">Teleport dPRIME from a blockchain to another</div>
       </div>
