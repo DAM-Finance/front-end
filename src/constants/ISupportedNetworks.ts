@@ -14,6 +14,7 @@ export interface ISupportedNetwork {
     hasUsdc: boolean
   }
   scanUrl: string
+  scanLz: string
 }
 
 export interface ISupportedNetworkAddresses {

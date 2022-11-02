@@ -1,6 +1,13 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState, useMemo } from 'react'
-import { supportedNetworks } from '../../constants/config'
+import {
+  scanDestinationLzIdMask,
+  scanDestinationLzPipeMask,
+  scanNonceMask,
+  scanOriginLzIdMask,
+  scanOriginLzPipeMask,
+  supportedNetworks
+} from '../../constants/config'
 // import { LayerZeroChainIds } from '../../constants/config'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -55,7 +62,21 @@ const Teleport: FC = () => {
     try {
       setTxState('waiting')
       const tx = await appStore.teleport(dPrimeAmount, dstChainName)
-      const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
+      // https://testnet.layerzeroscan.com/10121/address/0x82a6a0e313765510e63fbcc0114af5c8054bda9f/message/10126/address/0xe48dc47089bd1ed3bcb06a97741e9e9e1a619f13/nonce/57
+      //TODO: test and move to utils
+      const dstChainId = supportedNetworks.find((net) => net.name === dstChainName)
+
+      let url = appStore.selectedNetwork!.scanLz
+
+      url = url.replace(scanOriginLzIdMask, appStore.selectedNetwork!.layerZeroChainIds)
+      url = url.replace(scanOriginLzPipeMask, appStore.selectedNetwork!.addresses.lzPipe!)
+
+      url = url.replace(scanDestinationLzIdMask, dstChainId!.layerZeroChainIds)
+      url = url.replace(scanDestinationLzPipeMask, dstChainId!.addresses.lzPipe!)
+
+      url = url.replace(scanNonceMask, tx.nonce)
+      const link = url
+      // const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
       setTxLink(link)
       setTxState('inprogress')
       await tx.wait()

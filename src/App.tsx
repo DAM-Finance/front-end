@@ -8,18 +8,19 @@ import { supportedNetworks } from './constants/config'
 import WaitingForConfirmationPopup from './components/wallet/WaitingForConfirmationPopup'
 import TermsAndConditionsPopup from './components/wallet/TermsAndConditionsPopup'
 import { useLocation } from 'react-router-dom'
+import { localStorageObjects } from './constants/persist'
 
 const App = () => {
   const appStore = useAppStore()
   const location = useLocation()
-  const [agreedTCs, setAgreedTCs] = useState(localStorage.getItem('agreedTC') === 'true')
+  const [agreedTCs, setAgreedTCs] = useState(JSON.parse(localStorage.getItem(localStorageObjects.agreedTcByWallet)!) || {})
 
   const showWrongNetwork = useMemo(() => {
     if (!appStore.isWrongNetworkPopupEnabled) {
       return false
     }
 
-    // TODO: BUG WRONG NET!!!!!!!!!!
+    // TODO: review
     if (location.pathname === '/teleport') {
       const missingCapability = !!(appStore.selectedNetwork && appStore.walletProvider.connected && !appStore.selectedNetwork.capabilities.canTeleport)
       const invalidNetwork = !supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
@@ -43,8 +44,26 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('agreedTC', agreedTCs.toString())
-  }, [agreedTCs])
+    debugger
+    const tcs = JSON.parse(localStorage.getItem(localStorageObjects.agreedTcByWallet)!) || {}
+    setAgreedTCs(tcs)
+  }, [appStore.walletProvider.accounts])
+
+  const updateTcs = () => {
+    const tcs = { ...agreedTCs }
+    const account = appStore.walletProvider.accounts[0]
+    tcs[account] = 'true'
+    setAgreedTCs(tcs)
+    localStorage.setItem(localStorageObjects.agreedTcByWallet, JSON.stringify(tcs))
+  }
+
+  const showTcs = useMemo(() => {
+    if (!appStore.walletProvider.connected) {
+      return false
+    }
+    const account = appStore.walletProvider.accounts[0]
+    return !agreedTCs[account]
+  }, [appStore.walletProvider, agreedTCs])
 
   return (
     <>
@@ -66,8 +85,8 @@ const App = () => {
       ></WaitingForConfirmationPopup>
       <TermsAndConditionsPopup
         handleDecline={() => (window.location.href = 'https://dam.finance')}
-        handleAgree={() => setAgreedTCs(true)}
-        show={appStore.walletProvider.connected && !agreedTCs}
+        handleAgree={updateTcs}
+        show={showTcs}
       ></TermsAndConditionsPopup>
     </>
   )

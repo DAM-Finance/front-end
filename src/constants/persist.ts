@@ -1,3 +1,4 @@
 export const localStorageObjects = {
-  DPrimeAddedWallet: 'DPrimeAddedWallet'
+  DPrimeAddedWallet: 'DPrimeAddedWallet',
+  agreedTcByWallet: 'agreedTcByWallet'
 }

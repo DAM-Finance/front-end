@@ -237,7 +237,7 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'loading' && !appStore.walletProvider?.connected && (
           <button
-            onClick={() => swap(firstCoin)}
+            onClick={appStore.connectWallet}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold"
           >
             <span>Connect</span>

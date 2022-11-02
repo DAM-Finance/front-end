@@ -2,6 +2,12 @@ import { ethers } from 'ethers'
 import { ISupportedNetwork } from './ISupportedNetworks'
 
 export const scanUrlMask = 'DAM__TX__ADDRESS'
+export const scanOriginLzIdMask = 'DAM__ORIGIN__LZ__ID'
+export const scanDestinationLzIdMask = 'DAM__DESTINATION__LZ__ID'
+export const scanOriginLzPipeMask = 'DAM__ORIGIN__LZPIPE'
+export const scanDestinationLzPipeMask = 'DAM__DESTINATION__LZPIPE'
+export const scanNonceMask = 'DAM__NONCE'
+
 export const supportedNetworks: ISupportedNetwork[] = [
   {
     name: 'Moonbase',
@@ -22,7 +28,8 @@ export const supportedNetworks: ISupportedNetwork[] = [
       canTeleport: true,
       hasUsdc: false
     },
-    scanUrl: `https://moonbase.moonscan.io/tx/${scanUrlMask}`
+    scanUrl: `https://moonbase.moonscan.io/tx/${scanUrlMask}`,
+    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`
   },
   {
     name: 'Goerli',
@@ -55,7 +62,8 @@ export const supportedNetworks: ISupportedNetwork[] = [
       canTeleport: true,
       hasUsdc: true
     },
-    scanUrl: `https://goerli.etherscan.io/tx/${scanUrlMask}`
+    scanUrl: `https://goerli.etherscan.io/tx/${scanUrlMask}`,
+    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`
   }
 ]
 
