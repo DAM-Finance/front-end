@@ -9,6 +9,7 @@ interface TransactionInProgressPopupProps {
   message?: string
   imgName?: string
   txLink?: string
+  txLinkMsg?: boolean
   addTokenOption?: boolean
 }
 
@@ -18,7 +19,8 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
   message = 'Transaction in progress',
   imgName = 'tip.svg',
   txLink = '',
-  addTokenOption = true
+  addTokenOption = true,
+  txLinkMsg = false
 }) => {
   const appStore = useAppStore()
   const [localStorageKey, setLocalStorageKey] = useState(`${localStorageObjects.DPrimeAddedWallet}_${appStore.selectedNetwork?.id}`)
@@ -49,13 +51,26 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
               <img width="240" src={utils.getImageSrc(imgName)} alt="transaction in progress" />
               <div className="font-light text-2xl pt-4">{message}</div>
               {!!txLink && (
-                <a className="flex gap-1" href={txLink} target="_blank" rel="noreferrer">
-                  <div className="text-sm text-damlabelgray">
-                    <span>Follow the </span>
-                    <span className="text-damyellow">transaction</span>
-                  </div>
-                  <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
-                </a>
+                <div className="flex flex-col">
+                  <a className="flex gap-1 justify-center" href={txLink} target="_blank" rel="noreferrer">
+                    <div className="text-sm text-damlabelgray">
+                      <span>Follow the </span>
+                      <span className="text-damyellow">transaction</span>
+                    </div>
+                    <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
+                  </a>
+                  {txLinkMsg && (
+                    <div className="pt-4 text-sm max-w-xl text-damlabelgray text-center">
+                      <span>
+                        <b>Notice:</b> Transaction tracking will be delayed in testnet.
+                      </span>
+                      <span>
+                        For a more real time experience in testnet, search your wallet address on Goerli and Moonbase Alpha as both networks need to confirm the
+                        teleportation.
+                      </span>
+                    </div>
+                  )}
+                </div>
               )}
               {addTokenOption && !isDPrimeAddedWallet && (
                 <div className="flex flex-col gap-2 mt-6 items-center">

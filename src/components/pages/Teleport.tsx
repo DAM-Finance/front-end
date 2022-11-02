@@ -166,6 +166,7 @@ const Teleport: FC = () => {
         message="Teleport in progress!"
         imgName="teleport-progress.svg"
         txLink={txLink}
+        txLinkMsg={true}
       ></TransactionInProgressPopup>
 
       <TransactionCompletedPopup
