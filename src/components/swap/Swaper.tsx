@@ -249,11 +249,11 @@ const Swaper: FC = () => {
       <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'} txLink={txLink}>
         <div className="flex flex-col gap-2 pt-6">
           <div className="text-md text-damlabelgray">
-            <span>Want to teleport your dPRIME?</span>
+            <span>Want to teleport your dPRIME to a different network?</span>
           </div>
           <NavLink to="/teleport">
             <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
-              <span>dSwap</span>
+              <span>Teleport</span>
             </button>
           </NavLink>
         </div>
