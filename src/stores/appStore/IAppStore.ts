@@ -1,4 +1,5 @@
-import { ethers } from 'ethers'
+import { IPendingTransaction } from './../../constants/IPendingTransaction'
+import { ContractTransaction, ethers } from 'ethers'
 import { supportedTokens } from '../../constants/config'
 import { ISupportedNetwork, ISupportedNetworkAddresses } from '../../constants/ISupportedNetworks'
 import { IBalances } from './IBalances'
@@ -30,6 +31,9 @@ export interface IAppStore {
 
   teleportFees: string
   setTeleportFees: (fees: string) => void
+
+  pendingTransactions: IPendingTransaction[]
+  setPendingTransactions: (txs: IPendingTransaction[]) => void
 
   chooseGateway: () => IGateway
   gatewayEventHandler: (event: IGatewayEvent) => void

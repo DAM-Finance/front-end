@@ -9,6 +9,7 @@ import WaitingForConfirmationPopup from './components/wallet/WaitingForConfirmat
 import TermsAndConditionsPopup from './components/wallet/TermsAndConditionsPopup'
 import { useLocation } from 'react-router-dom'
 import { localStorageObjects } from './constants/persist'
+import PendingTransactions from './components/common/PendingTransactions/PendingTransactions'
 
 const App = () => {
   const appStore = useAppStore()
@@ -44,7 +45,6 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    debugger
     const tcs = JSON.parse(localStorage.getItem(localStorageObjects.agreedTcByWallet)!) || {}
     setAgreedTCs(tcs)
   }, [appStore.walletProvider.accounts])
@@ -69,6 +69,7 @@ const App = () => {
     <>
       <div className="flex flex-col w-full h-screen bg-damdarkgray">
         <Navbar />
+        <PendingTransactions></PendingTransactions>
         <div className="w-full" style={{ height: 'calc(100vh - 80px)' }}>
           <Routes />
         </div>

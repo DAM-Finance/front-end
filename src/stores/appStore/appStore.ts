@@ -1,5 +1,4 @@
-import { ISupportedNetworkAddresses } from './../../constants/ISupportedNetworks'
-import { ethers } from 'ethers'
+import { ContractTransaction, ethers } from 'ethers'
 import produce from 'immer'
 import create from 'zustand'
 import {
@@ -11,6 +10,7 @@ import {
   supportedNetworks,
   supportedTokens
 } from '../../constants/config'
+import { ISupportedNetworkAddresses } from './../../constants/ISupportedNetworks'
 import Metamask from './../../wallet/metamask'
 import { IAppStore } from './IAppStore'
 import { IBalances } from './IBalances'
@@ -24,11 +24,13 @@ import dPrimeJoinAbi from '../../constants/abis/dPrimeJoin.json'
 import ERC20Abi from '../../constants/abis/ERC20.json'
 import LMCVAbi from '../../constants/abis/LMCV.json'
 import LMCVProxyAbi from '../../constants/abis/LMCVProxy.json'
-import PSMAbi from '../../constants/abis/PSM.json'
 import LZPipeAbi from '../../constants/abis/LZPipe.json'
+import PSMAbi from '../../constants/abis/PSM.json'
 import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
+import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
+import { IPendingTransaction } from '../../constants/IPendingTransaction'
 
 //BYTES
 // let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
@@ -60,6 +62,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   analytics: null,
   showWaitingForConfirmation: false,
   isWrongNetworkPopupEnabled: true,
+  pendingTransactions: localStorage.getItem(localStorageObjects.pendingTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.pendingTxs)!) : [],
   setSelectedNetwork: (network: ISupportedNetwork) =>
     set(
       produce((state: IAppStore) => {
@@ -123,6 +126,14 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         state.analytics = data
       })
     )
+  },
+  setPendingTransactions: (data) => {
+    set(
+      produce((state: IAppStore) => {
+        state.pendingTransactions = data
+      })
+    )
+    localStorage.setItem(localStorageObjects.pendingTxs, JSON.stringify(get().pendingTransactions))
   },
   // Might be extended to support new gateways
   chooseGateway: (): IGateway => {
