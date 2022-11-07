@@ -63,6 +63,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   showWaitingForConfirmation: false,
   isWrongNetworkPopupEnabled: true,
   pendingTransactions: localStorage.getItem(localStorageObjects.pendingTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.pendingTxs)!) : [],
+
   setSelectedNetwork: (network: ISupportedNetwork) =>
     set(
       produce((state: IAppStore) => {

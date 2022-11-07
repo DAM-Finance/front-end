@@ -51,19 +51,19 @@ const App = () => {
 
   const updateTcs = () => {
     const tcs = { ...agreedTCs }
-    const account = appStore.walletProvider.accounts[0]
+    const account = appStore.walletProvider.accounts[0].toLowerCase()
     tcs[account] = 'true'
     setAgreedTCs(tcs)
     localStorage.setItem(localStorageObjects.agreedTcByWallet, JSON.stringify(tcs))
   }
 
-  const showTcs = useMemo(() => {
+  const showTcs = () => {
     if (!appStore.walletProvider.connected) {
       return false
     }
-    const account = appStore.walletProvider.accounts[0]
+    const account = appStore.walletProvider.accounts[0].toLowerCase()
     return !agreedTCs[account]
-  }, [appStore.walletProvider, agreedTCs])
+  }
 
   return (
     <>
@@ -87,7 +87,7 @@ const App = () => {
       <TermsAndConditionsPopup
         handleDecline={() => (window.location.href = 'https://dam.finance')}
         handleAgree={updateTcs}
-        show={showTcs}
+        show={showTcs()}
       ></TermsAndConditionsPopup>
     </>
   )
