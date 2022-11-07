@@ -34,7 +34,7 @@ import { IGatewayEvent } from './IGatewayEvent'
 //BYTES
 // let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
 const connectedContracts = {} as IContractInstances | any
-const initBalances = {} as IBalances
+const initBalances: IBalances = { dPrime: '0', usdc: '0' }
 const maxApprove = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
 const minApprove = 10000000000
 
@@ -275,6 +275,9 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   getTokenBalance: async (token: keyof typeof supportedTokens) => {
     const account = get().walletProvider.accounts[0]
+    if (!account || !connectedContracts[token]) {
+      return
+    }
     const units = supportedTokens[token].units
 
     let balance = await connectedContracts[token].balanceOf(account)
