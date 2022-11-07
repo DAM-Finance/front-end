@@ -16,28 +16,13 @@ const App = () => {
   const location = useLocation()
   const [agreedTCs, setAgreedTCs] = useState(JSON.parse(localStorage.getItem(localStorageObjects.agreedTcByWallet)!) || {})
 
-  const showWrongNetwork = useMemo(() => {
+  const showWrongNetwork = () => {
     if (!appStore.isWrongNetworkPopupEnabled) {
       return false
     }
 
-    // TODO: review
-    if (location.pathname === '/teleport') {
-      const missingCapability = !!(appStore.selectedNetwork && appStore.walletProvider.connected && !appStore.selectedNetwork.capabilities.canTeleport)
-      const invalidNetwork = !supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
-      return missingCapability || invalidNetwork
-    }
-
-    if (location.pathname === '/swap') {
-      const missingCapability = !!(appStore.selectedNetwork && appStore.walletProvider.connected && !appStore.selectedNetwork.capabilities.canSwap)
-      const invalidNetwork = !supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
-      return missingCapability || invalidNetwork
-    }
-
-    return false
-    // const isSelectedNetworkSupported =
-    // return !isSelectedNetworkSupported
-  }, [appStore.isWrongNetworkPopupEnabled, appStore.selectedNetwork, appStore.walletProvider.connected, location])
+    return !supportedNetworks.find((network) => network.chainId === appStore.selectedNetwork?.chainId)
+  }
 
   useEffect(() => {
     appStore.initWeb3()
@@ -75,7 +60,7 @@ const App = () => {
         </div>
       </div>
       <WrongNetworkPop
-        show={showWrongNetwork}
+        show={showWrongNetwork()}
         handleClose={() => {
           appStore.setIsWrongNetworkPopupEnabled(false)
         }}

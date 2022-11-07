@@ -1,9 +1,11 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { supportedNetworks } from '../../constants/config'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
+import InfoPopup from '../wallet/InfoPopup'
 import TransactionCompletedPopup from '../wallet/TransactionCompletedPopup'
 import TransactionFailedPopup from '../wallet/TransactionFailedPopup'
 import TransactionInProgressPopup from '../wallet/TransactionInProgressPopup'
@@ -33,6 +35,12 @@ const Swaper: FC = () => {
   const [approveButtonState, setApproveButtonState] = useState<ApproveButtonState>('loading')
   const [txState, setTxState] = useState<ITxState>()
   const [txLink, setTxLink] = useState('')
+  const [hideUnsupported, setHideUnsupported] = useState(false)
+
+  const isNetworkUnsupported = () => {
+    const isSupported = supportedNetworks.findIndex((network) => network.chainId === appStore.selectedNetwork?.chainId) > -1
+    return isSupported && !appStore.selectedNetwork?.capabilities.canSwap
+  }
 
   const checkNeedsApprove = async () => {
     try {
@@ -244,6 +252,13 @@ const Swaper: FC = () => {
           </button>
         )}
       </div>
+
+      <InfoPopup
+        handleClose={() => setHideUnsupported(true)}
+        show={isNetworkUnsupported() && !hideUnsupported}
+        title="Unsupported network"
+        description={`Mint is only available on Goerli at this time`}
+      ></InfoPopup>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
       <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
       <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'} txLink={txLink}>
