@@ -18,7 +18,7 @@ const WrongNetworkPop: FC<WrongNetworkPopupProps> = ({ show, handleClose }) => {
           <div className="fixed bg-damgray flex flex-col items-center p-8 gap-4 rounded-xl text-white">
             <div className="font-light text-2xl">Wrong Network</div>
             <div className="text-sm font-light text-damlabelgray">
-              <span>Please swith to the </span>
+              <span>Please switch to the </span>
               <span className="font-bold">{supportedNetworks[1].name} Network</span>
               <span> in order to use dam.finance</span>
             </div>
