@@ -73,7 +73,7 @@ const Swaper: FC = () => {
         setTxLink(link)
         setTxState('inprogress')
         await tx.wait()
-        setTxState('completed')
+        setTxState('approveCompleted')
       } else {
         setTxState('waiting')
         const tx = await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
@@ -81,7 +81,7 @@ const Swaper: FC = () => {
         setTxLink(link)
         setTxState('inprogress')
         await tx.wait()
-        setTxState('completed')
+        setTxState('approveCompleted')
       }
     } catch (err: any) {
       setTxState('failed')
@@ -241,7 +241,15 @@ const Swaper: FC = () => {
           </button>
         )}
 
-        {approveButtonState === 'loading' && appStore.walletProvider?.connected && <div></div>}
+        {approveButtonState === 'loading' && appStore.walletProvider?.connected && (
+          <button
+            onClick={() => swap(firstCoin)}
+            className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={true}
+          >
+            <span>Swap</span>
+          </button>
+        )}
 
         {approveButtonState === 'loading' && !appStore.walletProvider?.connected && (
           <button
@@ -261,17 +269,19 @@ const Swaper: FC = () => {
       ></InfoPopup>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
       <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
-      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed'} txLink={txLink}>
-        <div className="flex flex-col gap-2 pt-6">
-          <div className="text-md text-damlabelgray">
-            <span>Want to teleport your dPRIME to a different network?</span>
+      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed' || txState === 'approveCompleted'} txLink={txLink}>
+        {txState === 'completed' && (
+          <div className="flex flex-col gap-2 pt-6">
+            <div className="text-md text-damlabelgray">
+              <span>Want to teleport your dPRIME to a different network?</span>
+            </div>
+            <NavLink to="/teleport">
+              <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
+                <span>Teleport</span>
+              </button>
+            </NavLink>
           </div>
-          <NavLink to="/teleport">
-            <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
-              <span>Teleport</span>
-            </button>
-          </NavLink>
-        </div>
+        )}
       </TransactionCompletedPopup>
       <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'} txLink={txLink}></TransactionFailedPopup>
     </div>
