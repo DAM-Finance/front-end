@@ -1,23 +1,24 @@
-import { FC, useState, useEffect } from 'react'
+// import { FC, useState, useEffect } from 'react'
+import { FC } from 'react'
 import { useAppStore } from '../../../stores/appStore/appStore'
-import { createClient } from '@layerzerolabs/scan-client'
-import { IPendingTransaction } from '../../../constants/IPendingTransaction'
-import PendingTransaction from './PendingTransaction'
+// import { createClient } from '@layerzerolabs/scan-client'
+// import { IPendingTransaction } from '../../../constants/IPendingTransaction'
+// import PendingTransaction from './PendingTransaction'
 
-const client = createClient('testnet')
+// const client = createClient('testnet')
 
 interface PendingTransactionsProps {}
 
 const PendingTransactions: FC<PendingTransactionsProps> = () => {
   const appStore = useAppStore()
-  const [lastUpdate, setLastUpdate] = useState(new Date())
+  // const [lastUpdate, setLastUpdate] = useState(new Date())
 
-  useEffect(() => {
-    const interval = setInterval(() => setLastUpdate(new Date()), 30000)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const interval = setInterval(() => setLastUpdate(new Date()), 30000)
+  //   return () => {
+  //     clearInterval(interval)
+  //   }
+  // }, [])
 
   if (!appStore.walletProvider.web3Provider) {
     return <></>

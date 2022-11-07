@@ -1,4 +1,4 @@
-import { ContractTransaction, ethers } from 'ethers'
+import { ethers } from 'ethers'
 import produce from 'immer'
 import create from 'zustand'
 import {
@@ -30,7 +30,6 @@ import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
-import { IPendingTransaction } from '../../constants/IPendingTransaction'
 
 //BYTES
 // let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')

@@ -2,18 +2,16 @@ import Navbar from './components/common/Navbar/Navbar'
 import Routes from './components/common/Routes/Routes'
 import WrongNetworkPop from './components/wallet/WrongNetworkPopup'
 
-import { useMemo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppStore } from './stores/appStore/appStore'
 import { supportedNetworks } from './constants/config'
 import WaitingForConfirmationPopup from './components/wallet/WaitingForConfirmationPopup'
 import TermsAndConditionsPopup from './components/wallet/TermsAndConditionsPopup'
-import { useLocation } from 'react-router-dom'
 import { localStorageObjects } from './constants/persist'
 import PendingTransactions from './components/common/PendingTransactions/PendingTransactions'
 
 const App = () => {
   const appStore = useAppStore()
-  const location = useLocation()
   const [agreedTCs, setAgreedTCs] = useState(JSON.parse(localStorage.getItem(localStorageObjects.agreedTcByWallet)!) || {})
 
   const showWrongNetwork = () => {
