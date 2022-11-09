@@ -120,7 +120,7 @@ const Teleport: FC = () => {
   }
 
   const isTeleportBtnDisabled = useMemo(() => {
-    return Number(amount) <= 0
+    return Number(amount) <= 0 || Number(amount) > Number(dPrimeBalance)
   }, [amount])
 
   return (

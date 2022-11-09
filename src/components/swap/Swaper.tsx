@@ -117,7 +117,8 @@ const Swaper: FC = () => {
   }
 
   const isSwapBtnDisabled = useMemo(() => {
-    return Number(firstCoin) <= 0
+    const balance = isInverted ? usdcBalance : dPrimeBalance
+    return Number(firstCoin) <= 0 || Number(firstCoin) > Number(balance)
   }, [firstCoin])
 
   useEffect(() => {
