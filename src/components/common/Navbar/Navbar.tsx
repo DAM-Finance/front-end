@@ -1,16 +1,22 @@
-import { FunctionComponent } from 'react'
+import { FC, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import utils from '../../../constants/utils'
 import ConnectButton from './../../wallet/ConnectButton'
-import TVLButton from './../../wallet/TVLButton'
+// import TVLButton from './../../wallet/TVLButton'
 import SwitchNetworkSelector from './../../wallet/SwitchNetworkSelector'
 import { useAppStore } from '../../../stores/appStore/appStore'
+import AddDPrimeToWallet from '../../wallet/AddDPrimeToWallet'
+import { localStorageObjects } from '../../../constants/persist'
 
 interface NavbarProps {}
 
-const Navbar: FunctionComponent<NavbarProps> = () => {
+const Navbar: FC<NavbarProps> = () => {
   const logoUrl = utils.getImageSrc('damlogo.svg')
   const appStore = useAppStore()
+  const [dprimeAddedToWalletByNetwork, setDprimeAddedToWalletByNetwork] = useState(
+    JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
+  )
+  const isDprimeAdded = !!appStore.selectedNetwork && !!dprimeAddedToWalletByNetwork && dprimeAddedToWalletByNetwork[appStore.selectedNetwork.id]
 
   return (
     <nav className="flex items-center flex-wrap gap-12 bg-damgray px-4 md:px-24 py-5">
@@ -37,7 +43,8 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
       <div className="flex ml-auto gap-4">
         {!appStore.walletProvider.loading && (
           <>
-            <TVLButton />
+            {/* <TVLButton /> */}
+            {!isDprimeAdded && <AddDPrimeToWallet></AddDPrimeToWallet>}
             <SwitchNetworkSelector />
             <ConnectButton />
           </>

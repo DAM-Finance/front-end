@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useState, useMemo } from 'react'
 import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -23,24 +23,20 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
   txLinkMsg = false
 }) => {
   const appStore = useAppStore()
-  const [localStorageKey, setLocalStorageKey] = useState(`${localStorageObjects.DPrimeAddedWallet}_${appStore.selectedNetwork?.id}`)
-  const [isDPrimeAddedWallet, setIsDPrimeAddedWallet] = useState(localStorage.getItem(localStorageKey))
+  const [dprimeAddedToWalletByNetwork, setDprimeAddedToWalletByNetwork] = useState(
+    JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
+  )
 
   const addDPrimeToWallet = async () => {
     try {
-      await appStore.addDPrimeToWallet()
-      localStorage.setItem(localStorageKey, 'true')
-      setIsDPrimeAddedWallet('true')
+      const dprimeAdded = await appStore.addDPrimeToWallet()
+      setDprimeAddedToWalletByNetwork(dprimeAdded)
     } catch (err) {
       // console.log(err)
     }
   }
 
-  useEffect(() => {
-    const key = `${localStorageObjects.DPrimeAddedWallet}_${appStore.selectedNetwork?.id}`
-    setLocalStorageKey(key)
-    setIsDPrimeAddedWallet(localStorage.getItem(key))
-  }, [appStore.selectedNetwork])
+  const isDprimeAdded = !!appStore.selectedNetwork && !!dprimeAddedToWalletByNetwork && dprimeAddedToWalletByNetwork[appStore.selectedNetwork.id]
 
   return (
     <>
@@ -72,7 +68,7 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
                   )}
                 </div>
               )}
-              {addTokenOption && !isDPrimeAddedWallet && (
+              {addTokenOption && !isDprimeAdded && (
                 <div className="flex flex-col gap-2 mt-6 items-center">
                   <button
                     onClick={addDPrimeToWallet}

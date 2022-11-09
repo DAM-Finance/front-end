@@ -229,6 +229,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       supportedTokens.dPrime.units,
       supportedTokens.dPrime.imgUIrl
     )
+    const dprimeAddedWallet = JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
+    dprimeAddedWallet[get().selectedNetwork!.id] = true
+    localStorage.setItem(localStorageObjects.DPrimeAddedWallet, JSON.stringify(dprimeAddedWallet))
+    return dprimeAddedWallet
   },
   attachContracts: async () => {
     if (!get().walletProvider.accounts || !get().walletProvider.accounts.length) {
