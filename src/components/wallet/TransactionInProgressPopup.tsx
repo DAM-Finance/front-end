@@ -1,4 +1,4 @@
-import { FC, useState, useMemo } from 'react'
+import { FC, useState } from 'react'
 import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'

@@ -1,16 +1,8 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useMemo, useState } from 'react'
-import {
-  scanDestinationLzIdMask,
-  scanDestinationLzPipeMask,
-  scanNonceMask,
-  scanOriginLzIdMask,
-  scanOriginLzPipeMask,
-  supportedNetworks,
-  supportedTokens
-} from '../../constants/config'
+import { supportedNetworks, supportedTokens } from '../../constants/config'
 // import { LayerZeroChainIds } from '../../constants/config'
-import { createClient } from '@layerzerolabs/scan-client'
+// import { createClient } from '@layerzerolabs/scan-client'
 import { IPendingTransaction } from '../../constants/IPendingTransaction'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
@@ -18,11 +10,10 @@ import { useAppStore } from '../../stores/appStore/appStore'
 import AvailableInput from '../AvailableInput'
 import Disclaimer from '../Disclaimer'
 import SelectNetwork from '../SelectNetwork'
-import TransactionCompletedPopup from '../wallet/TransactionCompletedPopup'
 import TransactionFailedPopup from '../wallet/TransactionFailedPopup'
 import TransactionInProgressPopup from '../wallet/TransactionInProgressPopup'
 import WaitingForConfirmationPopup from '../wallet/WaitingForConfirmationPopup'
-const client = createClient('testnet')
+// const client = createClient('testnet')
 // interface DDPrimeProps {}
 
 const Teleport: FC = () => {
@@ -65,9 +56,9 @@ const Teleport: FC = () => {
     try {
       setTxState('waiting')
       const tx = await appStore.teleport(dPrimeAmount, dstChainName)
-      console.log('LZ:', tx)
-      const lzResult = await client.getMessagesBySrcTxHash(tx.hash)
-      console.log({ lzResult })
+      // console.log('LZ:', tx)
+      // const lzResult = await client.getMessagesBySrcTxHash(tx.hash)
+      // console.log({ lzResult })
       const pendingTransaction: IPendingTransaction = {
         hash: tx.hash,
         status: 'REQUESTING',
@@ -102,14 +93,14 @@ const Teleport: FC = () => {
     }
   }
 
-  const switchNetwork = async () => {
-    await appStore.switchNetwork(destinationNetwork.chainId)
-    setTxState('none')
-  }
+  // const switchNetwork = async () => {
+  //   await appStore.switchNetwork(destinationNetwork.chainId)
+  //   setTxState('none')
+  // }
 
   const isTeleportBtnDisabled = useMemo(() => {
     return Number(amount) <= 0 || Number(amount) > Number(dPrimeBalance)
-  }, [amount])
+  }, [amount, dPrimeBalance])
 
   return (
     <div className="flex p-4 w-full justify-center py-24">

@@ -119,7 +119,7 @@ const Swaper: FC = () => {
   const isSwapBtnDisabled = useMemo(() => {
     const balance = isInverted ? usdcBalance : dPrimeBalance
     return Number(firstCoin) <= 0 || Number(firstCoin) > Number(balance)
-  }, [firstCoin])
+  }, [firstCoin, isInverted, usdcBalance, dPrimeBalance])
 
   useEffect(() => {
     const getGasPrice = async () => {
