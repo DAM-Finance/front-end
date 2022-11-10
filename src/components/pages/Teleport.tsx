@@ -1,5 +1,5 @@
 import { utils as ethersUtils } from 'ethers'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { supportedNetworks, supportedTokens } from '../../constants/config'
 // import { LayerZeroChainIds } from '../../constants/config'
 // import { createClient } from '@layerzerolabs/scan-client'

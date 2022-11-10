@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { supportedNetworks } from '../../constants/config'
+// import { supportedNetworks } from '../../constants/config'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
 
