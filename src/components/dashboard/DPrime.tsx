@@ -18,7 +18,14 @@ const DPrime: FC<Partial<IPortfolio>> = (props) => {
       <div className="flex flex-col p-6 gap-2 relative">
         <div className="text-damlabelgray">dPRIME</div>
         <div className="text-3xl">{appStore.balances.dPrime || 0}</div>
-        <img className="absolute top-2 right-2" width={115} src={utils.getImageSrc('dprimebg.svg')} alt="dPrime background" />
+        {/* <img className="absolute top-2 right-2" width={115} src={utils.getImageSrc('dprimebg.svg')} alt="dPrime background" /> */}
+        <img
+          className="absolute right-[-10px] top-[-30px]"
+          width={150}
+          src={utils.getImageSrc('dprimelogowhite.svg')}
+          style={{ opacity: 0.3 }}
+          alt="dPrime background"
+        />
       </div>
       <NavLink className="mt-auto" to="/swap">
         <button className="bg-damtranspgray rounded-none w-full text-damyellow font-light py-3">Swap for dPRIME</button>
