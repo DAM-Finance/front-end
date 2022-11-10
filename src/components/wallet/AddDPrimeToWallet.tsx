@@ -22,9 +22,9 @@ const AddDPrimeToWallet: FC = () => {
   return (
     <>
       {!isDprimeAdded && (
-        <div className="flex items-center px-4 py-2 gap-2 rounded-full bg-dambackgroundgrayed text-damyellow cursor-pointer" onClick={addDPrime}>
-          <div>dPRIME</div>
-          <img className="pb-1" width="25px" src={utils.getImageSrc('metamask.png')} alt="wallet" />
+        <div className="flex items-center px-4 gap-2 rounded-full bg-dambackgroundgrayed text-white cursor-pointer" onClick={addDPrime}>
+          <div>Add</div>
+          <img className="pb-1" width="28px" src={utils.getImageSrc('dprimelogo.svg')} alt="wallet" />
           {/* <img className="pb-1" src={utils.getImageSrc('link-external.svg')} alt="wallet" /> */}
         </div>
       )}
