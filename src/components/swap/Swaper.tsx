@@ -116,10 +116,15 @@ const Swaper: FC = () => {
     }
   }
 
-  const isSwapBtnDisabled = useMemo(() => {
-    const balance = isInverted ? usdcBalance : dPrimeBalance
-    return Number(firstCoin) <= 0 || Number(firstCoin) > Number(balance)
-  }, [firstCoin, isInverted, usdcBalance, dPrimeBalance])
+  const isBelowZero = () => {
+    const balance = isInverted ? dPrimeBalance : usdcBalance
+    return Number(firstCoin) <= 0
+  }
+
+  const isAboveBalance = () => {
+    const balance = isInverted ? dPrimeBalance : usdcBalance
+    return Number(firstCoin) > Number(balance)
+  }
 
   useEffect(() => {
     const getGasPrice = async () => {
@@ -236,9 +241,9 @@ const Swaper: FC = () => {
           <button
             onClick={() => swap(firstCoin)}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isSwapBtnDisabled}
+            disabled={isBelowZero() || isAboveBalance()}
           >
-            <span>Swap</span>
+            <span>{isAboveBalance() ? 'Insuficient balance' : 'Swap'}</span>
           </button>
         )}
 
