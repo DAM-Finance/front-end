@@ -1,5 +1,5 @@
 import { utils as ethersUtils } from 'ethers'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { supportedNetworks } from '../../constants/config'
 import { ITxState } from '../../constants/ITxState'
@@ -117,7 +117,6 @@ const Swaper: FC = () => {
   }
 
   const isBelowZero = () => {
-    const balance = isInverted ? dPrimeBalance : usdcBalance
     return Number(firstCoin) <= 0
   }
 
