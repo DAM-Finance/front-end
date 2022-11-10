@@ -1,5 +1,5 @@
 import { IPendingTransaction } from './../../constants/IPendingTransaction'
-import { ContractTransaction, ethers } from 'ethers'
+import { ethers } from 'ethers'
 import { supportedTokens } from '../../constants/config'
 import { ISupportedNetwork, ISupportedNetworkAddresses } from '../../constants/ISupportedNetworks'
 import { IBalances } from './IBalances'

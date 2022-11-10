@@ -15,6 +15,7 @@ export interface ISupportedNetwork {
   }
   scanUrl: string
   scanLz: string
+  default: boolean
 }
 
 export interface ISupportedNetworkAddresses {

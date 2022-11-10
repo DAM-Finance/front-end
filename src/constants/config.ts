@@ -29,7 +29,8 @@ export const supportedNetworks: ISupportedNetwork[] = [
       hasUsdc: false
     },
     scanUrl: `https://moonbase.moonscan.io/tx/${scanUrlMask}`,
-    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`
+    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
+    default: false
   },
   {
     name: 'Goerli',
@@ -63,7 +64,8 @@ export const supportedNetworks: ISupportedNetwork[] = [
       hasUsdc: true
     },
     scanUrl: `https://goerli.etherscan.io/tx/${scanUrlMask}`,
-    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`
+    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
+    default: true
   }
 ]
 

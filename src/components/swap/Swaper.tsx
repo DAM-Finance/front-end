@@ -5,7 +5,7 @@ import { supportedNetworks } from '../../constants/config'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
-import InfoPopup from '../wallet/InfoPopup'
+import InfoPopupWithNetwork from '../wallet/InfoPopup'
 import TransactionCompletedPopup from '../wallet/TransactionCompletedPopup'
 import TransactionFailedPopup from '../wallet/TransactionFailedPopup'
 import TransactionInProgressPopup from '../wallet/TransactionInProgressPopup'
@@ -267,12 +267,12 @@ const Swaper: FC = () => {
         )}
       </div>
 
-      <InfoPopup
+      <InfoPopupWithNetwork
         handleClose={() => setHideUnsupported(true)}
         show={isNetworkUnsupported() && !hideUnsupported}
         title="Unsupported network"
         description={`Mint is only available on Goerli at this time`}
-      ></InfoPopup>
+      ></InfoPopupWithNetwork>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
       <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
       <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed' || txState === 'approveCompleted'} txLink={txLink}>

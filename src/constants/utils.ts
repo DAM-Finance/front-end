@@ -1,4 +1,4 @@
-import { scanUrlMask } from './config'
+import { scanUrlMask, supportedNetworks } from './config'
 import { ISupportedNetwork } from './ISupportedNetworks'
 import * as ethers from 'ethers'
 
@@ -36,6 +36,10 @@ export class Utils {
   // TODO:
   getLzTxLink() {
     // https://testnet.layerzeroscan.com/10121/address/0x82a6a0e313765510e63fbcc0114af5c8054bda9f/message/10126/address/0xe48dc47089bd1ed3bcb06a97741e9e9e1a619f13/nonce/57
+  }
+
+  getDefaultNetwork = (): ISupportedNetwork => {
+    return supportedNetworks.find((network) => network.default) || supportedNetworks[0]
   }
 
   fwad(wad: string) {

@@ -10,6 +10,7 @@ interface WrongNetworkPopupProps {
 
 const WrongNetworkPop: FC<WrongNetworkPopupProps> = ({ show, handleClose }) => {
   const appStore = useAppStore()
+  const defaultNetwork = utils.getDefaultNetwork()
 
   return (
     <>
@@ -19,11 +20,11 @@ const WrongNetworkPop: FC<WrongNetworkPopupProps> = ({ show, handleClose }) => {
             <div className="font-light text-2xl">Wrong Network</div>
             <div className="text-sm font-light text-damlabelgray">
               <span>Please switch to the </span>
-              <span className="font-bold">{supportedNetworks[1].name} Network</span>
+              <span className="font-bold">{defaultNetwork.name} Network</span>
               <span> in order to use dam.finance</span>
             </div>
             <button
-              onClick={() => appStore.switchNetwork(supportedNetworks[1].chainId)}
+              onClick={() => appStore.switchNetwork(defaultNetwork.chainId)}
               className="flex items-center mt-8 gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
             >
               Switch Network

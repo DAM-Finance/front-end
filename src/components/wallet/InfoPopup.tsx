@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import { supportedNetworks } from '../../constants/config'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
 
@@ -10,8 +9,9 @@ interface InfoPopupProps {
   description: string
 }
 
-const InfoPopup: FC<InfoPopupProps> = ({ show, handleClose, title, description }) => {
+const InfoPopupWithNetwork: FC<InfoPopupProps> = ({ show, handleClose, title, description }) => {
   const appStore = useAppStore()
+  const defaultNetwork = utils.getDefaultNetwork()
 
   return (
     <>
@@ -23,7 +23,7 @@ const InfoPopup: FC<InfoPopupProps> = ({ show, handleClose, title, description }
               <span>{description}</span>
             </div>
             <button
-              onClick={() => appStore.switchNetwork(supportedNetworks[1].chainId)}
+              onClick={() => appStore.switchNetwork(defaultNetwork.chainId)}
               className="flex items-center mt-8 gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
             >
               Switch Network
@@ -38,4 +38,4 @@ const InfoPopup: FC<InfoPopupProps> = ({ show, handleClose, title, description }
   )
 }
 
-export default InfoPopup
+export default InfoPopupWithNetwork

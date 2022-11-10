@@ -6,6 +6,7 @@ import { useAppStore } from '../../stores/appStore/appStore'
 
 const SwitchNetworkSelector: FC = () => {
   const appStore = useAppStore()
+  const defaultNetwork = utils.getDefaultNetwork()
 
   // const isSelectedNetworkSupported = useCallback(() => {
   //   return !!supportedNetworks.find((network) => network.chainId === appStore.walletProvider.chainId)
@@ -16,7 +17,7 @@ const SwitchNetworkSelector: FC = () => {
   if (appStore.walletProvider.connected) {
     switchNeworkSelector = (
       <button
-        onClick={() => appStore.switchNetwork(supportedNetworks[0].chainId)}
+        onClick={() => appStore.switchNetwork(defaultNetwork.chainId)}
         className="outline outline-1 px-4 py-2 rounded-full bg-transparent text-damyellow outline-damtext-damyellow hover:bg-damyellow hover:text-damgray"
       >
         Switch Network

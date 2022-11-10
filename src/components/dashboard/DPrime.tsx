@@ -1,15 +1,20 @@
 import { FC } from 'react'
 import { NavLink } from 'react-router-dom'
+import { supportedNetworks } from '../../constants/config'
 import utils from '../../constants/utils'
 import { IPortfolio } from '../../features/dashboard'
 import { useAppStore } from '../../stores/appStore/appStore'
 
 const DPrime: FC<Partial<IPortfolio>> = (props) => {
-  const isDisabled = !props.hasOwnProperty('dPrime')
   const appStore = useAppStore()
 
+  const isValidNetworkConnected = () => {
+    const isSupported = supportedNetworks.findIndex((network) => network.chainId === appStore.selectedNetwork?.chainId) > -1
+    return isSupported && appStore.walletProvider.connected
+  }
+
   return (
-    <div className="flex flex-col bg-damgray rounded-xl overflow-hidden" style={{ opacity: isDisabled ? '0.2' : '1' }}>
+    <div className="flex flex-col bg-damgray rounded-xl overflow-hidden" style={{ opacity: isValidNetworkConnected() ? '1' : '0.2' }}>
       <div className="flex flex-col p-6 gap-2 relative">
         <div className="text-damlabelgray">dPRIME</div>
         <div className="text-3xl">{appStore.balances.dPrime || 0}</div>
