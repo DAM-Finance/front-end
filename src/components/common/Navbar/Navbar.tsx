@@ -11,7 +11,6 @@ import { localStorageObjects } from '../../../constants/persist'
 interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = () => {
-  const logoUrl = utils.getImageSrc('damlogo.svg')
   const appStore = useAppStore()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dprimeAddedToWalletByNetwork, setDprimeAddedToWalletByNetwork] = useState(
