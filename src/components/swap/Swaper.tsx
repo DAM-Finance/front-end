@@ -179,14 +179,14 @@ const Swaper: FC = () => {
             <SwaperBalance
               balance={appStore.balances[selectedStableCoin.balancesMapper]}
               coinName={selectedStableCoin.name}
-              rightAligned={true}
+              rightAligned={false}
               decimals={2}
             ></SwaperBalance>
           </div>
         </SwaperInputList>
       ) : (
         <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin}>
-          <SwaperBalance balance={dPrimeBalance} coinName={'dPRIME'} rightAligned={true} decimals={2}></SwaperBalance>
+          <SwaperBalance balance={dPrimeBalance} coinName={'dPRIME'} rightAligned={false} decimals={2}></SwaperBalance>
         </SwaperInput>
       )}
 
