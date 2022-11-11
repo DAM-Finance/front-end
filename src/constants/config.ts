@@ -18,7 +18,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
     teleportBgImg: 'moonbase-bg.png',
     addresses: {
       dPrime: '0xA693E53a134457A2Dc0669a77f20F114B4aaea8E',
-      lzPipe: '0xe48dc47089bd1ED3BCB06a97741e9E9E1a619F13',
+      lzPipe: '0xe48dc47089bd1ED3BCB06a97741e9E9E1a619F13'.toLowerCase(),
       hyperlanePipe: '0x0B80E3704FC74f5621C875274203301168Ac7702'
     },
     layerZeroChainIds: '10126',
@@ -44,7 +44,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       lmcv: '0x12fA0d79BCD21114D5F34A2789D9b2B5b1d7b42D',
       dPrimeJoin: '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
       usdcJoin: '0x7517b7900D845F18189e7e89707525E759a2eBb3', //DEC COLLAT JOIN
-      lzPipe: '0x82a6A0E313765510e63fBcc0114af5C8054bDA9F', // lzPipe
+      lzPipe: '0x82a6A0E313765510e63fBcc0114af5C8054bDA9F'.toLowerCase(), // lzPipe
       hyperlanePipe: '0x74487683a4E248b21A09DAA3d78B2e26cedBe5E8',
       usdcPSM: '0xD264Daa2b0Ae259b7864e6532A30ebe6Ac93b3fd', // PSM
       lmcvProxy: '0x0CAfb9c3b7Aa97505276908A928bc9eA0c228324',
