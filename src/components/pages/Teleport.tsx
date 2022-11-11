@@ -183,7 +183,7 @@ const Teleport: FC = () => {
       <TransactionInProgressPopup
         handleClose={() => setTxState('none')}
         show={txState === 'inprogress'}
-        message="Requesting teleport on origin network!"
+        message="Step 1: Requesting teleport on origin network!"
         imgName="teleport-progress.svg"
         txLink={txLink}
         txLinkMsg={true}
@@ -192,29 +192,9 @@ const Teleport: FC = () => {
       <TransactionInProgressPopup
         handleClose={() => setTxState('none')}
         show={txState === 'completed'}
-        message="Teleportation in flight between origin and destination!"
+        message="Step 2: Teleportation in flight between origin and destination!"
         imgName="teleport-progress.svg"
       ></TransactionInProgressPopup>
-
-      {/* <TransactionCompletedPopup
-        handleClose={() => setTxState('none')}
-        show={txState === 'completed'}
-        imgName="teleport-completed.svg"
-        message="Teleportation in flight between origin and destination!"
-        txLink={txLink}
-      >
-        <div className="flex flex-col gap-6">
-          <div className="text-md text-damlabelgray">
-            <span>Switch network to use your dPRIME.</span>
-          </div>
-          <button
-            onClick={switchNetwork}
-            className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
-          >
-            <span>Switch Network</span>
-          </button>
-        </div>
-      </TransactionCompletedPopup> */}
 
       <TransactionFailedPopup
         handleClose={() => setTxState('none')}

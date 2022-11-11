@@ -50,9 +50,9 @@ const App = () => {
 
   return (
     <>
+      <PendingTransactions></PendingTransactions>
       <div className="flex flex-col w-full h-screen bg-damdarkgray">
         <Navbar />
-        <PendingTransactions></PendingTransactions>
         <div className="w-full" style={{ height: 'calc(100vh - 80px)' }}>
           <Routes />
         </div>

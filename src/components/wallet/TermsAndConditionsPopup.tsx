@@ -16,7 +16,7 @@ const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handl
   return (
     <>
       {show && (
-        <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
+        <div className="w-screen h-screen z-30 fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
           <div className="fixed bg-damgray flex flex-col items-center max-w-4xl p-16 gap-8 rounded-xl text-white">
             <div className="flex gap-4 w-full">
               <img src={utils.getImageSrc('termsconditions.svg')} alt="terms" />

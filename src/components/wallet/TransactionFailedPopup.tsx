@@ -12,7 +12,7 @@ const TransactionCompletedPopup: FC<TransactionCompletedPopupProps> = ({ show, h
   return (
     <>
       {show && (
-        <div className="w-screen h-screen fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
+        <div className="w-screen h-screen z-30 fixed flex justify-center items-center top-0 left-0 bg-damtranspdarkgray">
           <div className="flex fixed bg-damgray px-32 py-12 rounded-xl text-white">
             <div className="flex flex-col items-center gap-1">
               <img width="240" src={utils.getImageSrc(imgName)} alt="transaction in progress" />
