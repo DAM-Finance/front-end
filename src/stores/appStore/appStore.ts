@@ -62,25 +62,36 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   showWaitingForConfirmation: false,
   isWrongNetworkPopupEnabled: true,
   pendingTransactions: localStorage.getItem(localStorageObjects.pendingTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.pendingTxs)!) : [],
+  notifyTransaction: null,
 
-  setSelectedNetwork: (network: ISupportedNetwork) =>
+  setNotifyTransaction: (tx) => {
+    set(
+      produce((state: IAppStore) => {
+        state.notifyTransaction = tx
+      })
+    )
+  },
+  setSelectedNetwork: (network: ISupportedNetwork) => {
     set(
       produce((state: IAppStore) => {
         state.selectedNetwork = network
       })
-    ),
-  setPortfolio: (data: any) =>
+    )
+  },
+  setPortfolio: (data: any) => {
     set(
       produce((state: IAppStore) => {
         state.portfolio = data
       })
-    ),
-  setGateway: (gateway: IGateway) =>
+    )
+  },
+  setGateway: (gateway: IGateway) => {
     set(
       produce((state: IAppStore) => {
         state.gateway = gateway
       })
-    ),
+    )
+  },
   setWalletProvider: (wallet: Partial<IWalletProvider>) => {
     set(
       produce((state: IAppStore) => {

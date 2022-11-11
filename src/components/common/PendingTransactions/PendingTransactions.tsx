@@ -2,18 +2,27 @@ import { FC, useCallback, useState, useEffect } from 'react' //useState,
 import { useAppStore } from '../../../stores/appStore/appStore'
 import { createClient } from '@layerzerolabs/scan-client'
 import { IPendingTransaction } from '../../../constants/IPendingTransaction'
-import PendingTransaction from './PendingTransaction'
 import TransactionCompletedPopup from '../../wallet/TransactionCompletedPopup'
+import WaitingForConfirmationPopup from '../../wallet/WaitingForConfirmationPopup'
+import TransactionInProgressPopup from '../../wallet/TransactionInProgressPopup'
+import TransactionFailedPopup from '../../wallet/TransactionFailedPopup'
+import utils from '../../../constants/utils'
+import {
+  scanDestinationLzIdMask,
+  scanDestinationLzPipeMask,
+  scanNonceMask,
+  scanOriginLzIdMask,
+  scanOriginLzPipeMask,
+  supportedNetworks
+} from '../../../constants/config'
 
 const client = createClient('testnet')
 
 interface PendingTransactionsProps {}
 
 const PendingTransactions: FC<PendingTransactionsProps> = () => {
-  // const [lastUpdate, setLastUpdate] = useState(new Date())
   const appStore = useAppStore()
   const [transactionsQueue, setTransactionsQueue] = useState<{ [key: string]: IPendingTransaction }>({})
-  const [popupTx, setPopupTx] = useState<IPendingTransaction | null>()
 
   const processTransaction = useCallback(
     async (pendingTransaction: IPendingTransaction) => {
@@ -29,6 +38,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
           await appStore.walletProvider.web3Provider!.waitForTransaction(transaction.hash)
           transaction.status = 'INFLIGHT'
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+          appStore.setNotifyTransaction(transaction)
           appStore.setPendingTransactions([...txs, transaction])
         }
         const res = await client.getMessagesBySrcTxHash(transaction.hash)
@@ -36,20 +46,63 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
           const message = res.messages[0]
           transaction.status = message.status
           transaction.lzData = message
-          setPopupTx(transaction)
+
+          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)
+          let url = appStore.selectedNetwork!.scanLz
+          url = url.replace(scanOriginLzIdMask, appStore.selectedNetwork!.layerZeroChainIds)
+          url = url.replace(scanOriginLzPipeMask, appStore.selectedNetwork!.addresses.lzPipe!)
+          url = url.replace(scanDestinationLzIdMask, dstChain!.layerZeroChainIds)
+          url = url.replace(scanDestinationLzPipeMask, dstChain!.addresses.lzPipe!)
+          url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
+          transaction.lzScan = url
+
+          appStore.setNotifyTransaction(transaction)
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
           appStore.setPendingTransactions([...txs, transaction])
-        } else {
-          setTimeout(() => {
-            processTransaction(transaction)
-          }, 30000)
         }
+        setTimeout(() => {
+          processTransaction(transaction)
+        }, 30000)
       } catch (err) {
         console.error(err)
       }
     },
     [appStore]
   )
+  const showTeleportWaiting = () => {
+    if (!appStore.notifyTransaction) {
+      return false
+    }
+    return appStore.notifyTransaction.type === 'TELEPORT' && appStore.notifyTransaction.status === 'CONFIRMING'
+  }
+
+  const showTeleportRequesting = () => {
+    if (!appStore.notifyTransaction) {
+      return false
+    }
+    return appStore.notifyTransaction.type === 'TELEPORT' && appStore.notifyTransaction.status === 'REQUESTING'
+  }
+
+  const showTeleportInflight = () => {
+    if (!appStore.notifyTransaction) {
+      return false
+    }
+    return appStore.notifyTransaction.type === 'TELEPORT' && appStore.notifyTransaction.status === 'INFLIGHT'
+  }
+
+  const showTeleportComplete = () => {
+    if (!appStore.notifyTransaction) {
+      return false
+    }
+    return appStore.notifyTransaction.type === 'TELEPORT' && appStore.notifyTransaction.status === 'DELIVERED'
+  }
+
+  const showTeleportFailed = () => {
+    if (!appStore.notifyTransaction) {
+      return false
+    }
+    return appStore.notifyTransaction.type === 'TELEPORT' && appStore.notifyTransaction.status === 'FAILED'
+  }
 
   useEffect(() => {
     appStore.pendingTransactions.forEach(async (pendingTx) => {
@@ -68,26 +121,64 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
 
   return (
     // <></>
-    <div className="text-white px-12 py-4">
-      <div className="flex flex-col gap-4">
+    <div className="text-black">
+      {/* <div className="flex flex-col gap-4">
         {appStore.pendingTransactions.map((tx) => (
           <PendingTransaction key={tx.hash} tx={tx}></PendingTransaction>
         ))}
-      </div>
+      </div> */}
 
-      <TransactionCompletedPopup handleClose={() => setPopupTx(null)} show={!!popupTx} imgName="teleport-completed.svg" message="Step 3: Teleport successful!">
+      <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
+        <div className="text-[14px] text-damlabelgray">
+          <span>Teleporting dPRIME takes on </span>
+          <span className="text-damyellow font-bold">average 15 min.</span>
+        </div>
+      </WaitingForConfirmationPopup>
+
+      <TransactionInProgressPopup
+        handleClose={() => appStore.setNotifyTransaction(null)}
+        show={showTeleportRequesting()}
+        message="Step 1: Requesting teleport on origin network!"
+        imgName="teleport-progress.svg"
+        txLink={utils.getTxLink(appStore.selectedNetwork!, appStore.notifyTransaction! && appStore.notifyTransaction.hash)}
+        txLinkMsg={true}
+      ></TransactionInProgressPopup>
+
+      <TransactionInProgressPopup
+        handleClose={() => appStore.setNotifyTransaction(null)}
+        show={showTeleportInflight()}
+        message="Step 2: Teleportation in flight between origin and destination!"
+        txLink={appStore.notifyTransaction?.lzScan || ''}
+        imgName="teleport-progress.svg"
+      ></TransactionInProgressPopup>
+
+      <TransactionCompletedPopup
+        handleClose={() => appStore.setNotifyTransaction(null)}
+        show={showTeleportComplete()}
+        imgName="teleport-completed.svg"
+        message="Step 3: Teleport successful!"
+      >
         <div className="flex flex-col gap-6">
           <div className="text-md text-damlabelgray">
             <span>Switch network to use your dPRIME.</span>
           </div>
           <button
-            onClick={() => {}} //appStore.switchNetwork(destinationNetwork.chainId)
+            onClick={() => {
+              appStore.switchNetwork(appStore.notifyTransaction?.to?.chainId!)
+            }}
             className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
           >
             <span>Switch Network</span>
           </button>
         </div>
       </TransactionCompletedPopup>
+
+      <TransactionFailedPopup
+        handleClose={() => appStore.setNotifyTransaction(null)}
+        imgName="teleport-failed.svg"
+        show={showTeleportFailed()}
+        txLink={''} // TODO txlink
+      ></TransactionFailedPopup>
     </div>
   )
 }

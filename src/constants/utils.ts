@@ -30,7 +30,7 @@ export class Utils {
   }
 
   getTxLink(network: ISupportedNetwork, txHash: string) {
-    return network.scanUrl.replace(scanUrlMask, txHash)
+    return network?.scanUrl?.replace(scanUrlMask, txHash)
   }
 
   // TODO:

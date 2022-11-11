@@ -32,6 +32,9 @@ export interface IAppStore {
   teleportFees: string
   setTeleportFees: (fees: string) => void
 
+  notifyTransaction: IPendingTransaction | null
+  setNotifyTransaction: (tx: IPendingTransaction | null) => void
+
   pendingTransactions: IPendingTransaction[]
   setPendingTransactions: (txs: IPendingTransaction[]) => void
 
