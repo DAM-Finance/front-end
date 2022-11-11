@@ -14,9 +14,9 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
       <div className="flex flex-col justify-center flex-wrap gap-6">
         <div>
           <span className="text-2xl">Take your stablecoin liquidity anywhere through </span>
-          <span className="text-2xl font-bold">dPRIME</span>
+          <span className="text-2xl font-bold">DAM</span>
         </div>
-        <div className="text-gray-500">dPRIME is the preferred stablecoin of emerging ecosystems</div>
+        <div className="text-gray-500">dPRIME is a scalable, omnichain stablecoin with utility in Dotsama</div>
         <div className="flex gap-4">
           <NavLink to="/swap">
             <button className="flex font-bold items-center gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200">
