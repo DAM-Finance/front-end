@@ -283,12 +283,23 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
   },
   updateBalances: async () => {
-    await get().getTokenBalance('dPrime')
+    await get().updateTokenBalance('dPrime')
     if (get().selectedNetwork?.capabilities.hasUsdc) {
-      await get().getTokenBalance('usdc')
+      await get().updateTokenBalance('usdc')
     }
   },
-  getTokenBalance: async (token: keyof typeof supportedTokens) => {
+  getTokenBalance: async (token: keyof typeof supportedTokens): Promise<string> => {
+    const account = get().walletProvider.accounts[0]
+    if (!account || !connectedContracts[token]) {
+      throw new Error('Can not get balance')
+    }
+    const units = supportedTokens[token].units
+
+    let balance = await connectedContracts[token].balanceOf(account)
+    let formatedBalance = ethers.utils.formatUnits(balance, units)
+    return formatedBalance
+  },
+  updateTokenBalance: async (token: keyof typeof supportedTokens) => {
     const account = get().walletProvider.accounts[0]
     if (!account || !connectedContracts[token]) {
       return

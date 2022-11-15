@@ -8,6 +8,7 @@ import TransactionInProgressPopup from '../../wallet/TransactionInProgressPopup'
 import TransactionFailedPopup from '../../wallet/TransactionFailedPopup'
 import utils from '../../../constants/utils'
 import {
+  isDev,
   scanDestinationLzIdMask,
   scanDestinationLzPipeMask,
   scanNonceMask,
@@ -15,6 +16,7 @@ import {
   scanOriginLzPipeMask,
   supportedNetworks
 } from '../../../constants/config'
+// import PendingTransaction from './PendingTransaction'
 
 const client = createClient('testnet')
 
@@ -22,7 +24,16 @@ interface PendingTransactionsProps {}
 
 const PendingTransactions: FC<PendingTransactionsProps> = () => {
   const appStore = useAppStore()
-  const [transactionsQueue, setTransactionsQueue] = useState<{ [key: string]: IPendingTransaction }>({})
+  const [forceUpdate, setForceUpdate] = useState(0)
+  const [showDevSwitch, setShowDevSwitch] = useState(true)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setForceUpdate((cur) => cur + 1)
+    }, 30000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   const processTransaction = useCallback(
     async (pendingTransaction: IPendingTransaction) => {
@@ -41,34 +52,68 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
           appStore.setNotifyTransaction(transaction)
           appStore.setPendingTransactions([...txs, transaction])
         }
+
         const res = await client.getMessagesBySrcTxHash(transaction.hash)
-        if (res.messages && res.messages.length && (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)) {
-          const message = res.messages[0]
-          transaction.status = message.status
-          transaction.lzData = message
+        if (isDev) {
+          const balance = appStore.balances.dPrime
+          const newBalance = await appStore.getTokenBalance('dPrime')
+          const diff = Number(newBalance) - Number(balance)
+          console.log({ diff })
+          if (diff === 0) {
+            return
+          }
+          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === diff.toString())
+          if (!foundTx) {
+            return
+          }
+          const txUpdate = { ...foundTx }
+          txUpdate.status = 'DELIVERED'
+          appStore.setNotifyTransaction(txUpdate)
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
+          appStore.setPendingTransactions([...txs, txUpdate])
+          setShowDevSwitch(true)
+        } else {
+          if (
+            appStore.selectedNetwork &&
+            res.messages &&
+            res.messages.length &&
+            (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)
+          ) {
+            const message = res.messages[0]
+            transaction.status = message.status
+            transaction.lzData = message
 
-          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)
-          let url = appStore.selectedNetwork!.scanLz
-          url = url.replace(scanOriginLzIdMask, appStore.selectedNetwork!.layerZeroChainIds)
-          url = url.replace(scanOriginLzPipeMask, appStore.selectedNetwork!.addresses.lzPipe!)
-          url = url.replace(scanDestinationLzIdMask, dstChain!.layerZeroChainIds)
-          url = url.replace(scanDestinationLzPipeMask, dstChain!.addresses.lzPipe!)
-          url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
-          transaction.lzScan = url
+            const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)
+            let url = appStore.selectedNetwork!.scanLz
+            url = url.replace(scanOriginLzIdMask, appStore.selectedNetwork!.layerZeroChainIds)
+            url = url.replace(scanOriginLzPipeMask, appStore.selectedNetwork!.addresses.lzPipe!)
+            url = url.replace(scanDestinationLzIdMask, dstChain!.layerZeroChainIds)
+            url = url.replace(scanDestinationLzPipeMask, dstChain!.addresses.lzPipe!)
+            url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
+            transaction.lzScan = url
 
-          appStore.setNotifyTransaction(transaction)
-          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
-          appStore.setPendingTransactions([...txs, transaction])
+            appStore.setNotifyTransaction(transaction)
+            const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+            appStore.setPendingTransactions([...txs, transaction])
+          }
         }
-        setTimeout(() => {
-          processTransaction(transaction)
-        }, 30000)
       } catch (err) {
         console.error(err)
       }
     },
     [appStore]
   )
+
+  const processPendingTasks = useCallback(() => {
+    appStore.pendingTransactions.forEach(async (pendingTx) => {
+      processTransaction(pendingTx)
+    })
+  }, [appStore.pendingTransactions, processTransaction])
+
+  useEffect(() => {
+    processPendingTasks()
+  }, [forceUpdate, processPendingTasks])
+
   const showTeleportWaiting = () => {
     if (!appStore.notifyTransaction) {
       return false
@@ -104,24 +149,13 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
     return appStore.notifyTransaction.type === 'TELEPORT' && appStore.notifyTransaction.status === 'FAILED'
   }
 
-  useEffect(() => {
-    appStore.pendingTransactions.forEach(async (pendingTx) => {
-      if (transactionsQueue[pendingTx.hash]) {
-        return
-      }
-      transactionsQueue[pendingTx.hash] = pendingTx
-      setTransactionsQueue(transactionsQueue)
-      processTransaction(pendingTx)
-    })
-  }, [appStore.pendingTransactions, processTransaction, transactionsQueue])
-
   if (!appStore.walletProvider.web3Provider) {
     return <></>
   }
 
   return (
-    // <></>
     <div className="text-black">
+      <></>
       {/* <div className="flex flex-col gap-4">
         {appStore.pendingTransactions.map((tx) => (
           <PendingTransaction key={tx.hash} tx={tx}></PendingTransaction>
@@ -150,7 +184,24 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         message="Step 2: Teleportation in flight between origin and destination!"
         txLink={appStore.notifyTransaction?.lzScan || ''}
         imgName="teleport-progress.svg"
-      ></TransactionInProgressPopup>
+      >
+        {isDev && showDevSwitch && (
+          <div className="flex flex-col gap-6">
+            <div className="text-md text-damlabelgray">
+              <span>Switch network to use your dPRIME.</span>
+            </div>
+            <button
+              onClick={async () => {
+                await appStore.switchNetwork(appStore.notifyTransaction?.to?.chainId!)
+                setShowDevSwitch(false)
+              }}
+              className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
+            >
+              <span>Switch Network</span>
+            </button>
+          </div>
+        )}
+      </TransactionInProgressPopup>
 
       <TransactionCompletedPopup
         handleClose={() => appStore.setNotifyTransaction(null)}
@@ -158,19 +209,21 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         imgName="teleport-completed.svg"
         message="Step 3: Teleport successful!"
       >
-        <div className="flex flex-col gap-6">
-          <div className="text-md text-damlabelgray">
-            <span>Switch network to use your dPRIME.</span>
+        {!isDev && (
+          <div className="flex flex-col gap-6">
+            <div className="text-md text-damlabelgray">
+              <span>Switch network to use your dPRIME.</span>
+            </div>
+            <button
+              onClick={() => {
+                appStore.switchNetwork(appStore.notifyTransaction?.to?.chainId!)
+              }}
+              className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
+            >
+              <span>Switch Network</span>
+            </button>
           </div>
-          <button
-            onClick={() => {
-              appStore.switchNetwork(appStore.notifyTransaction?.to?.chainId!)
-            }}
-            className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
-          >
-            <span>Switch Network</span>
-          </button>
-        </div>
+        )}
       </TransactionCompletedPopup>
 
       <TransactionFailedPopup

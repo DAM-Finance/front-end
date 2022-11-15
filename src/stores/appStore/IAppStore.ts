@@ -53,7 +53,8 @@ export interface IAppStore {
 
   addDPrimeToWallet: () => any
 
-  getTokenBalance: (token: keyof typeof supportedTokens) => void
+  updateTokenBalance: (token: keyof typeof supportedTokens) => void
+  getTokenBalance: (token: keyof typeof supportedTokens) => Promise<string>
 
   updateBalances: () => void
   swapStableToDPrime: (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => Promise<any>

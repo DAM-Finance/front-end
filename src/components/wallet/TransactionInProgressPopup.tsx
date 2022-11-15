@@ -11,6 +11,7 @@ interface TransactionInProgressPopupProps {
   txLink?: string
   txLinkMsg?: boolean
   addTokenOption?: boolean
+  children?: any
 }
 
 const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
@@ -20,7 +21,8 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
   imgName = 'tip.svg',
   txLink = '',
   addTokenOption = true,
-  txLinkMsg = false
+  txLinkMsg = false,
+  children = <></>
 }) => {
   const appStore = useAppStore()
   const [dprimeAddedToWalletByNetwork, setDprimeAddedToWalletByNetwork] = useState(
@@ -84,6 +86,7 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
                   </div>
                 </div>
               )}
+              {children}
             </div>
             <button>
               <img onClick={handleClose} className="absolute top-3 right-3" src={utils.getImageSrc('x2.svg')} alt="close" />
