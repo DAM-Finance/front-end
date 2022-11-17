@@ -172,7 +172,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
       <TransactionInProgressPopup
         handleClose={() => appStore.setNotifyTransaction(null)}
         show={showTeleportRequesting()}
-        message="Step 1: Requesting teleport on origin network!"
+        message="Step 1/3: Requesting teleport on origin network!"
         imgName="teleport-progress.svg"
         txLink={utils.getTxLink(appStore.selectedNetwork!, appStore.notifyTransaction! && appStore.notifyTransaction.hash)}
         txLinkMsg={true}
@@ -181,7 +181,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
       <TransactionInProgressPopup
         handleClose={() => appStore.setNotifyTransaction(null)}
         show={showTeleportInflight()}
-        message="Step 2: Teleportation in flight between origin and destination!"
+        message="Step 2/3: Teleportation in flight between origin and destination!"
         txLink={appStore.notifyTransaction?.lzScan || ''}
         imgName="teleport-progress.svg"
       >
@@ -207,7 +207,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         handleClose={() => appStore.setNotifyTransaction(null)}
         show={showTeleportComplete()}
         imgName="teleport-completed.svg"
-        message="Step 3: Teleport successful!"
+        message="Step 3/3: Teleport successful!"
       >
         {!isDev && (
           <div className="flex flex-col gap-6">
