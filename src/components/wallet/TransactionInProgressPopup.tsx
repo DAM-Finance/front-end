@@ -60,11 +60,7 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
                   {txLinkMsg && (
                     <div className="pt-4 text-sm max-w-xl text-damlabelgray text-center">
                       <span>
-                        <b>Notice:</b> Transaction tracking will be delayed in testnet.
-                      </span>
-                      <span>
-                        For a more real time experience in testnet, search your wallet address on Goerli and Moonbase Alpha as both networks need to confirm the
-                        teleportation.
+                        <b>Notice:</b> teleportation can take up to 15 minutes.
                       </span>
                     </div>
                   )}

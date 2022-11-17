@@ -188,7 +188,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         {isDev && showDevSwitch && (
           <div className="flex flex-col gap-6">
             <div className="text-md text-damlabelgray">
-              <span>Switch network to use your dPRIME.</span>
+              <span>Switch network to track teleportation and use your dPRIME.</span>
             </div>
             <button
               onClick={async () => {
