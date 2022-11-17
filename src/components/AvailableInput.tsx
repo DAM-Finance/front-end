@@ -14,13 +14,14 @@ interface AvailableInputProps {
 const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasPrice, handleChange, children, decimals = -1 }) => {
   const [showFees, setShowFees] = useState(false)
   const toogleShowFees = () => setShowFees(!showFees)
+
   return (
     <div className="w-full flex flex-col gap-1">
       <div className="w-full flex text-gray-400 bg-damgray border-solid border-[1px] border-damlightyellow outline-none rounded-2xl">
         <input
-          value={amount}
-          onChange={(ev) => handleChange(ev.target.value)}
-          type="number"
+          value={utils.beautifyNumber(amount)}
+          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value))}
+          type="string"
           className="w-full bg-damgray p-4 text-2xl outline-none border-none rounded-2xl"
         />
         <button

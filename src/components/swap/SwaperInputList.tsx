@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { ISupportedNetworkAddresses } from '../../constants/ISupportedNetworks'
+import utils from '../../constants/utils'
 import { IBalances } from '../../stores/appStore/IBalances'
 
 interface SwaperInputListProps {
@@ -34,9 +35,9 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
         }`}
       >
         <input
-          value={value}
-          onChange={(ev) => handleChange(ev.target.value)}
-          type="number"
+          value={utils.beautifyNumber(value)}
+          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value))}
+          type="string"
           disabled={disabled}
           className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
         />

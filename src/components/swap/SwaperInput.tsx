@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import utils from '../../constants/utils'
 interface SwaperInputProps {
   value?: string
   coin: string
@@ -15,9 +16,9 @@ const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, chil
                       ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
       >
         <input
-          value={value}
-          onChange={(ev) => handleChange(ev.target.value)}
-          type="number"
+          value={utils.beautifyNumber(value)}
+          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value))}
+          type="string"
           disabled={disabled}
           className="w-full bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
         />

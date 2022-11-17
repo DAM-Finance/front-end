@@ -33,6 +33,35 @@ export class Utils {
     return network?.scanUrl?.replace(scanUrlMask, txHash)
   }
 
+  beautifyNumber(valueMixed: string | number): string {
+    let value: String = typeof valueMixed === 'number' ? valueMixed.toString() : valueMixed
+    if (!value) {
+      return ''
+    }
+    const coercedValue = Number(value)
+    let res = coercedValue.toLocaleString('en', { maximumFractionDigits: 18 })
+    if (value.length && value.indexOf('.') === value.length - 1) {
+      res += '.'
+    }
+    return res
+  }
+
+  unbeautifyNumber(value: string): string {
+    console.log({ unbeautifyNumber1: value })
+    if (value.length === 1) {
+      value = value.replace(/\D/, '')
+    }
+    if (!value) {
+      return ''
+    }
+    let val = parseFloat(value.replace(/,/g, '')).toString()
+    if (value.length && value.indexOf('.') === value.length - 1) {
+      val += '.'
+    }
+    console.log({ unbeautifyNumber: val })
+    return val
+  }
+
   // TODO:
   getLzTxLink() {
     // https://testnet.layerzeroscan.com/10121/address/0x82a6a0e313765510e63fbcc0114af5c8054bda9f/message/10126/address/0xe48dc47089bd1ed3bcb06a97741e9e9e1a619f13/nonce/57
