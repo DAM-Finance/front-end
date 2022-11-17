@@ -17,10 +17,10 @@ const BorrowingSoon: FC = () => {
         }}
       >
         <div className="text-lg">
-          <span className="font-bold">Borrowing </span>
+          <span className="font-bold">Mainnet </span>
           <span>coming soon</span>
         </div>
-        <div className="text-damlabelgray3 text-sm font-light">DAM token targeted for Q1 2023</div>
+        <div className="text-damlabelgray3 text-sm font-light">DAM token targeted for 2023</div>
       </div>
     </div>
   )
