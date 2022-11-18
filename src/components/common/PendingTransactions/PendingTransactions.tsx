@@ -162,12 +162,12 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         ))}
       </div> */}
 
-      {/* <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
+      <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
         <div className="text-[14px] text-damlabelgray">
           <span>Teleporting d2O takes on average </span>
           <span className="text-damyellow font-bold">15 min.</span>
         </div>
-      </WaitingForConfirmationPopup> */}
+      </WaitingForConfirmationPopup>
 
       <TransactionInProgressPopup
         handleClose={() => appStore.setNotifyTransaction(null)}
