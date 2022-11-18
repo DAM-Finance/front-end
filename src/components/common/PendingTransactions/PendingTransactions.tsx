@@ -164,8 +164,8 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
 
       <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
         <div className="text-[14px] text-damlabelgray">
-          <span>Teleporting dPRIME takes on </span>
-          <span className="text-damyellow font-bold">average 15 min.</span>
+          <span>Teleporting d2O takes on average </span>
+          <span className="text-damyellow font-bold">15 min.</span>
         </div>
       </WaitingForConfirmationPopup>
 
@@ -188,7 +188,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         {isDev && showDevSwitch && (
           <div className="flex flex-col gap-6">
             <div className="text-md text-damlabelgray">
-              <span>Switch network to track teleportation and use your dPRIME.</span>
+              <span>Switch network to track teleportation and use your d2O.</span>
             </div>
             <button
               onClick={async () => {
@@ -212,7 +212,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         {!isDev && (
           <div className="flex flex-col gap-6">
             <div className="text-md text-damlabelgray">
-              <span>Switch network to use your dPRIME.</span>
+              <span>Switch network to use your d2O.</span>
             </div>
             <button
               onClick={() => {
