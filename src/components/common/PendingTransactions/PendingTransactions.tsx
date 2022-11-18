@@ -181,7 +181,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
       <TransactionInProgressPopup
         handleClose={() => appStore.setNotifyTransaction(null)}
         show={showTeleportInflight()}
-        message="Step 2/3: Teleportation in flight between origin and destination!"
+        message="Step 2/3: Teleportation in flight between origin and destination! ETA is 15 minutes."
         txLink={appStore.notifyTransaction?.lzScan || ''}
         imgName="teleport-progress.svg"
       >
