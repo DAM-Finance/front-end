@@ -60,7 +60,7 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
                   {txLinkMsg && (
                     <div className="pt-4 text-sm max-w-xl text-damlabelgray text-center">
                       <span>
-                        <b>Notice:</b> teleportation can take up to 15 minutes.
+                        <b>Notice:</b> Teleportation takes on average 15 minutes.
                       </span>
                     </div>
                   )}

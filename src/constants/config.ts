@@ -71,17 +71,17 @@ export const supportedNetworks: ISupportedNetwork[] = [
 
 export const supportedTokens = {
   dPrime: {
-    name: 'dPrime',
-    symbol: 'dPRI',
+    name: 'Deuterium',
+    symbol: 'd2O',
     units: 18,
-    imgUIrl: 'https://dam-d2o.netlify.app/dprimelogowhite.svg',
+    imgUrl: 'https://i.imgur.com/kck4tX2.jpeg',
     bytes: 0x0
   },
   usdc: {
     name: 'usdc',
-    symbol: 'dPRI',
+    symbol: 'USDC',
     units: 6,
-    imgUIrl: 'https://bitcoin.org/img/icons/opengraph.png?1666775325',
+    imgUrl: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
     bytes: ethers.utils.formatBytes32String('PSM-USDC') // TODO: Change to PSM-USDC on production
   }
 }
