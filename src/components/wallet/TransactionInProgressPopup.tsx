@@ -77,7 +77,7 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
                   </button>
                   <div className="text-damlightyellow">
                     <span>Add </span>
-                    <span className="font-bold">dPRIME </span>
+                    <span className="font-bold">d2O </span>
                     <span>to Metamask</span>
                   </div>
                 </div>

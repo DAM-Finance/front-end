@@ -74,7 +74,7 @@ export const supportedTokens = {
     name: 'dPrime',
     symbol: 'dPRI',
     units: 18,
-    imgUIrl: 'https://bitcoin.org/img/icons/opengraph.png?1666775325',
+    imgUIrl: 'https://dam-d2o.netlify.app/dprimelogowhite.svg',
     bytes: 0x0
   },
   usdc: {

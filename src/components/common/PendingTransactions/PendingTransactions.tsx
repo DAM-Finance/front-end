@@ -45,6 +45,13 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
           appStore.setPendingTransactions(txs)
           return
         }
+        const now = new Date().getTime()
+        const deltaReq = now - new Date(transaction.startedAt!).getTime()
+        if (deltaReq > 1000 * 3600 * 24) {
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+          appStore.setPendingTransactions(txs)
+          return
+        }
         if (transaction.status === 'REQUESTING') {
           await appStore.walletProvider.web3Provider!.waitForTransaction(transaction.hash)
           transaction.status = 'INFLIGHT'
@@ -164,7 +171,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
 
       <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
         <div className="text-[14px] text-damlabelgray">
-          <span>Teleporting dPRIME takes on </span>
+          <span>Teleporting d2O takes on </span>
           <span className="text-damyellow font-bold">average 15 min.</span>
         </div>
       </WaitingForConfirmationPopup>
@@ -188,7 +195,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         {isDev && showDevSwitch && (
           <div className="flex flex-col gap-6">
             <div className="text-md text-damlabelgray">
-              <span>Switch network to track teleportation and use your dPRIME.</span>
+              <span>Switch network to track teleportation and use your d2O.</span>
             </div>
             <button
               onClick={async () => {
@@ -201,6 +208,10 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
             </button>
           </div>
         )}
+        <div className="text-[14px] text-damlabelgray">
+          <span>Teleporting d2O takes on </span>
+          <span className="text-damyellow font-bold">average 15 min.</span>
+        </div>
       </TransactionInProgressPopup>
 
       <TransactionCompletedPopup
@@ -212,7 +223,7 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         {!isDev && (
           <div className="flex flex-col gap-6">
             <div className="text-md text-damlabelgray">
-              <span>Switch network to use your dPRIME.</span>
+              <span>Switch network to use your d2O.</span>
             </div>
             <button
               onClick={() => {

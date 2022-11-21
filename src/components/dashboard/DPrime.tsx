@@ -16,7 +16,7 @@ const DPrime: FC<Partial<IPortfolio>> = (props) => {
   return (
     <div className="flex flex-col bg-damgray rounded-xl overflow-hidden" style={{ opacity: isValidNetworkConnected() ? '1' : '0.2' }}>
       <div className="flex flex-col p-6 gap-2 relative">
-        <div className="text-damlabelgray">dPRIME</div>
+        <div className="text-damlabelgray">d2O</div>
         <div className="text-3xl">{appStore.balances.dPrime || 0}</div>
         {/* <img className="absolute top-2 right-2" width={115} src={utils.getImageSrc('dprimebg.svg')} alt="dPrime background" /> */}
         <img
@@ -28,7 +28,7 @@ const DPrime: FC<Partial<IPortfolio>> = (props) => {
         />
       </div>
       <NavLink className="mt-auto" to="/swap">
-        <button className="bg-damtranspgray rounded-none w-full text-damyellow font-light py-3">Swap for dPRIME</button>
+        <button className="bg-damtranspgray rounded-none w-full text-damyellow font-light py-3">Swap for d2O</button>
       </NavLink>
     </div>
   )

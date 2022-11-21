@@ -43,13 +43,13 @@ const TermsAndConditionsText: FC = () => {
       </ol>
       <br />
       <p>
-        The Company has developed dPRIME Asset Modules Finance (&rdquo;DAM&rdquo;) &ndash; an online, decentralized and autonomous environment that displays
-        price information and autonomous smart contract mechanisms of digital tokens and assets (&ldquo;Digital Assets&rdquo;) &ndash; and provides the
-        user-interface that guides your access to DAM; the Site is used to provide Users with access to certain decentralized finance services and products on
-        the Moonbeam, Polkadot, or other blockchains through DAM (the &ldquo;Services&rdquo;). The Services may require users to pay fees, such as gas charges
-        on the Ethereum network, to perform a transaction. You acknowledge and agree that the Company has no control over User transactions, User digital
-        assets, the method or amount of payment required for any User to engage in any transaction, or any payments of fees for any transactions. You must
-        ensure that you have a sufficient balance to complete any transaction using the Site or Services before initiating such transaction.
+        The Company has developed d2O Asset Modules Finance (&rdquo;DAM&rdquo;) &ndash; an online, decentralized and autonomous environment that displays price
+        information and autonomous smart contract mechanisms of digital tokens and assets (&ldquo;Digital Assets&rdquo;) &ndash; and provides the user-interface
+        that guides your access to DAM; the Site is used to provide Users with access to certain decentralized finance services and products on the Moonbeam,
+        Polkadot, or other blockchains through DAM (the &ldquo;Services&rdquo;). The Services may require users to pay fees, such as gas charges on the Ethereum
+        network, to perform a transaction. You acknowledge and agree that the Company has no control over User transactions, User digital assets, the method or
+        amount of payment required for any User to engage in any transaction, or any payments of fees for any transactions. You must ensure that you have a
+        sufficient balance to complete any transaction using the Site or Services before initiating such transaction.
       </p>
       <br />
       <p>
@@ -569,7 +569,7 @@ const TermsAndConditionsText: FC = () => {
       </p>
       <br />
       <p>
-        The &ldquo;dam.finance/app&rdquo; name, the DAM logo, other related trademarks (&ldquo;dPRIME Asset Modules&rdquo;), and the web domains and URLs are
+        The &ldquo;dam.finance/app&rdquo; name, the DAM logo, other related trademarks (&ldquo;d2O Asset Modules&rdquo;), and the web domains and URLs are
         property of Address Labs Inc. Using our Services does not give you ownership of any proprietary intellectual property rights in our Services or the
         content you access. These terms do not grant you the right to use any branding or logos used in our Services. You may not remove, obscure, or alter any
         legal notices displayed in or along with our Services.

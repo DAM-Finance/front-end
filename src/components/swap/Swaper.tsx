@@ -147,12 +147,12 @@ const Swaper: FC = () => {
       <div className="flex">
         <div>Expected Output</div>
         <div className="ml-auto">
-          {isInverted ? firstCoin : secondCoin} {true ? 'dPRIME' : selectedStableCoin.name}
+          {isInverted ? firstCoin : secondCoin} {true ? 'd2O' : selectedStableCoin.name}
         </div>
       </div>
       <div className="flex">
         <div>Teleport Fee</div>
-        <div className="ml-auto">0 {true ? 'dPRIME' : selectedStableCoin.name}</div>
+        <div className="ml-auto">0 {true ? 'd2O' : selectedStableCoin.name}</div>
       </div>
       <div className="flex">
         <div>Gas fee</div>
@@ -176,17 +176,12 @@ const Swaper: FC = () => {
           handleListChange={(coin) => setSelectedStableCoin(coin)}
         >
           <div className="">
-            <SwaperBalance
-              balance={appStore.balances[selectedStableCoin.balancesMapper]}
-              coinName={selectedStableCoin.name}
-              rightAligned={false}
-              decimals={2}
-            ></SwaperBalance>
+            <SwaperBalance balance={appStore.balances[selectedStableCoin.balancesMapper]} rightAligned={false} decimals={2}></SwaperBalance>
           </div>
         </SwaperInputList>
       ) : (
-        <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin}>
-          <SwaperBalance balance={dPrimeBalance} coinName={'dPRIME'} rightAligned={false} decimals={2}></SwaperBalance>
+        <SwaperInput handleChange={updateBothInputs} coin={'d2O'} value={secondCoin}>
+          <SwaperBalance balance={dPrimeBalance} rightAligned={false} decimals={2}></SwaperBalance>
         </SwaperInput>
       )}
 
@@ -199,7 +194,7 @@ const Swaper: FC = () => {
       </button>
 
       {!isInverted ? (
-        <SwaperInput handleChange={updateBothInputs} coin={'dPRIME'} value={secondCoin} disabled={true}>
+        <SwaperInput handleChange={updateBothInputs} coin={'d2O'} value={secondCoin} disabled={true}>
           <SwapperBalanceWithFees available={dPrimeBalance} children={gasDetails} gasPrice={gasPrice} decimals={2}></SwapperBalanceWithFees>
         </SwaperInput>
       ) : (
@@ -278,7 +273,7 @@ const Swaper: FC = () => {
         {txState === 'completed' && (
           <div className="flex flex-col gap-2 pt-6">
             <div className="text-md text-damlabelgray">
-              <span>Want to teleport your dPRIME to a different network?</span>
+              <span>Want to teleport your d2O to a different network?</span>
             </div>
             <NavLink to="/teleport">
               <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
