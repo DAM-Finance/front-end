@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { useAppStore } from '../../stores/appStore/appStore'
 import PendingTransaction from './PendingTransaction'
 
