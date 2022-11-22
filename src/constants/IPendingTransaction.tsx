@@ -11,12 +11,14 @@ export interface IPendingTransaction {
   from?: {
     amount: string
     token: string
+    networkImg: string
     network: string
     chainId: string
   }
   to?: {
     amount: string
     token: string
+    networkImg: string
     network: string
     chainId: string
   }

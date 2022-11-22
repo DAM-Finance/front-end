@@ -61,13 +61,15 @@ const Teleport: FC = () => {
         type: 'TELEPORT',
         from: {
           amount: dPrimeAmount,
-          token: supportedTokens.dPrime.name,
+          token: supportedTokens.dPrime.symbol,
+          networkImg: appStore.selectedNetwork!.iconName,
           network: appStore.selectedNetwork!.name,
           chainId: appStore.selectedNetwork!.chainId
         },
         to: {
           amount: dPrimeAmount,
-          token: supportedTokens.dPrime.name,
+          token: supportedTokens.dPrime.symbol,
+          networkImg: dstnetwork.iconName,
           network: dstnetwork.name,
           chainId: dstnetwork.chainId
         },

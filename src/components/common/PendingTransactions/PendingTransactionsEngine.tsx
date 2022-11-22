@@ -22,7 +22,7 @@ const client = createClient('testnet')
 
 interface PendingTransactionsProps {}
 
-const PendingTransactions: FC<PendingTransactionsProps> = () => {
+const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
   const appStore = useAppStore()
   const [forceUpdate, setForceUpdate] = useState(0)
   const [showDevSwitch, setShowDevSwitch] = useState(true)
@@ -61,6 +61,24 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
         }
 
         const res = await client.getMessagesBySrcTxHash(transaction.hash)
+        if (appStore.selectedNetwork && res.messages && res.messages.length && (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)) {
+          const message = res.messages[0]
+          transaction.status = message.status
+          transaction.lzData = message
+
+          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)
+          let url = appStore.selectedNetwork!.scanLz
+          url = url.replace(scanOriginLzIdMask, appStore.selectedNetwork!.layerZeroChainIds)
+          url = url.replace(scanOriginLzPipeMask, appStore.selectedNetwork!.addresses.lzPipe!)
+          url = url.replace(scanDestinationLzIdMask, dstChain!.layerZeroChainIds)
+          url = url.replace(scanDestinationLzPipeMask, dstChain!.addresses.lzPipe!)
+          url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
+          transaction.lzScan = url
+
+          appStore.setNotifyTransaction(transaction)
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+          appStore.setPendingTransactions([...txs, transaction])
+        }
         if (isDev) {
           const balance = appStore.balances.dPrime
           const newBalance = await appStore.getTokenBalance('dPrime')
@@ -79,30 +97,6 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
           appStore.setPendingTransactions([...txs, txUpdate])
           setShowDevSwitch(true)
-        } else {
-          if (
-            appStore.selectedNetwork &&
-            res.messages &&
-            res.messages.length &&
-            (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)
-          ) {
-            const message = res.messages[0]
-            transaction.status = message.status
-            transaction.lzData = message
-
-            const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)
-            let url = appStore.selectedNetwork!.scanLz
-            url = url.replace(scanOriginLzIdMask, appStore.selectedNetwork!.layerZeroChainIds)
-            url = url.replace(scanOriginLzPipeMask, appStore.selectedNetwork!.addresses.lzPipe!)
-            url = url.replace(scanDestinationLzIdMask, dstChain!.layerZeroChainIds)
-            url = url.replace(scanDestinationLzPipeMask, dstChain!.addresses.lzPipe!)
-            url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
-            transaction.lzScan = url
-
-            appStore.setNotifyTransaction(transaction)
-            const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
-            appStore.setPendingTransactions([...txs, transaction])
-          }
         }
       } catch (err) {
         console.error(err)
@@ -247,4 +241,4 @@ const PendingTransactions: FC<PendingTransactionsProps> = () => {
   )
 }
 
-export default PendingTransactions
+export default PendingTransactionsEngine

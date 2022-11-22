@@ -8,7 +8,8 @@ import { supportedNetworks } from './constants/config'
 import WaitingForConfirmationPopup from './components/wallet/WaitingForConfirmationPopup'
 import TermsAndConditionsPopup from './components/wallet/TermsAndConditionsPopup'
 import { localStorageObjects } from './constants/persist'
-import PendingTransactions from './components/common/PendingTransactions/PendingTransactions'
+import PendingTransactionsEngine from './components/common/PendingTransactions/PendingTransactionsEngine'
+import PendingTransactionsList from './components/transactions/PendingTransactionList'
 
 const App = () => {
   const appStore = useAppStore()
@@ -50,10 +51,11 @@ const App = () => {
 
   return (
     <>
-      <PendingTransactions></PendingTransactions>
+      <PendingTransactionsEngine></PendingTransactionsEngine>
       <div className="flex flex-col w-full h-screen bg-damdarkgray">
         <Navbar />
-        <div className="w-full" style={{ height: 'calc(100vh - 80px)' }}>
+        <div className="w-full relative" style={{ height: 'calc(100vh - 80px)' }}>
+          <PendingTransactionsList></PendingTransactionsList>
           <Routes />
         </div>
       </div>

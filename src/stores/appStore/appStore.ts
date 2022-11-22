@@ -63,6 +63,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   isWrongNetworkPopupEnabled: true,
   pendingTransactions: localStorage.getItem(localStorageObjects.pendingTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.pendingTxs)!) : [],
   notifyTransaction: null,
+  isPendingTransactionsVisible: false,
 
   setNotifyTransaction: (tx) => {
     set(
@@ -145,6 +146,13 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       })
     )
     localStorage.setItem(localStorageObjects.pendingTxs, JSON.stringify(get().pendingTransactions))
+  },
+  tooglePendingTransactions: () => {
+    set(
+      produce((state: IAppStore) => {
+        state.isPendingTransactionsVisible = !state.isPendingTransactionsVisible
+      })
+    )
   },
   // Might be extended to support new gateways
   chooseGateway: (): IGateway => {

@@ -17,6 +17,9 @@ export interface IAppStore {
   isWrongNetworkPopupEnabled: boolean
   setIsWrongNetworkPopupEnabled: (isWrongNetwork: boolean) => void
 
+  isPendingTransactionsVisible: boolean
+  tooglePendingTransactions: () => void
+
   gateway: IGateway | null
   setGateway: (gateway: IGateway) => void
 

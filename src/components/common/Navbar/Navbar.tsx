@@ -7,6 +7,7 @@ import SwitchNetworkSelector from './../../wallet/SwitchNetworkSelector'
 import { useAppStore } from '../../../stores/appStore/appStore'
 import AddDPrimeToWallet from '../../wallet/AddDPrimeToWallet'
 import { localStorageObjects } from '../../../constants/persist'
+import PendingTransactionsWidget from '../../transactions/PendingTramsactionsWidget'
 
 interface NavbarProps {}
 
@@ -45,6 +46,7 @@ const Navbar: FC<NavbarProps> = () => {
         {!appStore.walletProvider.loading && (
           <>
             {/* <TVLButton /> */}
+            <PendingTransactionsWidget></PendingTransactionsWidget>
             {!isDprimeAdded && <AddDPrimeToWallet></AddDPrimeToWallet>}
             <SwitchNetworkSelector />
             <ConnectButton />
