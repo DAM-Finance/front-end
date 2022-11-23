@@ -10,7 +10,6 @@ interface TransactionInProgressPopupProps {
   imgName?: string
   txLink?: string
   txLinkMsg?: boolean
-  addTokenOption?: boolean
   children?: any
 }
 
@@ -20,26 +19,9 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
   message = 'Transaction in progress',
   imgName = 'tip.svg',
   txLink = '',
-  addTokenOption = true,
   txLinkMsg = false,
   children = <></>
 }) => {
-  const appStore = useAppStore()
-  const [dprimeAddedToWalletByNetwork, setDprimeAddedToWalletByNetwork] = useState(
-    JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
-  )
-
-  const addDPrimeToWallet = async () => {
-    try {
-      const dprimeAdded = await appStore.addDPrimeToWallet()
-      setDprimeAddedToWalletByNetwork(dprimeAdded)
-    } catch (err) {
-      // console.log(err)
-    }
-  }
-
-  const isDprimeAdded = !!appStore.selectedNetwork && !!dprimeAddedToWalletByNetwork && dprimeAddedToWalletByNetwork[appStore.selectedNetwork.id]
-
   return (
     <>
       {show && (
@@ -64,22 +46,6 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
                       </span>
                     </div>
                   )}
-                </div>
-              )}
-              {addTokenOption && !isDprimeAdded && (
-                <div className="flex flex-col gap-2 mt-6 items-center">
-                  <button
-                    onClick={addDPrimeToWallet}
-                    className="flex items-center  w-fit gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
-                  >
-                    <img width={18} src={utils.getImageSrc('add.svg')} alt="Add" />
-                    <span>Add</span>
-                  </button>
-                  <div className="text-damlightyellow">
-                    <span>Add </span>
-                    <span className="font-bold">d2O </span>
-                    <span>to Metamask</span>
-                  </div>
                 </div>
               )}
               {children}
