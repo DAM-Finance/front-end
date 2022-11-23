@@ -34,9 +34,13 @@ export class Utils {
   }
 
   beautifyNumber(valueMixed: string | number): string {
-    let value: String = typeof valueMixed === 'number' ? valueMixed.toString() : valueMixed
+    let value: string = typeof valueMixed === 'number' ? valueMixed.toString() : valueMixed
     if (!value) {
       return ''
+    }
+    if (/^\d+\.\d+$/.test(value)) {
+      const split = value.split('.')
+      return Number(split[0]).toLocaleString('en', { maximumFractionDigits: 18 }) + '.' + split[1]
     }
     const coercedValue = Number(value)
     let res = coercedValue.toLocaleString('en', { maximumFractionDigits: 18 })
@@ -47,18 +51,20 @@ export class Utils {
   }
 
   unbeautifyNumber(value: string): string {
-    console.log({ unbeautifyNumber1: value })
     if (value.length === 1) {
       value = value.replace(/\D/, '')
     }
     if (!value) {
       return ''
     }
-    let val = parseFloat(value.replace(/,/g, '')).toString()
+    const cleanValue = value.replace(/,/g, '')
+    if (/^\d+\.\d+$/.test(cleanValue)) {
+      return cleanValue
+    }
+    let val = parseFloat(cleanValue).toString()
     if (value.length && value.indexOf('.') === value.length - 1) {
       val += '.'
     }
-    console.log({ unbeautifyNumber: val })
     return val
   }
 
