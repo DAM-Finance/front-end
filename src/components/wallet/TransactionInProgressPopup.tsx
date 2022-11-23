@@ -1,7 +1,5 @@
-import { FC, useState } from 'react'
-import { localStorageObjects } from '../../constants/persist'
+import { FC } from 'react'
 import utils from '../../constants/utils'
-import { useAppStore } from '../../stores/appStore/appStore'
 
 interface TransactionInProgressPopupProps {
   show: boolean

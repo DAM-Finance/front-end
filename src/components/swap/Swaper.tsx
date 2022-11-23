@@ -282,6 +282,14 @@ const Swaper: FC = () => {
             </NavLink>
           </div>
         )}
+        {txState === 'approveCompleted' && (
+          <button
+            onClick={() => setTxState('none')}
+            className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mt-4 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
+          >
+            <span>Done</span>
+          </button>
+        )}
       </TransactionCompletedPopup>
       <TransactionFailedPopup handleClose={() => setTxState('none')} show={txState === 'failed'} txLink={txLink}></TransactionFailedPopup>
     </div>
