@@ -20,7 +20,7 @@ const DDPrime: FC = () => {
           <span>Meet </span>
           <span className="font-bold">dReservoir</span>
         </div>
-        <div className="text-damlabellightgray text-sm">Teleport d2O from Ethereum to Dotsama</div>
+        <div className="text-damlabellightgray text-sm">Teleport d2O from Ethereum to Polkadot</div>
       </div>
       <NavLink to="/teleport" className="ml-auto flex justify-center font-bold">
         <button className="flex items-center gap-2 rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">
