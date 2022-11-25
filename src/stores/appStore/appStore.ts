@@ -214,6 +214,9 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
 
     const provider = await get().gateway?.detectProvider()
+    if (!provider) {
+      return
+    }
     const chainId = await get().gateway?.getChainId(provider)
     const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
     const accounts = await web3Provider.listAccounts()

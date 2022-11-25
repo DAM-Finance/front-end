@@ -16,7 +16,7 @@ const App = () => {
   const [agreedTCs, setAgreedTCs] = useState(JSON.parse(localStorage.getItem(localStorageObjects.agreedTcByWallet)!) || {})
 
   const showWrongNetwork = () => {
-    if (!appStore.isWrongNetworkPopupEnabled) {
+    if (!appStore.isWrongNetworkPopupEnabled || !appStore.walletProvider.provider) {
       return false
     }
 

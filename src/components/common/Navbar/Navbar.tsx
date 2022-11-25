@@ -8,6 +8,7 @@ import { useAppStore } from '../../../stores/appStore/appStore'
 import AddDPrimeToWallet from '../../wallet/AddDPrimeToWallet'
 import { localStorageObjects } from '../../../constants/persist'
 import PendingTransactionsWidget from '../../transactions/PendingTramsactionsWidget'
+import DownloadWalletButton from '../../wallet/DownloadWalletButton'
 
 interface NavbarProps {}
 
@@ -52,6 +53,7 @@ const Navbar: FC<NavbarProps> = () => {
             <ConnectButton />
           </>
         )}
+        <DownloadWalletButton />
       </div>
     </nav>
   )
