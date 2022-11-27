@@ -53,7 +53,7 @@ const Navbar: FC<NavbarProps> = () => {
             <ConnectButton />
           </>
         )}
-        <DownloadWalletButton />
+        {!appStore.walletProvider.connected && <DownloadWalletButton />}
       </div>
     </nav>
   )

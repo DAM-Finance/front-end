@@ -239,8 +239,20 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().updateBalances()
   },
   switchNetwork: async (chainId: string) => {
-    const provider = get().walletProvider.provider
-    return get().gateway?.switchNetwork(provider, chainId)
+    try {
+      const provider = get().walletProvider.provider
+      const res = await get().gateway?.switchNetwork(provider, chainId)
+      return res
+    } catch (err: any) {
+      if (err.code === 4902) {
+        const network = supportedNetworks.find((network) => network.chainId === chainId)
+        if (!network) {
+          console.error(err)
+        }
+        const provider = get().walletProvider.provider
+        await get().gateway?.addNetworkToWallet(provider, network!.addNetworkData)
+      }
+    }
   },
   addDPrimeToWallet: async () => {
     const provider = get().walletProvider.provider

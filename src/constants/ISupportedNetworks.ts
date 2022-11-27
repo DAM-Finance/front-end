@@ -16,6 +16,7 @@ export interface ISupportedNetwork {
   scanUrl: string
   scanLz: string
   default: boolean
+  addNetworkData?: IAddNetworkData
 }
 
 export interface ISupportedNetworkAddresses {
@@ -32,4 +33,16 @@ export interface ISupportedNetworkAddresses {
   linkJoin?: string
   lzPipe?: string
   hyperlanePipe?: string
+}
+
+export interface IAddNetworkData {
+  chainId: string
+  chainName: string
+  nativeCurrency: {
+    name: string
+    symbol: string
+    decimals: number
+  }
+  rpcUrls: string[]
+  blockExplorerUrls: string[]
 }
