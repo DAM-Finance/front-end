@@ -350,7 +350,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const tokenBytes = supportedTokens[token].bytes
     const { accounts } = get().walletProvider
     const gasLimit = get().selectedNetwork?.suggestedGasLimit
-    return connectedContracts[tokenPsm as any].createDPrime(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
+    return connectedContracts[tokenPsm as any].createD2O(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
   },
   swapDPrimeToStable: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => {
     await get().ensureConnected()
