@@ -78,12 +78,12 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           appStore.setNotifyTransaction(transaction)
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
           appStore.setPendingTransactions([...txs, transaction])
+          await appStore.updateTokenBalance('dPrime')
         }
         if (isDev) {
           const balance = appStore.balances.dPrime
           const newBalance = await appStore.getTokenBalance('dPrime')
           const diff = Number(newBalance) - Number(balance)
-          console.log({ diff })
           if (diff === 0) {
             return
           }
@@ -96,6 +96,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           appStore.setNotifyTransaction(txUpdate)
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
           appStore.setPendingTransactions([...txs, txUpdate])
+          await appStore.updateTokenBalance('dPrime')
           setShowDevSwitch(true)
         }
       } catch (err) {
