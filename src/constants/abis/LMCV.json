@@ -20,7 +20,7 @@
         "type": "uint256"
       }
     ],
-    "name": "AddLoanedDPrime",
+    "name": "AddLoanedD2O",
     "type": "event"
   },
   {
@@ -133,7 +133,7 @@
         "type": "uint256"
       }
     ],
-    "name": "EnterDPrime",
+    "name": "EnterD2O",
     "type": "event"
   },
   {
@@ -152,7 +152,7 @@
         "type": "uint256"
       }
     ],
-    "name": "ExitDPrime",
+    "name": "ExitD2O",
     "type": "event"
   },
   {
@@ -167,7 +167,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "dPrimeReceiver",
+        "name": "d2OReceiver",
         "type": "address"
       },
       {
@@ -242,7 +242,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "dPrimeChange",
+        "name": "d2OChange",
         "type": "uint256"
       },
       {
@@ -273,7 +273,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "dPrimeChange",
+        "name": "d2OChange",
         "type": "uint256"
       },
       {
@@ -370,7 +370,7 @@
         "type": "uint256"
       }
     ],
-    "name": "MoveDPrime",
+    "name": "MoveD2O",
     "type": "event"
   },
   {
@@ -433,7 +433,7 @@
         "type": "uint256"
       }
     ],
-    "name": "PullLiquidationDPrime",
+    "name": "PullLiquidationD2O",
     "type": "event"
   },
   {
@@ -477,7 +477,7 @@
         "type": "uint256"
       }
     ],
-    "name": "PushLiquidationDPrime",
+    "name": "PushLiquidationD2O",
     "type": "event"
   },
   {
@@ -526,6 +526,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "ArchAdmin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -564,25 +577,6 @@
         "internalType": "bool",
         "name": "leveraged",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "CollateralList",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -736,7 +730,7 @@
         "type": "address"
       }
     ],
-    "name": "dPrime",
+    "name": "d2O",
     "outputs": [
       {
         "internalType": "uint256",
@@ -823,29 +817,6 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "collateralName",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bool",
-        "name": "accepted",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "position",
-        "type": "uint256"
-      }
-    ],
-    "name": "editCollateralList",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
         "name": "collateral",
         "type": "bytes32"
       },
@@ -923,7 +894,7 @@
       },
       {
         "internalType": "address",
-        "name": "dPrimeReceiver",
+        "name": "d2OReceiver",
         "type": "address"
       },
       {
@@ -1115,7 +1086,7 @@
         "type": "uint256"
       }
     ],
-    "name": "moveDPrime",
+    "name": "moveD2O",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1297,6 +1268,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "newArch",
+        "type": "address"
+      }
+    ],
+    "name": "setArchAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "flag",
         "type": "uint256"
@@ -1366,7 +1350,7 @@
   },
   {
     "inputs": [],
-    "name": "totalDPrime",
+    "name": "totalD2O",
     "outputs": [
       {
         "internalType": "uint256",

@@ -8,7 +8,7 @@
       },
       {
         "internalType": "address",
-        "name": "_dPrime",
+        "name": "_d2O",
         "type": "address"
       },
       {
@@ -60,10 +60,10 @@
   },
   {
     "inputs": [],
-    "name": "dPrime",
+    "name": "d2O",
     "outputs": [
       {
-        "internalType": "contract dPrimeLike",
+        "internalType": "contract d2OLike",
         "name": "",
         "type": "address"
       }
