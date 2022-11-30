@@ -51,9 +51,9 @@ const Navbar: FC<NavbarProps> = () => {
             {!isDprimeAdded && <AddDPrimeToWallet></AddDPrimeToWallet>}
             <SwitchNetworkSelector />
             <ConnectButton />
+            <DownloadWalletButton />
           </>
         )}
-        {!appStore.walletProvider.connected && <DownloadWalletButton />}
       </div>
     </nav>
   )

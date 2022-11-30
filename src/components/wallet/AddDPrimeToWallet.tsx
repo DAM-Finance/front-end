@@ -9,7 +9,7 @@ const AddDPrimeToWallet: FC = () => {
     JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
   )
   const isDprimeAdded = !!appStore.selectedNetwork && !!dprimeAddedToWalletByNetwork && dprimeAddedToWalletByNetwork[appStore.selectedNetwork.id]
-
+  const isConnected = appStore.walletProvider.connected && appStore.walletProvider.provider
   const addDPrime = async () => {
     try {
       const dprimeAdded = await appStore.addDPrimeToWallet()
@@ -21,7 +21,7 @@ const AddDPrimeToWallet: FC = () => {
 
   return (
     <>
-      {!isDprimeAdded && (
+      {!isDprimeAdded && isConnected && (
         <div className="flex items-center px-4 gap-2 rounded-full bg-dambackgroundgrayed text-white cursor-pointer" onClick={addDPrime}>
           <div>Add</div>
           <img className="pb-1" width="28px" src={utils.getImageSrc('dprimelogo.svg')} alt="wallet" />

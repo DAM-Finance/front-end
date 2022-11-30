@@ -215,6 +215,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     const provider = await get().gateway?.detectProvider()
     if (!provider) {
+      get().setWalletProvider({})
       return
     }
     const chainId = await get().gateway?.getChainId(provider)
