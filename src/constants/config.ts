@@ -17,9 +17,10 @@ export const supportedNetworks: ISupportedNetwork[] = [
     iconName: 'moonbeamneticon.svg',
     teleportBgImg: 'moonbase-bg.png',
     addresses: {
-      dPrime: '0xA693E53a134457A2Dc0669a77f20F114B4aaea8E',
-      lzPipe: '0xe48dc47089bd1ED3BCB06a97741e9E9E1a619F13'.toLowerCase(),
-      hyperlanePipe: '0x0B80E3704FC74f5621C875274203301168Ac7702'
+      dPrime: '0x607F26BC84035088e3AD308e6d9439Da507190dB',
+      dPrimeGuardian: '0x05533EA9B9F37daA890512d8a2DD5b853620819e',
+      lzPipe: '0xfd7243e3837Aa0a1Fd0ECa7DB0e7154e502Af191'.toLowerCase(),
+      hyperlanePipe: '0xbA3CE03A101980B624550E3554d6Eb9b9E87384c'
     },
     layerZeroChainIds: '10126',
     suggestedGasLimit: 500000,
@@ -51,16 +52,17 @@ export const supportedNetworks: ISupportedNetwork[] = [
     iconName: 'ethneticon.png',
     teleportBgImg: 'goerli-bg.png',
     addresses: {
-      dPrime: '0x0c14d2bc2562b6aB953f21B24ddE8ad9e8cba2e1',
-      lmcv: '0x12fA0d79BCD21114D5F34A2789D9b2B5b1d7b42D',
-      dPrimeJoin: '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
-      usdcJoin: '0x7517b7900D845F18189e7e89707525E759a2eBb3', //DEC COLLAT JOIN
-      lzPipe: '0x82a6A0E313765510e63fBcc0114af5C8054bDA9F'.toLowerCase(), // lzPipe
-      hyperlanePipe: '0x74487683a4E248b21A09DAA3d78B2e26cedBe5E8',
-      usdcPSM: '0xD264Daa2b0Ae259b7864e6532A30ebe6Ac93b3fd', // PSM
-      lmcvProxy: '0x0CAfb9c3b7Aa97505276908A928bc9eA0c228324',
+      dPrime: '0x0E65cCEE050dB2d1065e43728F1B77C81cDED576',
+      dPrimeJoin: '0x2b7D597ac75c8C83452a6666797C6dFBdB8783f4',
+      dPrimeGuardian: '0x88E4B42e9eB353AE91F32025631df7fCC6BcCDC2',
+      lmcv: '0xfa192656A5498378fA3885842c6C7E5E4f84aEa0',
+      lmcvProxy: '0x7aBd240B4050b6F70aF6A23a682074E3CEC89568',
+      lzPipe: '0xb7a9a624591e32a46324dc72aef5708d06f6d0ed'.toLowerCase(), // lzPipe
+      hyperlanePipe: '0x2a4d2fE5A242Fe1eE8964A0Cf67151885e7B21f4',
+      usdcPSM: '0x0b481250A15bb14607f4C1C73708B289fE8F3E92', // PSM
 
-      usdc: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F', // '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
+      usdc: '0x718Ef9aA56CF9AcD33975c89024F9D840332BFD3', // '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
+      usdcJoin: '0x1C88Ac66f82738F4ad88731AaD2770F25e6f728d', //DEC COLLAT JOIN
 
       weth: '', // '0xc778417E063141139Fce010982780140Aa0cD5Ab',
       wethJoin: '', // '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
@@ -104,6 +106,6 @@ export const supportedTokens = {
     symbol: 'USDC',
     units: 6,
     imgUrl: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
-    bytes: ethers.utils.formatBytes32String('PSM-USDC') // TODO: Change to PSM-USDC on production
+    bytes: ethers.utils.formatBytes32String('PSM-USDC-DAM')
   }
 }

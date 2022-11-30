@@ -22,6 +22,7 @@ export interface ISupportedNetwork {
 export interface ISupportedNetworkAddresses {
   dPrime: string
   dPrimeJoin?: string
+  dPrimeGuardian?: string
   lmcv?: string
   lmcvProxy?: string
   usdcJoin?: string //DEC COLLAT JOIN
