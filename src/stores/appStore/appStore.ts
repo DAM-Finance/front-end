@@ -21,10 +21,12 @@ import { initialWalletProvider, IWalletProvider } from './IWalletProvider'
 import CollateralJoinDecAbi from '../../constants/abis/CollateralJoinDecimals.json'
 import dPrimeAbi from '../../constants/abis/dPrime.json'
 import dPrimeJoinAbi from '../../constants/abis/dPrimeJoin.json'
-import ERC20Abi from '../../constants/abis/ERC20.json'
+import dPrimeGuardianAbi from '../../constants/abis/dPrimeGuardian.json'
+import usdcAbi from '../../constants/abis/usdc.json'
 import LMCVAbi from '../../constants/abis/LMCV.json'
 import LMCVProxyAbi from '../../constants/abis/LMCVProxy.json'
 import LZPipeAbi from '../../constants/abis/LZPipe.json'
+import hyperlanePipeAbi from '../../constants/abis/hyperlanePipe.json'
 import PSMAbi from '../../constants/abis/PSM.json'
 import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 import { localStorageObjects } from '../../constants/persist'
@@ -44,11 +46,13 @@ const abis = {
   usdcJoin: CollateralJoinDecAbi,
   dPrime: dPrimeAbi,
   dPrimeJoin: dPrimeJoinAbi,
-  usdc: ERC20Abi,
+  dPrimeGuardian: dPrimeGuardianAbi,
+  usdc: usdcAbi,
   lmcv: LMCVAbi,
   lmcvProxy: LMCVProxyAbi,
   usdcPSM: PSMAbi,
-  lzPipe: LZPipeAbi
+  lzPipe: LZPipeAbi,
+  hyperlanePipe: hyperlanePipeAbi
 } as any
 
 export const useAppStore = create<IAppStore>((set, get) => ({
@@ -214,6 +218,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }
 
     const provider = await get().gateway?.detectProvider()
+    if (!provider) {
+      get().setWalletProvider({})
+      return
+    }
     const chainId = await get().gateway?.getChainId(provider)
     const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
     const accounts = await web3Provider.listAccounts()
@@ -236,8 +244,20 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().updateBalances()
   },
   switchNetwork: async (chainId: string) => {
-    const provider = get().walletProvider.provider
-    return get().gateway?.switchNetwork(provider, chainId)
+    try {
+      const provider = get().walletProvider.provider
+      const res = await get().gateway?.switchNetwork(provider, chainId)
+      return res
+    } catch (err: any) {
+      if (err.code === 4902) {
+        const network = supportedNetworks.find((network) => network.chainId === chainId)
+        if (!network) {
+          console.error(err)
+        }
+        const provider = get().walletProvider.provider
+        await get().gateway?.addNetworkToWallet(provider, network!.addNetworkData)
+      }
+    }
   },
   addDPrimeToWallet: async () => {
     const provider = get().walletProvider.provider

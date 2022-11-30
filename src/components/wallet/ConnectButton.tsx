@@ -5,15 +5,18 @@ import { useAppStore } from '../../stores/appStore/appStore'
 const ConnectButton: FC = () => {
   const appStore = useAppStore()
 
-  // Connect button
-  let connectBtn = (
-    <button
-      onClick={appStore.connectWallet}
-      className="outline outline-1 px-12 py-2 rounded-full bg-transparent text-damyellow outline-damtext-damyellow hover:bg-damyellow hover:text-damgray"
-    >
-      Connect
-    </button>
-  )
+  let connectBtn = <></>
+
+  if (!appStore.walletProvider.connected && appStore.walletProvider.provider) {
+    connectBtn = (
+      <button
+        onClick={appStore.connectWallet}
+        className="outline outline-1 px-12 py-2 rounded-full bg-transparent text-damyellow outline-damtext-damyellow hover:bg-damyellow hover:text-damgray"
+      >
+        Connect
+      </button>
+    )
+  }
 
   if (appStore.walletProvider.connected) {
     connectBtn = (
@@ -22,9 +25,6 @@ const ConnectButton: FC = () => {
         <img className="pb-1" src={utils.getImageSrc('walleticon.png')} alt="wallet" />
       </div>
     )
-  }
-  if (appStore.walletProvider.loading) {
-    connectBtn = <></>
   }
 
   return <>{connectBtn}</>

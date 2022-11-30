@@ -187,9 +187,11 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
         imgName="teleport-progress.svg"
       >
         {isDev && showDevSwitch && (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2 pt-4">
             <div className="text-md text-damlabelgray">
-              <span>Switch network to track teleportation and use your d2O.</span>
+              <span>Switch network </span>
+              <span className="font-bold text-damyellow">now </span>
+              <span>to track teleportation.</span>
             </div>
             <button
               onClick={async () => {
@@ -202,10 +204,15 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
             </button>
           </div>
         )}
-        <div className="text-[14px] text-damlabelgray">
-          <span>Teleporting d2O takes on </span>
-          <span className="text-damyellow font-bold">average 15 min.</span>
-        </div>
+        {!showDevSwitch && (
+          <div className="pt-4 text-sm text-damlabelgray">
+            <span>Please reach out on </span>
+            <a href="https://discord.com/invite/FqzSeEzhNS" target="_blank" rel="noreferrer">
+              <span>Discord </span>
+            </a>
+            <span>with any issues.</span>
+          </div>
+        )}
       </TransactionInProgressPopup>
 
       <TransactionCompletedPopup

@@ -8,7 +8,7 @@
       },
       {
         "internalType": "address",
-        "name": "_dPrimeContract",
+        "name": "_d2OContract",
         "type": "address"
       }
     ],
@@ -29,9 +29,28 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "_dstChainId",
+        "type": "uint16"
       }
     ],
     "name": "BurnLayerZero",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "live",
+        "type": "uint256"
+      }
+    ],
+    "name": "Cage",
     "type": "event"
   },
   {
@@ -98,6 +117,12 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "_srcChainId",
+        "type": "uint16"
       }
     ],
     "name": "MintLayerZero",
@@ -403,7 +428,7 @@
   },
   {
     "inputs": [],
-    "name": "dPrimeContract",
+    "name": "d2OContract",
     "outputs": [
       {
         "internalType": "address",
@@ -953,6 +978,24 @@
       }
     ],
     "name": "setTrustedRemoteAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_remoteChainId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_remoteAddress",
+        "type": "bytes"
+      }
+    ],
+    "name": "setTrustedRemoteAddressAuth",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

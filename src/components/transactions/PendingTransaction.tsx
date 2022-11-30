@@ -8,7 +8,7 @@ interface PendingTransactionProps {
 
 const PendingTransaction: FC<PendingTransactionProps> = ({ tx }) => {
   return (
-    <div>
+    <div className="w-full">
       {tx.type === 'TELEPORT' && (
         <div className="flex gap-2">
           <div className="flex items-center">

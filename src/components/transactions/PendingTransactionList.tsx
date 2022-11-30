@@ -14,7 +14,7 @@ const PendingTransactionsList: FC<PendingTransactionsListProps> = () => {
         <div className="text-white p-4 bg-damgray rounded-xl flex flex-col justify-center items-center gap-2 z-40 absolute right-4 top-4">
           <div className="font-bold text-center">Pending Transactions</div>
           {appStore.pendingTransactions.map((tx) => (
-            <PendingTransaction tx={tx}></PendingTransaction>
+            <PendingTransaction key={tx.hash} tx={tx}></PendingTransaction>
           ))}
         </div>
       )}

@@ -21,6 +21,27 @@ class Metamask {
     })
   }
 
+  async addNetworkToWallet(provider, addNetworkData) {
+    debugger
+    const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls } = addNetworkData
+    return provider.request({
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          chainId,
+          chainName,
+          nativeCurrency: {
+            name: nativeCurrency.name,
+            symbol: nativeCurrency.symbol,
+            decimals: nativeCurrency.decimals
+          },
+          rpcUrls,
+          blockExplorerUrls
+        }
+      ]
+    })
+  }
+
   isValidProvider(provider) {
     return provider && provider === window.ethereum && provider.isMetaMask
   }

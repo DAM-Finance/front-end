@@ -30,7 +30,18 @@ export const supportedNetworks: ISupportedNetwork[] = [
     },
     scanUrl: `https://moonbase.moonscan.io/tx/${scanUrlMask}`,
     scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
-    default: false
+    default: false,
+    addNetworkData: {
+      chainId: '0x507',
+      chainName: 'Moonbase Alpha',
+      nativeCurrency: {
+        name: 'DEV',
+        symbol: 'DEV',
+        decimals: 18
+      },
+      rpcUrls: ['https://rpc.api.moonbase.moonbeam.network'],
+      blockExplorerUrls: ['https://moonbase.moonscan.io/']
+    }
   },
   {
     name: 'Goerli',
@@ -65,7 +76,18 @@ export const supportedNetworks: ISupportedNetwork[] = [
     },
     scanUrl: `https://goerli.etherscan.io/tx/${scanUrlMask}`,
     scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
-    default: true
+    default: true,
+    addNetworkData: {
+      chainId: '0x5',
+      chainName: 'Goerli',
+      nativeCurrency: {
+        name: 'Goerli ETH',
+        symbol: 'gorETH',
+        decimals: 18
+      },
+      rpcUrls: ['https://rpc.ankr.com/eth_goerli'],
+      blockExplorerUrls: ['https://goerli.etherscan.io']
+    }
   }
 ]
 

@@ -108,7 +108,7 @@ const Teleport: FC = () => {
   return (
     <div className="flex p-4 w-full justify-center py-24">
       <div className="flex flex-col max-w-7xl gap-6">
-        <Disclaimer infoTxt={['Teleport d2O between Ethereum and Dotsama.']}></Disclaimer>
+        <Disclaimer infoTxt={['Teleport d2O between Ethereum and Polkadot.']}></Disclaimer>
         <div
           className="flex flex-col gap-8 rounded-2xl p-6 text-gray-500"
           style={{ background: 'linear-gradient(124.57deg, #4B2BA5 -118.12%, #1F212C 57.01%)' }}
