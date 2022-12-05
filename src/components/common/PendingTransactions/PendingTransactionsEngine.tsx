@@ -212,9 +212,9 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           <div className="pt-4 text-sm text-damlabelgray">
             <span>Please reach out on </span>
             <a href="https://discord.com/invite/FqzSeEzhNS" target="_blank" rel="noreferrer">
-              <span>Discord </span>
+              <span style={{ textDecoration: 'underline' }}>Discord</span>
             </a>
-            <span>with any issues.</span>
+            <span> with any issues.</span>
           </div>
         )}
       </TransactionInProgressPopup>
