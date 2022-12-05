@@ -36,6 +36,7 @@ const Swaper: FC = () => {
   const [txState, setTxState] = useState<ITxState>()
   const [txLink, setTxLink] = useState('')
   const [hideUnsupported, setHideUnsupported] = useState(false)
+  const swapLabel: string = isInverted ? 'Burn d2O' : 'Mint d2O'
 
   const isNetworkUnsupported = () => {
     const isSupported = supportedNetworks.findIndex((network) => network.chainId === appStore.selectedNetwork?.chainId) > -1
@@ -226,7 +227,7 @@ const Swaper: FC = () => {
               disabled
               className="flex items-center w-full justify-center rounded-full py-3 px-6  bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow cursor-not-allowed font-bold opacity-50"
             >
-              <span>Swap</span>
+              <span>{swapLabel}</span>
             </button>
           </>
         )}
@@ -237,7 +238,7 @@ const Swaper: FC = () => {
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isBelowZero() || isAboveBalance()}
           >
-            <span>{isAboveBalance() ? 'Insuficient balance' : 'Swap'}</span>
+            <span>{isAboveBalance() ? 'Insuficient balance' : swapLabel}</span>
           </button>
         )}
 
@@ -247,7 +248,7 @@ const Swaper: FC = () => {
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={true}
           >
-            <span>Swap</span>
+            <span>{swapLabel}</span>
           </button>
         )}
 
