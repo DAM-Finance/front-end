@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { ISupportedNetwork } from './ISupportedNetworks'
+import { ISupportedTokensMap } from './ISupportedToken'
 
 export const scanUrlMask = 'DAM__TX__ADDRESS'
 export const scanOriginLzIdMask = 'DAM__ORIGIN__LZ__ID'
@@ -93,13 +94,13 @@ export const supportedNetworks: ISupportedNetwork[] = [
   }
 ]
 
-export const supportedTokens = {
+export const supportedTokens: ISupportedTokensMap = {
   dPrime: {
     name: 'Deuterium',
     symbol: 'd2O',
     units: 18,
     imgUrl: 'https://i.imgur.com/kck4tX2.jpeg',
-    bytes: 0x0
+    bytes: '0x0'
   },
   usdc: {
     name: 'usdc',

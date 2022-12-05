@@ -1,8 +1,9 @@
 import { FC } from 'react'
+import { ISupportedToken } from '../../constants/ISupportedToken'
 import utils from '../../constants/utils'
 interface SwaperInputProps {
   value?: string
-  coin: string
+  coin: ISupportedToken
   children?: any
   disabled?: boolean
   decimals: number
@@ -23,7 +24,10 @@ const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, chil
           disabled={disabled}
           className="w-full bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
         />
-        <div className="flex items-center pr-4 text-2xl">{coin}</div>
+        <div className="flex justify-around mx-4 my-2 px-2 ml-auto bg-damgray rounded-3xl" style={{ minWidth: '120px' }}>
+          <img className="py-2 pr-1" src={coin.imgUrl} style={{ maxHeight: '48px', maxWidth: '48px' }} alt="selected coin" />
+          <div className="flex items-center pr-4 text-md">{coin.symbol}</div>
+        </div>
       </div>
       <div>{children}</div>
     </div>
