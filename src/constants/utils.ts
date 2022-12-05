@@ -34,12 +34,15 @@ export class Utils {
   }
 
   beautifyNumber(valueMixed: string | number): string {
+    // console.log('beautifyNumber:BEFORE:', valueMixed)
     let value: string = typeof valueMixed === 'number' ? valueMixed.toString() : valueMixed
     if (!value) {
+      // console.log('beautifyNumber:AFTER:', value)
       return ''
     }
     if (/^\d+\.\d+$/.test(value)) {
       const split = value.split('.')
+      // console.log('beautifyNumber:AFTER:', Number(split[0]).toLocaleString('en', { maximumFractionDigits: 18 }) + '.' + split[1])
       return Number(split[0]).toLocaleString('en', { maximumFractionDigits: 18 }) + '.' + split[1]
     }
     const coercedValue = Number(value)
@@ -47,24 +50,34 @@ export class Utils {
     if (value.length && value.indexOf('.') === value.length - 1) {
       res += '.'
     }
+    // console.log('beautifyNumber:AFTER:', res)
     return res
   }
 
-  unbeautifyNumber(value: string): string {
+  unbeautifyNumber(value: string, decimals: number): string {
+    // console.log('unbeautifyNumber:BEFORE:', value)
     if (value.length === 1) {
-      value = value.replace(/\D/, '')
+      value = value.replace(/\D22/, '')
     }
     if (!value) {
+      // console.log('unbeautifyNumber:AFTER1:', '')
       return ''
     }
-    const cleanValue = value.replace(/,/g, '')
+    let cleanValue = value.replace(/,/g, '')
+    if (cleanValue.includes('.')) {
+      const splitted = cleanValue.split('.')
+      cleanValue = `${splitted[0]}.${splitted[1].substring(0, decimals)}`
+    }
+
     if (/^\d+\.\d+$/.test(cleanValue)) {
+      // console.log('unbeautifyNumber:AFTER2:', cleanValue)
       return cleanValue
     }
     let val = parseFloat(cleanValue).toString()
     if (value.length && value.indexOf('.') === value.length - 1) {
       val += '.'
     }
+    // console.log('unbeautifyNumber:AFTER3:', val)
     return val
   }
 

@@ -129,7 +129,13 @@ const Teleport: FC = () => {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <AvailableInput amount={amount} available={dPrimeBalance} gasPrice={gasPrice} handleChange={(value) => setAmount(value)} decimals={2}>
+            <AvailableInput
+              amount={amount}
+              available={dPrimeBalance}
+              gasPrice={gasPrice}
+              handleChange={(value) => setAmount(value)}
+              decimals={supportedTokens.dPrime.units}
+            >
               <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
                 <div className="flex">
                   <div>Teleport Fee</div>

@@ -11,7 +11,6 @@ interface TermsAndConditionsPopupProps {
 
 const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handleDecline, handleAgree }) => {
   const [agreeTC, setAgreeTC] = useState(false)
-  const [agreePP, setAgreePP] = useState(false)
 
   return (
     <>
@@ -33,10 +32,6 @@ const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handl
                 <span className="text-damlabelgray">I agree with the </span>
                 <span className="font-bold text-damlabelgray">Terms and Conditions</span>
               </Checkbox>
-              <Checkbox selected={agreePP} handleClick={() => setAgreePP(!agreePP)}>
-                <span className="text-damlabelgray">I agree with the </span>
-                <span className="font-bold text-damlabelgray">Privacy Policy</span>
-              </Checkbox>
             </div>
             <div className="flex gap-4">
               <button
@@ -47,7 +42,7 @@ const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handl
               </button>
               <button
                 onClick={handleAgree}
-                disabled={!agreeTC || !agreePP}
+                disabled={!agreeTC}
                 className="flex items-center w-fit gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold disabled:opacity-20 disabled:cursor-not-allowed"
               >
                 <span>Agree</span>

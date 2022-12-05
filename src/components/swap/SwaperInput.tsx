@@ -5,10 +5,11 @@ interface SwaperInputProps {
   coin: string
   children?: any
   disabled?: boolean
+  decimals: number
   handleChange: (elem: string) => void
 }
 
-const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, children = <></>, disabled = false }) => {
+const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, children = <></>, disabled = false, decimals }) => {
   return (
     <div className="w-full flex flex-col gap-1">
       <div
@@ -17,7 +18,7 @@ const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, chil
       >
         <input
           value={utils.beautifyNumber(value)}
-          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value))}
+          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value, decimals))}
           type="string"
           disabled={disabled}
           className="w-full bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"

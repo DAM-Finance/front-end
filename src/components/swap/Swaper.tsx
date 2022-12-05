@@ -1,7 +1,7 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { supportedNetworks } from '../../constants/config'
+import { supportedNetworks, supportedTokens } from '../../constants/config'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -23,7 +23,7 @@ const Swaper: FC = () => {
   const dPrimeBalance = appStore.balances.dPrime
   const usdcBalance = appStore.balances.usdc
   const [stableCoins] = useState<Coin[]>([
-    { name: 'USDC', balancesMapper: 'usdc', tokenJoin: 'usdcJoin', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance }
+    { name: 'USDC', balancesMapper: 'usdc', tokenJoin: 'usdcJoin', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance, decimals: 6 }
     // { name: 'DAI', balancesMapper: 'usdc', icon: utils.getImageSrc('DAI.svg'), balance: '0.0' }
   ])
 
@@ -180,7 +180,7 @@ const Swaper: FC = () => {
           </div>
         </SwaperInputList>
       ) : (
-        <SwaperInput handleChange={updateBothInputs} coin={'d2O'} value={secondCoin}>
+        <SwaperInput handleChange={updateBothInputs} coin={'d2O'} value={secondCoin} decimals={supportedTokens.dPrime.units}>
           <SwaperBalance balance={dPrimeBalance} rightAligned={false} decimals={2}></SwaperBalance>
         </SwaperInput>
       )}
@@ -194,7 +194,7 @@ const Swaper: FC = () => {
       </button>
 
       {!isInverted ? (
-        <SwaperInput handleChange={updateBothInputs} coin={'d2O'} value={secondCoin} disabled={true}>
+        <SwaperInput handleChange={updateBothInputs} coin={'d2O'} value={secondCoin} disabled={true} decimals={supportedTokens.dPrime.units}>
           <SwapperBalanceWithFees available={dPrimeBalance} children={gasDetails} gasPrice={gasPrice} decimals={2}></SwapperBalanceWithFees>
         </SwaperInput>
       ) : (

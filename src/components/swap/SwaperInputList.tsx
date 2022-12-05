@@ -19,6 +19,7 @@ export interface Coin {
   tokenJoin: keyof ISupportedNetworkAddresses
   icon: string
   balance: string
+  decimals: 6
 }
 
 const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selectedCoin, handleChange, handleListChange, children, disabled = false }) => {
@@ -36,7 +37,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
       >
         <input
           value={utils.beautifyNumber(value)}
-          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value))}
+          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value, selectedCoin.decimals))}
           type="string"
           disabled={disabled}
           className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
