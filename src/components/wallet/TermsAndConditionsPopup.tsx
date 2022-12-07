@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useState, UIEvent } from 'react'
 import utils from '../../constants/utils'
 import Checkbox from '../Checkbox'
 import TermsAndConditionsText from './TermsAndConditionsText'
@@ -11,6 +11,14 @@ interface TermsAndConditionsPopupProps {
 
 const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handleDecline, handleAgree }) => {
   const [agreeTC, setAgreeTC] = useState(false)
+  const [scrolledTcs, setScrolledTcs] = useState(false)
+
+  const onScroll = (evt: UIEvent<HTMLDivElement>) => {
+    const bottom = evt.currentTarget.scrollHeight - evt.currentTarget.scrollTop === evt.currentTarget.clientHeight
+    if (bottom) {
+      setScrolledTcs(true)
+    }
+  }
 
   return (
     <>
@@ -24,11 +32,11 @@ const TermsAndConditionsPopup: FC<TermsAndConditionsPopupProps> = ({ show, handl
                 <div className="text-xs text-damlabelgray3">Updated 09/04/22</div>
               </div>
             </div>
-            <div className="overflow-y-scroll damscroll w-full max-h-64 text-sm my-4">
+            <div className="overflow-y-scroll damscroll w-full max-h-64 text-sm my-4" onScroll={onScroll}>
               <TermsAndConditionsText></TermsAndConditionsText>
             </div>
             <div className="flex flex-col w-full gap-3">
-              <Checkbox selected={agreeTC} handleClick={() => setAgreeTC(!agreeTC)}>
+              <Checkbox disabled={!scrolledTcs} selected={agreeTC} handleClick={() => setAgreeTC(!agreeTC)}>
                 <span className="text-damlabelgray">I agree with the </span>
                 <span className="font-bold text-damlabelgray">Terms and Conditions</span>
               </Checkbox>
