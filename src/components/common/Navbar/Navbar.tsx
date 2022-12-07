@@ -23,7 +23,6 @@ const Navbar: FC<NavbarProps> = () => {
   return (
     <nav className="flex items-center flex-wrap gap-12 bg-damgray px-4 md:px-24 py-5">
       <NavLink to="/">
-        {/* <img src={utils.getImageSrc('damlogo.svg')} alt="Dam Finance logo" /> */}
         <img src={utils.getImageSrc('mainlogowhite.svg')} width="100" alt="Dam Finance logo" />
       </NavLink>
       <NavLink to="/" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
