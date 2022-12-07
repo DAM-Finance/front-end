@@ -1,1 +1,1 @@
-export type ITxState = 'none' | 'waiting' | 'inprogress' | 'completed' | 'approveCompleted' | 'failed'
+export type ITxState = 'none' | 'waiting' | 'inprogress' | 'mintCompleted' | 'burnCompleted' | 'approveCompleted' | 'failed'

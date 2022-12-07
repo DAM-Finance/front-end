@@ -96,10 +96,11 @@ const Swaper: FC = () => {
   const swap = async (amount: string) => {
     try {
       let swapCall
+      const isMint = !isInverted
 
-      if (!isInverted) {
+      if (isMint) {
         swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', amount)
-      } else if (isInverted) {
+      } else {
         swapCall = appStore.swapDPrimeToStable('usdc', 'usdcPSM', amount)
       }
 
@@ -109,7 +110,7 @@ const Swaper: FC = () => {
       setTxLink(link)
       setTxState('inprogress')
       await tx.wait()
-      setTxState('completed')
+      setTxState(isMint ? 'mintCompleted' : 'burnCompleted')
       appStore.updateBalances()
     } catch (err) {
       setTxState('failed')
@@ -283,19 +284,37 @@ const Swaper: FC = () => {
       ></InfoPopupWithNetwork>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
       <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
-      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed' || txState === 'approveCompleted'} txLink={txLink}>
-        {txState === 'completed' && (
+      <TransactionCompletedPopup
+        handleClose={() => setTxState('none')}
+        show={['mintCompleted', 'burnCompleted', 'approveCompleted'].includes(txState!)}
+        txLink={txLink}
+      >
+        <></>
+        {
           <div className="flex flex-col gap-2 pt-6">
-            <div className="text-md text-damlabelgray">
-              <span>Want to teleport your d2O to a different network?</span>
-            </div>
-            <NavLink to="/teleport">
-              <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
-                <span>Teleport</span>
+            {txState === 'mintCompleted' && (
+              <>
+                <div className="text-md text-damlabelgray">
+                  <span>Want to teleport your d2O to a different network?</span>
+                </div>
+
+                <NavLink to="/teleport">
+                  <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
+                    <span>Teleport</span>
+                  </button>
+                </NavLink>
+              </>
+            )}
+            {txState === 'burnCompleted' && (
+              <button
+                onClick={() => setTxState('none')}
+                className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
+              >
+                <span>Done</span>
               </button>
-            </NavLink>
+            )}
           </div>
-        )}
+        }
         {txState === 'approveCompleted' && (
           <button
             onClick={() => setTxState('none')}
