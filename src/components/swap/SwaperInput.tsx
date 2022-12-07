@@ -7,10 +7,11 @@ interface SwaperInputProps {
   children?: any
   disabled?: boolean
   decimals: number
+  maxBalance: string
   handleChange: (elem: string) => void
 }
 
-const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, children = <></>, disabled = false, decimals }) => {
+const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, children = <></>, disabled = false, decimals, maxBalance }) => {
   return (
     <div className="w-full flex flex-col gap-1">
       <div
@@ -24,7 +25,13 @@ const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, chil
           disabled={disabled}
           className="w-full bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
         />
-        <div className="flex justify-around mx-4 my-2 px-2 ml-auto bg-damgray rounded-3xl" style={{ minWidth: '120px' }}>
+        <button
+          onClick={() => handleChange(utils.unbeautifyNumber(maxBalance, decimals))}
+          className="flex items-center gap-2 rounded-full px-4 my-4 mr-4 bg-yellow-400 bg-opacity-5 text-yellow-300 hover:bg-opacity-10 ml-auto"
+        >
+          <span>MAX</span>
+        </button>
+        <div className="flex justify-around mr-4 my-2 px-2 bg-damgray rounded-3xl" style={{ minWidth: '120px' }}>
           <img className="py-2 pr-1" src={coin.imgUrl} style={{ maxHeight: '48px', maxWidth: '48px' }} alt="selected coin" />
           <div className="flex items-center pr-4 text-md">{coin.symbol}</div>
         </div>
