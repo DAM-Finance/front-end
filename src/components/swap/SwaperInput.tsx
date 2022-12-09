@@ -6,12 +6,12 @@ interface SwaperInputProps {
   coin: ISupportedToken
   children?: any
   disabled?: boolean
-  decimals: number
+  maxDecimals: number
   maxBalance: string
   handleChange: (elem: string) => void
 }
 
-const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, children = <></>, disabled = false, decimals, maxBalance }) => {
+const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, children = <></>, disabled = false, maxDecimals, maxBalance }) => {
   return (
     <div className="w-full flex flex-col gap-1">
       <div
@@ -20,13 +20,13 @@ const SwaperInput: FC<SwaperInputProps> = ({ value = 0, coin, handleChange, chil
       >
         <input
           value={utils.beautifyNumber(value)}
-          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value, decimals))}
+          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value, maxDecimals))}
           type="string"
           disabled={disabled}
           className="w-full bg-damdarkgray p-4 text-2xl border-damdarkgray outline-none border-none rounded-2xl"
         />
         <button
-          onClick={() => handleChange(utils.unbeautifyNumber(maxBalance, decimals))}
+          onClick={() => handleChange(utils.unbeautifyNumber(maxBalance, maxDecimals))}
           className="flex items-center gap-2 rounded-full px-4 my-4 mr-4 bg-yellow-400 bg-opacity-5 text-yellow-300 hover:bg-opacity-10 ml-auto"
         >
           <span>MAX</span>

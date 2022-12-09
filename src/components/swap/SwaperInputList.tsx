@@ -10,6 +10,7 @@ interface SwaperInputListProps {
   selectedCoin: Coin
   children?: any
   disabled?: boolean
+  maxDecimals: number
   handleChange: (elem: string) => void
   handleListChange: (coin: Coin) => void
 }
@@ -20,10 +21,19 @@ export interface Coin {
   tokenJoin: keyof ISupportedNetworkAddresses
   icon: string
   balance: string
-  decimals: 6
+  decimals: number
 }
 
-const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selectedCoin, handleChange, handleListChange, children, disabled = false }) => {
+const SwaperInputList: FC<SwaperInputListProps> = ({
+  value = '0',
+  coins,
+  selectedCoin,
+  maxDecimals,
+  handleChange,
+  handleListChange,
+  children,
+  disabled = false
+}) => {
   const appStore = useAppStore()
   const changeSelected = (ev: any) => {
     const selectedCoin = coins.find((coin) => coin.name === ev.target.value) || coins[0]
@@ -39,13 +49,13 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
       >
         <input
           value={utils.beautifyNumber(value)}
-          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value, selectedCoin.decimals))}
+          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value, maxDecimals))}
           type="string"
           disabled={disabled}
           className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
         />
         <button
-          onClick={() => handleChange(utils.unbeautifyNumber(appStore.balances[selectedCoin.balancesMapper], selectedCoin.decimals))}
+          onClick={() => handleChange(utils.unbeautifyNumber(appStore.balances[selectedCoin.balancesMapper], maxDecimals))}
           className="flex items-center gap-2 rounded-full px-4 my-4 mr-4 bg-yellow-400 bg-opacity-5 text-yellow-300 hover:bg-opacity-10 ml-auto"
         >
           <span>MAX</span>

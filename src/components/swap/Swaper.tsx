@@ -122,6 +122,10 @@ const Swaper: FC = () => {
     return Number(firstCoin) <= 0
   }
 
+  const getMaxDecimals = () => {
+    return Math.min(supportedTokens.dPrime.units, selectedStableCoin.decimals)
+  }
+
   const isAboveBalance = () => {
     const balance = isInverted ? dPrimeBalance : usdcBalance
     return Number(firstCoin) > Number(balance)
@@ -175,6 +179,7 @@ const Swaper: FC = () => {
           coins={stableCoins}
           selectedCoin={selectedStableCoin}
           handleChange={updateBothInputs}
+          maxDecimals={getMaxDecimals()}
           handleListChange={(coin) => setSelectedStableCoin(coin)}
         >
           <div className="">
@@ -182,13 +187,7 @@ const Swaper: FC = () => {
           </div>
         </SwaperInputList>
       ) : (
-        <SwaperInput
-          handleChange={updateBothInputs}
-          coin={supportedTokens.dPrime}
-          value={secondCoin}
-          decimals={supportedTokens.dPrime.units}
-          maxBalance={dPrimeBalance}
-        >
+        <SwaperInput handleChange={updateBothInputs} coin={supportedTokens.dPrime} value={secondCoin} maxDecimals={getMaxDecimals()} maxBalance={dPrimeBalance}>
           <SwaperBalance balance={dPrimeBalance} rightAligned={false} decimals={2}></SwaperBalance>
         </SwaperInput>
       )}
@@ -207,7 +206,7 @@ const Swaper: FC = () => {
           coin={supportedTokens.dPrime}
           value={secondCoin}
           disabled={true}
-          decimals={supportedTokens.dPrime.units}
+          maxDecimals={getMaxDecimals()}
           maxBalance={dPrimeBalance}
         >
           <SwapperBalanceWithFees available={dPrimeBalance} children={gasDetails} gasPrice={gasPrice} decimals={2}></SwapperBalanceWithFees>
@@ -220,6 +219,7 @@ const Swaper: FC = () => {
           handleChange={updateBothInputs}
           handleListChange={(coin) => setSelectedStableCoin(coin)}
           disabled={true}
+          maxDecimals={getMaxDecimals()}
         >
           <div className="">
             <SwapperBalanceWithFees available={usdcBalance} children={gasDetails} gasPrice={gasPrice} decimals={2}></SwapperBalanceWithFees>
