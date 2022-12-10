@@ -56,7 +56,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({
         />
         <button
           onClick={() => handleChange(utils.unbeautifyNumber(appStore.balances[selectedCoin.balancesMapper], maxDecimals))}
-          className="flex items-center gap-2 rounded-full px-4 my-4 mr-4 bg-yellow-400 bg-opacity-5 text-yellow-300 hover:bg-opacity-10 ml-auto"
+          className="flex items-center gap-2 rounded-full px-4 my-4 mr-2 bg-yellow-400 bg-opacity-5 text-yellow-300 hover:bg-opacity-10 ml-auto"
         >
           <span>MAX</span>
         </button>

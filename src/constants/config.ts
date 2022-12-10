@@ -99,7 +99,7 @@ export const supportedTokens: ISupportedTokensMap = {
     name: 'Deuterium',
     symbol: 'd2O',
     units: 18,
-    imgUrl: 'https://i.imgur.com/kck4tX2.jpeg',
+    imgUrl: 'dam-logo-rounded.png',
     bytes: '0x0'
   },
   usdc: {
