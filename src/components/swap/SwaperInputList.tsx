@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { ISupportedNetworkAddresses } from '../../constants/ISupportedNetworks'
 import utils from '../../constants/utils'
+import { useAppStore } from '../../stores/appStore/appStore'
 import { IBalances } from '../../stores/appStore/IBalances'
 
 interface SwaperInputListProps {
@@ -9,6 +10,7 @@ interface SwaperInputListProps {
   selectedCoin: Coin
   children?: any
   disabled?: boolean
+  maxDecimals: number
   handleChange: (elem: string) => void
   handleListChange: (coin: Coin) => void
 }
@@ -19,9 +21,20 @@ export interface Coin {
   tokenJoin: keyof ISupportedNetworkAddresses
   icon: string
   balance: string
+  decimals: number
 }
 
-const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selectedCoin, handleChange, handleListChange, children, disabled = false }) => {
+const SwaperInputList: FC<SwaperInputListProps> = ({
+  value = '0',
+  coins,
+  selectedCoin,
+  maxDecimals,
+  handleChange,
+  handleListChange,
+  children,
+  disabled = false
+}) => {
+  const appStore = useAppStore()
   const changeSelected = (ev: any) => {
     const selectedCoin = coins.find((coin) => coin.name === ev.target.value) || coins[0]
     handleListChange(selectedCoin)
@@ -36,12 +49,18 @@ const SwaperInputList: FC<SwaperInputListProps> = ({ value = '0', coins, selecte
       >
         <input
           value={utils.beautifyNumber(value)}
-          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value))}
+          onChange={(ev) => handleChange(utils.unbeautifyNumber(ev.target.value, maxDecimals))}
           type="string"
           disabled={disabled}
           className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
         />
-        <div className="flex mx-4 my-2 px-2 ml-auto bg-damgray rounded-3xl">
+        <button
+          onClick={() => handleChange(utils.unbeautifyNumber(appStore.balances[selectedCoin.balancesMapper], maxDecimals))}
+          className="flex items-center gap-2 rounded-full px-4 my-4 mr-2 bg-yellow-400 bg-opacity-5 text-yellow-300 hover:bg-opacity-10 ml-auto"
+        >
+          <span>MAX</span>
+        </button>
+        <div className="flex mr-4 my-2 px-2 bg-damgray rounded-3xl" style={{ minWidth: '120px' }}>
           <img className="py-2 pr-1" src={selectedCoin.icon} style={{ maxHeight: '48px' }} alt="selected coin" />
           <select className="bg-transparent outline-none" value={selectedCoin.name} onChange={changeSelected} disabled={disabled} name="coins" id="coins">
             {coins?.map((coin) => (

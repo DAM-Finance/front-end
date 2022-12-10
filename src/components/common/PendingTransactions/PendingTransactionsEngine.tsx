@@ -14,8 +14,11 @@ import {
   scanNonceMask,
   scanOriginLzIdMask,
   scanOriginLzPipeMask,
-  supportedNetworks
+  supportedNetworks,
+  supportedTokens
 } from '../../../constants/config'
+const moveDecimal = require('move-decimal-point')
+const BN = require('bn.js')
 // import PendingTransaction from './PendingTransaction'
 
 const client = createClient('testnet')
@@ -66,28 +69,32 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           transaction.status = message.status
           transaction.lzData = message
 
-          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)
+          const originChain = supportedNetworks.find((net) => net.chainId === transaction.from?.chainId)!
+          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)!
           let url = appStore.selectedNetwork!.scanLz
-          url = url.replace(scanOriginLzIdMask, appStore.selectedNetwork!.layerZeroChainIds)
-          url = url.replace(scanOriginLzPipeMask, appStore.selectedNetwork!.addresses.lzPipe!)
-          url = url.replace(scanDestinationLzIdMask, dstChain!.layerZeroChainIds)
-          url = url.replace(scanDestinationLzPipeMask, dstChain!.addresses.lzPipe!)
+          url = url.replace(scanOriginLzIdMask, originChain.layerZeroChainIds)
+          url = url.replace(scanOriginLzPipeMask, originChain.addresses.lzPipe!)
+          url = url.replace(scanDestinationLzIdMask, dstChain.layerZeroChainIds)
+          url = url.replace(scanDestinationLzPipeMask, dstChain.addresses.lzPipe!)
           url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
           transaction.lzScan = url
 
           appStore.setNotifyTransaction(transaction)
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
           appStore.setPendingTransactions([...txs, transaction])
+          await appStore.updateTokenBalance('dPrime')
         }
         if (isDev) {
-          const balance = appStore.balances.dPrime
-          const newBalance = await appStore.getTokenBalance('dPrime')
-          const diff = Number(newBalance) - Number(balance)
-          console.log({ diff })
-          if (diff === 0) {
+          const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
+          const dPrimeBalance = await appStore.getTokenBalance('dPrime')
+          const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)
+          const newBalanceBN = new BN(newBalance, 10)
+          const diff = newBalanceBN.sub(new BN(balance, 10))
+          if (diff.eq(new BN('0'))) {
             return
           }
-          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === diff.toString())
+          const transferValue: string = moveDecimal(diff.toString(), -supportedTokens.dPrime.units)
+          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue)
           if (!foundTx) {
             return
           }
@@ -96,6 +103,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           appStore.setNotifyTransaction(txUpdate)
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
           appStore.setPendingTransactions([...txs, txUpdate])
+          await appStore.updateTokenBalance('dPrime')
           setShowDevSwitch(true)
         }
       } catch (err) {
@@ -180,7 +188,10 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
       ></TransactionInProgressPopup>
 
       <TransactionInProgressPopup
-        handleClose={() => appStore.setNotifyTransaction(null)}
+        handleClose={() => {
+          appStore.setNotifyTransaction(null)
+          setShowDevSwitch(true)
+        }}
         show={showTeleportInflight()}
         message="Step 2/3: Teleportation in flight between origin and destination! ETA is 15 minutes."
         txLink={appStore.notifyTransaction?.lzScan || ''}
@@ -208,9 +219,9 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           <div className="pt-4 text-sm text-damlabelgray">
             <span>Please reach out on </span>
             <a href="https://discord.com/invite/FqzSeEzhNS" target="_blank" rel="noreferrer">
-              <span>Discord </span>
+              <span style={{ textDecoration: 'underline' }}>Discord</span>
             </a>
-            <span>with any issues.</span>
+            <span> with any issues.</span>
           </div>
         )}
       </TransactionInProgressPopup>

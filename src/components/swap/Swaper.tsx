@@ -1,7 +1,7 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { supportedNetworks } from '../../constants/config'
+import { supportedNetworks, supportedTokens } from '../../constants/config'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -23,7 +23,7 @@ const Swaper: FC = () => {
   const dPrimeBalance = appStore.balances.dPrime
   const usdcBalance = appStore.balances.usdc
   const [stableCoins] = useState<Coin[]>([
-    { name: 'USDC', balancesMapper: 'usdc', tokenJoin: 'usdcJoin', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance }
+    { name: 'USDC', balancesMapper: 'usdc', tokenJoin: 'usdcJoin', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance, decimals: 6 }
     // { name: 'DAI', balancesMapper: 'usdc', icon: utils.getImageSrc('DAI.svg'), balance: '0.0' }
   ])
 
@@ -36,6 +36,7 @@ const Swaper: FC = () => {
   const [txState, setTxState] = useState<ITxState>()
   const [txLink, setTxLink] = useState('')
   const [hideUnsupported, setHideUnsupported] = useState(false)
+  const swapLabel: string = isInverted ? 'Burn d2O' : 'Mint d2O'
 
   const isNetworkUnsupported = () => {
     const isSupported = supportedNetworks.findIndex((network) => network.chainId === appStore.selectedNetwork?.chainId) > -1
@@ -95,10 +96,11 @@ const Swaper: FC = () => {
   const swap = async (amount: string) => {
     try {
       let swapCall
+      const isMint = !isInverted
 
-      if (!isInverted) {
+      if (isMint) {
         swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', amount)
-      } else if (isInverted) {
+      } else {
         swapCall = appStore.swapDPrimeToStable('usdc', 'usdcPSM', amount)
       }
 
@@ -108,7 +110,7 @@ const Swaper: FC = () => {
       setTxLink(link)
       setTxState('inprogress')
       await tx.wait()
-      setTxState('completed')
+      setTxState(isMint ? 'mintCompleted' : 'burnCompleted')
       appStore.updateBalances()
     } catch (err) {
       setTxState('failed')
@@ -118,6 +120,10 @@ const Swaper: FC = () => {
 
   const isBelowZero = () => {
     return Number(firstCoin) <= 0
+  }
+
+  const getMaxDecimals = () => {
+    return Math.min(supportedTokens.dPrime.units, selectedStableCoin.decimals)
   }
 
   const isAboveBalance = () => {
@@ -173,6 +179,7 @@ const Swaper: FC = () => {
           coins={stableCoins}
           selectedCoin={selectedStableCoin}
           handleChange={updateBothInputs}
+          maxDecimals={getMaxDecimals()}
           handleListChange={(coin) => setSelectedStableCoin(coin)}
         >
           <div className="">
@@ -180,7 +187,7 @@ const Swaper: FC = () => {
           </div>
         </SwaperInputList>
       ) : (
-        <SwaperInput handleChange={updateBothInputs} coin={'d2O'} value={secondCoin}>
+        <SwaperInput handleChange={updateBothInputs} coin={supportedTokens.dPrime} value={secondCoin} maxDecimals={getMaxDecimals()} maxBalance={dPrimeBalance}>
           <SwaperBalance balance={dPrimeBalance} rightAligned={false} decimals={2}></SwaperBalance>
         </SwaperInput>
       )}
@@ -194,7 +201,14 @@ const Swaper: FC = () => {
       </button>
 
       {!isInverted ? (
-        <SwaperInput handleChange={updateBothInputs} coin={'d2O'} value={secondCoin} disabled={true}>
+        <SwaperInput
+          handleChange={updateBothInputs}
+          coin={supportedTokens.dPrime}
+          value={secondCoin}
+          disabled={true}
+          maxDecimals={getMaxDecimals()}
+          maxBalance={dPrimeBalance}
+        >
           <SwapperBalanceWithFees available={dPrimeBalance} children={gasDetails} gasPrice={gasPrice} decimals={2}></SwapperBalanceWithFees>
         </SwaperInput>
       ) : (
@@ -205,6 +219,7 @@ const Swaper: FC = () => {
           handleChange={updateBothInputs}
           handleListChange={(coin) => setSelectedStableCoin(coin)}
           disabled={true}
+          maxDecimals={getMaxDecimals()}
         >
           <div className="">
             <SwapperBalanceWithFees available={usdcBalance} children={gasDetails} gasPrice={gasPrice} decimals={2}></SwapperBalanceWithFees>
@@ -226,7 +241,7 @@ const Swaper: FC = () => {
               disabled
               className="flex items-center w-full justify-center rounded-full py-3 px-6  bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow cursor-not-allowed font-bold opacity-50"
             >
-              <span>Swap</span>
+              <span>{swapLabel}</span>
             </button>
           </>
         )}
@@ -237,7 +252,7 @@ const Swaper: FC = () => {
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isBelowZero() || isAboveBalance()}
           >
-            <span>{isAboveBalance() ? 'Insuficient balance' : 'Swap'}</span>
+            <span>{isAboveBalance() ? 'Insuficient balance' : swapLabel}</span>
           </button>
         )}
 
@@ -247,7 +262,7 @@ const Swaper: FC = () => {
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={true}
           >
-            <span>Swap</span>
+            <span>{swapLabel}</span>
           </button>
         )}
 
@@ -269,19 +284,37 @@ const Swaper: FC = () => {
       ></InfoPopupWithNetwork>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
       <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
-      <TransactionCompletedPopup handleClose={() => setTxState('none')} show={txState === 'completed' || txState === 'approveCompleted'} txLink={txLink}>
-        {txState === 'completed' && (
+      <TransactionCompletedPopup
+        handleClose={() => setTxState('none')}
+        show={['mintCompleted', 'burnCompleted', 'approveCompleted'].includes(txState!)}
+        txLink={txLink}
+      >
+        <></>
+        {
           <div className="flex flex-col gap-2 pt-6">
-            <div className="text-md text-damlabelgray">
-              <span>Want to teleport your d2O to a different network?</span>
-            </div>
-            <NavLink to="/teleport">
-              <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
-                <span>Teleport</span>
+            {txState === 'mintCompleted' && (
+              <>
+                <div className="text-md text-damlabelgray">
+                  <span>Want to teleport your d2O to a different network?</span>
+                </div>
+
+                <NavLink to="/teleport">
+                  <button className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
+                    <span>Teleport</span>
+                  </button>
+                </NavLink>
+              </>
+            )}
+            {txState === 'burnCompleted' && (
+              <button
+                onClick={() => setTxState('none')}
+                className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
+              >
+                <span>Done</span>
               </button>
-            </NavLink>
+            )}
           </div>
-        )}
+        }
         {txState === 'approveCompleted' && (
           <button
             onClick={() => setTxState('none')}
