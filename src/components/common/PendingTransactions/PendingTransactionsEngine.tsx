@@ -17,6 +17,7 @@ import {
   supportedNetworks,
   supportedTokens
 } from '../../../constants/config'
+const moveDecimal = require('move-decimal-point')
 const BN = require('bn.js')
 // import PendingTransaction from './PendingTransaction'
 
@@ -84,17 +85,16 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           await appStore.updateTokenBalance('dPrime')
         }
         if (isDev) {
-          const dPrimeDecimalsPower = Math.pow(10, supportedTokens.dPrime.units)
-          const balance = (Number(appStore.balances.dPrime) * dPrimeDecimalsPower).toString()
+          const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
           const dPrimeBalance = await appStore.getTokenBalance('dPrime')
-          const newBalance = (Number(dPrimeBalance) * dPrimeDecimalsPower).toString()
+          const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)
           const newBalanceBN = new BN(newBalance, 10)
           const diff = newBalanceBN.sub(new BN(balance, 10))
           if (diff.eq(new BN('0'))) {
             return
           }
-          const transferValue = Number(diff.toString()) / dPrimeDecimalsPower
-          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue.toString())
+          const transferValue: string = moveDecimal(diff.toString(), -supportedTokens.dPrime.units)
+          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue)
           if (!foundTx) {
             return
           }

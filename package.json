@@ -11,6 +11,7 @@
     "bn.js": "^5.2.1",
     "ethers": "^5.6.9",
     "immer": "^9.0.15",
+    "move-decimal-point": "0.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
