@@ -14,8 +14,10 @@ import {
   scanNonceMask,
   scanOriginLzIdMask,
   scanOriginLzPipeMask,
-  supportedNetworks
+  supportedNetworks,
+  supportedTokens
 } from '../../../constants/config'
+const BN = require('bn.js')
 // import PendingTransaction from './PendingTransaction'
 
 const client = createClient('testnet')
@@ -66,12 +68,13 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           transaction.status = message.status
           transaction.lzData = message
 
-          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)
+          const originChain = supportedNetworks.find((net) => net.chainId === transaction.from?.chainId)!
+          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)!
           let url = appStore.selectedNetwork!.scanLz
-          url = url.replace(scanOriginLzIdMask, appStore.selectedNetwork!.layerZeroChainIds)
-          url = url.replace(scanOriginLzPipeMask, appStore.selectedNetwork!.addresses.lzPipe!)
-          url = url.replace(scanDestinationLzIdMask, dstChain!.layerZeroChainIds)
-          url = url.replace(scanDestinationLzPipeMask, dstChain!.addresses.lzPipe!)
+          url = url.replace(scanOriginLzIdMask, originChain.layerZeroChainIds)
+          url = url.replace(scanOriginLzPipeMask, originChain.addresses.lzPipe!)
+          url = url.replace(scanDestinationLzIdMask, dstChain.layerZeroChainIds)
+          url = url.replace(scanDestinationLzPipeMask, dstChain.addresses.lzPipe!)
           url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
           transaction.lzScan = url
 
@@ -81,13 +84,17 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           await appStore.updateTokenBalance('dPrime')
         }
         if (isDev) {
-          const balance = appStore.balances.dPrime
-          const newBalance = await appStore.getTokenBalance('dPrime')
-          const diff = Number(newBalance) - Number(balance)
-          if (diff === 0) {
+          const dPrimeDecimalsPower = Math.pow(10, supportedTokens.dPrime.units)
+          const balance = (Number(appStore.balances.dPrime) * dPrimeDecimalsPower).toString()
+          const dPrimeBalance = await appStore.getTokenBalance('dPrime')
+          const newBalance = (Number(dPrimeBalance) * dPrimeDecimalsPower).toString()
+          const newBalanceBN = new BN(newBalance, 10)
+          const diff = newBalanceBN.sub(new BN(balance, 10))
+          if (diff.eq(new BN('0'))) {
             return
           }
-          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === diff.toString())
+          const transferValue = Number(diff.toString()) / dPrimeDecimalsPower
+          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue.toString())
           if (!foundTx) {
             return
           }
