@@ -18,7 +18,7 @@ const Navbar: FC<NavbarProps> = () => {
   const [dprimeAddedToWalletByNetwork, setDprimeAddedToWalletByNetwork] = useState(
     JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
   )
-  const isDprimeAdded = !!appStore.selectedNetwork && !!dprimeAddedToWalletByNetwork && dprimeAddedToWalletByNetwork[appStore.selectedNetwork.id]
+  const isDprimeAdded = !!appStore.selectedNetwork && !!dprimeAddedToWalletByNetwork && dprimeAddedToWalletByNetwork[appStore.selectedNetwork.addresses.dPrime]
 
   return (
     <nav className="flex items-center flex-wrap gap-12 bg-damgray px-4 md:px-24 py-5">

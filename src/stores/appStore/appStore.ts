@@ -269,7 +269,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       supportedTokens.dPrime.imgUrl
     )
     const dprimeAddedWallet = JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
-    dprimeAddedWallet[get().selectedNetwork!.id] = true
+    dprimeAddedWallet[get().selectedNetwork!.addresses.dPrime] = true
     localStorage.setItem(localStorageObjects.DPrimeAddedWallet, JSON.stringify(dprimeAddedWallet))
     return dprimeAddedWallet
   },
