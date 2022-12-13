@@ -52,9 +52,9 @@ const App = () => {
   return (
     <>
       <PendingTransactionsEngine></PendingTransactionsEngine>
-      <div className="flex flex-col w-full h-screen bg-damdarkgray">
+      <div className="flex flex-col w-full h-full bg-damdarkgray">
         <Navbar />
-        <div className="w-full relative" style={{ height: 'calc(100vh - 80px)' }}>
+        <div className="w-full h-full relative">
           <PendingTransactionsList></PendingTransactionsList>
           <Routes />
         </div>
