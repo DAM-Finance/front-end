@@ -2,6 +2,7 @@ import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { supportedNetworks, supportedTokens } from '../../constants/config'
+import { IPendingTransaction } from '../../constants/IPendingTransaction'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
@@ -23,8 +24,16 @@ const Swaper: FC = () => {
   const dPrimeBalance = appStore.balances.dPrime
   const usdcBalance = appStore.balances.usdc
   const [stableCoins] = useState<Coin[]>([
-    { name: 'USDC', balancesMapper: 'usdc', tokenJoin: 'usdcJoin', icon: utils.getImageSrc('usdc.svg'), balance: usdcBalance, decimals: 6 }
-    // { name: 'DAI', balancesMapper: 'usdc', icon: utils.getImageSrc('DAI.svg'), balance: '0.0' }
+    {
+      name: 'USDC',
+      balancesMapper: 'usdc',
+      tokenJoin: 'usdcJoin',
+      tokenPSM: 'usdcPSM',
+      icon: utils.getImageSrc('usdc.svg'),
+      balance: usdcBalance,
+      decimals: 6,
+      symbol: 'usdc'
+    }
   ])
 
   const [firstCoin, setFirstCoin] = useState('0')
@@ -98,18 +107,49 @@ const Swaper: FC = () => {
       let swapCall
       const isMint = !isInverted
 
+      const pendingTransaction: IPendingTransaction = {
+        hash: '',
+        status: 'INFLIGHT',
+        type: 'SWAP',
+        startedAt: new Date()
+      }
+      const dPrimeDetails = {
+        amount: amount,
+        token: supportedTokens.dPrime.symbol,
+        networkImg: appStore.selectedNetwork!.iconName,
+        network: appStore.selectedNetwork!.name,
+        chainId: appStore.selectedNetwork!.chainId
+      }
+      const stableDetails = {
+        amount: amount,
+        token: selectedStableCoin.symbol,
+        networkImg: appStore.selectedNetwork!.iconName,
+        network: appStore.selectedNetwork!.name,
+        chainId: appStore.selectedNetwork!.chainId
+      }
+
       if (isMint) {
-        swapCall = appStore.swapStableToDPrime('usdc', 'usdcPSM', amount)
+        swapCall = appStore.swapStableToDPrime(selectedStableCoin.symbol, selectedStableCoin.tokenPSM, amount)
+        pendingTransaction.from = stableDetails
+        pendingTransaction.to = dPrimeDetails
       } else {
-        swapCall = appStore.swapDPrimeToStable('usdc', 'usdcPSM', amount)
+        swapCall = appStore.swapDPrimeToStable(selectedStableCoin.symbol, selectedStableCoin.tokenPSM, amount)
+        pendingTransaction.from = dPrimeDetails
+        pendingTransaction.to = stableDetails
       }
 
       setTxState('waiting')
       const tx = await swapCall
+      pendingTransaction.hash = tx.hash
+      appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
       const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
       setTxLink(link)
       setTxState('inprogress')
       await tx.wait()
+      const txUpdate = { ...pendingTransaction }
+      txUpdate.status = 'DELIVERED'
+      const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
+      appStore.setPendingTransactions([...txs, txUpdate])
       setTxState(isMint ? 'mintCompleted' : 'burnCompleted')
       appStore.updateBalances()
     } catch (err) {

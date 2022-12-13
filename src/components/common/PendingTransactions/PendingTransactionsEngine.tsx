@@ -17,9 +17,9 @@ import {
   supportedNetworks,
   supportedTokens
 } from '../../../constants/config'
+import { ISupportedTokensMap } from '../../../constants/ISupportedToken'
 const moveDecimal = require('move-decimal-point')
 const BN = require('bn.js')
-// import PendingTransaction from './PendingTransaction'
 
 const client = createClient('testnet')
 
@@ -38,6 +38,102 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
     return () => clearInterval(interval)
   }, [])
 
+  const handleTeleport = useCallback(
+    async (transaction: IPendingTransaction) => {
+      if (transaction.status === 'REQUESTING') {
+        const txReceipt = await appStore.walletProvider.web3Provider!.waitForTransaction(transaction.hash)
+        console.log({ txReceipt })
+        if (txReceipt.status === 1) {
+          transaction.status = 'INFLIGHT'
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+          appStore.setNotifyTransaction(transaction)
+          appStore.setPendingTransactions([...txs, transaction])
+        } else {
+          transaction.status = 'FAILED'
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+          appStore.setNotifyTransaction(transaction)
+          appStore.setPendingTransactions([...txs])
+          return
+        }
+      }
+
+      const res = await client.getMessagesBySrcTxHash(transaction.hash)
+      if (appStore.selectedNetwork && res.messages && res.messages.length && (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)) {
+        const message = res.messages[0]
+        transaction.status = message.status
+        transaction.lzData = message
+
+        const originChain = supportedNetworks.find((net) => net.chainId === transaction.from?.chainId)!
+        const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)!
+        let url = appStore.selectedNetwork!.scanLz
+        url = url.replace(scanOriginLzIdMask, originChain.layerZeroChainIds)
+        url = url.replace(scanOriginLzPipeMask, originChain.addresses.lzPipe!)
+        url = url.replace(scanDestinationLzIdMask, dstChain.layerZeroChainIds)
+        url = url.replace(scanDestinationLzPipeMask, dstChain.addresses.lzPipe!)
+        url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
+        transaction.lzScan = url
+
+        appStore.setNotifyTransaction(transaction)
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+        appStore.setPendingTransactions([...txs, transaction])
+        await appStore.updateTokenBalance('dPrime')
+      }
+      if (isDev) {
+        const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
+        const dPrimeBalance = await appStore.getTokenBalance('dPrime')
+        const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)
+        const newBalanceBN = new BN(newBalance, 10)
+        const diff = newBalanceBN.sub(new BN(balance, 10))
+        if (diff.eq(new BN('0'))) {
+          return
+        }
+        const transferValue: string = moveDecimal(diff.toString(), -supportedTokens.dPrime.units)
+        const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue)
+        if (!foundTx) {
+          return
+        }
+        const txUpdate = { ...foundTx }
+        txUpdate.status = 'DELIVERED'
+        appStore.setNotifyTransaction(txUpdate)
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
+        appStore.setPendingTransactions([...txs, txUpdate])
+        await appStore.updateTokenBalance('dPrime')
+        setShowDevSwitch(true)
+      }
+    },
+    [appStore]
+  )
+
+  const handleSwap = useCallback(
+    async (transaction: IPendingTransaction) => {
+      if (!appStore.walletProvider.web3Provider) {
+        return
+      }
+
+      const receipt = await appStore.walletProvider.web3Provider.getTransactionReceipt(transaction.hash)
+      if (!receipt) {
+        return
+      }
+
+      if (receipt.status === 1) {
+        transaction.status = 'DELIVERED'
+      } else if (receipt.status === 0) {
+        transaction.status = 'FAILED'
+      }
+      const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+      appStore.setPendingTransactions([...txs, transaction])
+      await appStore.updateTokenBalance(transaction.from?.token as keyof ISupportedTokensMap)
+      await appStore.updateTokenBalance(transaction.from?.token as keyof ISupportedTokensMap)
+
+      if (['DELIVERED', 'FAILED'].includes(transaction.status)) {
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+        appStore.setPendingTransactions(txs)
+        return
+      }
+    },
+    [appStore]
+  )
+
   const processTransaction = useCallback(
     async (pendingTransaction: IPendingTransaction) => {
       try {
@@ -55,62 +151,17 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           appStore.setPendingTransactions(txs)
           return
         }
-        if (transaction.status === 'REQUESTING') {
-          await appStore.walletProvider.web3Provider!.waitForTransaction(transaction.hash)
-          transaction.status = 'INFLIGHT'
-          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
-          appStore.setNotifyTransaction(transaction)
-          appStore.setPendingTransactions([...txs, transaction])
-        }
 
-        const res = await client.getMessagesBySrcTxHash(transaction.hash)
-        if (appStore.selectedNetwork && res.messages && res.messages.length && (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)) {
-          const message = res.messages[0]
-          transaction.status = message.status
-          transaction.lzData = message
-
-          const originChain = supportedNetworks.find((net) => net.chainId === transaction.from?.chainId)!
-          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)!
-          let url = appStore.selectedNetwork!.scanLz
-          url = url.replace(scanOriginLzIdMask, originChain.layerZeroChainIds)
-          url = url.replace(scanOriginLzPipeMask, originChain.addresses.lzPipe!)
-          url = url.replace(scanDestinationLzIdMask, dstChain.layerZeroChainIds)
-          url = url.replace(scanDestinationLzPipeMask, dstChain.addresses.lzPipe!)
-          url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
-          transaction.lzScan = url
-
-          appStore.setNotifyTransaction(transaction)
-          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
-          appStore.setPendingTransactions([...txs, transaction])
-          await appStore.updateTokenBalance('dPrime')
-        }
-        if (isDev) {
-          const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
-          const dPrimeBalance = await appStore.getTokenBalance('dPrime')
-          const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)
-          const newBalanceBN = new BN(newBalance, 10)
-          const diff = newBalanceBN.sub(new BN(balance, 10))
-          if (diff.eq(new BN('0'))) {
-            return
-          }
-          const transferValue: string = moveDecimal(diff.toString(), -supportedTokens.dPrime.units)
-          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue)
-          if (!foundTx) {
-            return
-          }
-          const txUpdate = { ...foundTx }
-          txUpdate.status = 'DELIVERED'
-          appStore.setNotifyTransaction(txUpdate)
-          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
-          appStore.setPendingTransactions([...txs, txUpdate])
-          await appStore.updateTokenBalance('dPrime')
-          setShowDevSwitch(true)
+        if (transaction.type === 'TELEPORT') {
+          handleTeleport(transaction)
+        } else if (transaction.type === 'SWAP') {
+          handleSwap(transaction)
         }
       } catch (err) {
         console.error(err)
       }
     },
-    [appStore]
+    [appStore, handleTeleport, handleSwap]
   )
 
   const processPendingTasks = useCallback(() => {
