@@ -1,6 +1,4 @@
 import { FC } from 'react'
-import utils from '../../constants/utils'
-import { useAppStore } from '../../stores/appStore/appStore'
 
 const MoreLinks: FC = () => {
   // const appStore = useAppStore()
