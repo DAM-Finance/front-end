@@ -9,6 +9,7 @@ import AddDPrimeToWallet from '../../wallet/AddDPrimeToWallet'
 import { localStorageObjects } from '../../../constants/persist'
 import PendingTransactionsWidget from '../../transactions/PendingTramsactionsWidget'
 import DownloadWalletButton from '../../wallet/DownloadWalletButton'
+import MoreLinks from '../../wallet/MoreLinks'
 
 interface NavbarProps {}
 
@@ -51,6 +52,7 @@ const Navbar: FC<NavbarProps> = () => {
             <SwitchNetworkSelector />
             <ConnectButton />
             <DownloadWalletButton />
+            <MoreLinks></MoreLinks>
           </>
         )}
       </div>
