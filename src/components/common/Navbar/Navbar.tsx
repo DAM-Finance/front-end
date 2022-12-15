@@ -47,12 +47,12 @@ const Navbar: FC<NavbarProps> = () => {
         {!appStore.walletProvider.loading && (
           <>
             {/* <TVLButton /> */}
+            <MoreLinks></MoreLinks>
             <PendingTransactionsWidget></PendingTransactionsWidget>
             {!isDprimeAdded && <AddDPrimeToWallet></AddDPrimeToWallet>}
             <SwitchNetworkSelector />
             <ConnectButton />
             <DownloadWalletButton />
-            <MoreLinks></MoreLinks>
           </>
         )}
       </div>

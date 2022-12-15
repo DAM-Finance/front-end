@@ -49,7 +49,10 @@ export interface IAppStore {
   setWalletProvider: (wallet: Partial<IWalletProvider>) => void
 
   ensureConnected: () => void
+
   connectWallet: () => void
+  disconnectWallet: () => void
+
   switchNetwork: (chainId: string) => Promise<any>
   attachContracts: () => void
   refreshSelectedNetwork: () => void

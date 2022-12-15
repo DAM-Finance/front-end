@@ -180,6 +180,13 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       }
     }
   },
+  disconnectWallet: async () => {
+    try {
+      get().setWalletProvider({ accounts: [] })
+    } catch (err: any) {
+      console.error(err)
+    }
+  },
   refreshSelectedNetwork: async () => {
     const network = await get().walletProvider!.web3Provider!.getNetwork() // update network?
     const selectedNetwork = supportedNetworks.find((supportedNetwork) => supportedNetwork.id === network.chainId)
