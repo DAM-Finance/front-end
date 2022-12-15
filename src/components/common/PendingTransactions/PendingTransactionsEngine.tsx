@@ -244,7 +244,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           setShowDevSwitch(true)
         }}
         show={showTeleportInflight()}
-        message="Step 2/3: Teleportation in flight between origin and destination! ETA is 15 minutes."
+        message="Step 2/3: Teleportation in flight between origin and destination! It should take 15 minutes."
         txLink={appStore.notifyTransaction?.lzScan || ''}
         imgName="teleport-progress.svg"
       >

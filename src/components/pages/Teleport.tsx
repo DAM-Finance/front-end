@@ -139,11 +139,7 @@ const Teleport: FC = () => {
               <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
                 <div className="flex">
                   <div>Teleport Fee</div>
-                  <div className="ml-auto">{appStore.teleportFees}</div>
-                </div>
-                <div className="flex">
-                  <div>Gas fee</div>
-                  <div className="ml-auto">$0</div>
+                  <div className="ml-auto">{appStore.teleportFees} d2O</div>
                 </div>
               </div>
             </AvailableInput>

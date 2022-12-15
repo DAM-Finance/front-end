@@ -1,7 +1,7 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { supportedNetworks, supportedTokens } from '../../constants/config'
+import { burnFee, supportedNetworks, supportedTokens } from '../../constants/config'
 import { IPendingTransaction } from '../../constants/IPendingTransaction'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
@@ -46,6 +46,7 @@ const Swaper: FC = () => {
   const [txLink, setTxLink] = useState('')
   const [hideUnsupported, setHideUnsupported] = useState(false)
   const swapLabel: string = isInverted ? 'Burn d2O' : 'Mint d2O'
+  const isMint = !isInverted
 
   const isNetworkUnsupported = () => {
     const isSupported = supportedNetworks.findIndex((network) => network.chainId === appStore.selectedNetwork?.chainId) > -1
@@ -105,7 +106,6 @@ const Swaper: FC = () => {
   const swap = async (amount: string) => {
     try {
       let swapCall
-      const isMint = !isInverted
 
       const pendingTransaction: IPendingTransaction = {
         hash: '',
@@ -171,6 +171,15 @@ const Swaper: FC = () => {
     return Number(firstCoin) > Number(balance)
   }
 
+  const calculateBurnFee = () => {
+    return Math.round(burnFee * Number(firstCoin)) / 100
+  }
+
+  const calculateExpectedBurnOutput = () => {
+    const burnFee = calculateBurnFee()
+    return Number(firstCoin) - burnFee
+  }
+
   useEffect(() => {
     const getGasPrice = async () => {
       const web3Provider = appStore.walletProvider?.web3Provider
@@ -192,17 +201,11 @@ const Swaper: FC = () => {
     <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
       <div className="flex">
         <div>Expected Output</div>
-        <div className="ml-auto">
-          {isInverted ? firstCoin : secondCoin} {true ? 'd2O' : selectedStableCoin.name}
-        </div>
+        <div className="ml-auto">{isInverted ? `${calculateExpectedBurnOutput()} d2O` : `${secondCoin} ${selectedStableCoin.name}`}</div>
       </div>
       <div className="flex">
-        <div>Teleport Fee</div>
-        <div className="ml-auto">0 {true ? 'd2O' : selectedStableCoin.name}</div>
-      </div>
-      <div className="flex">
-        <div>Gas fee</div>
-        <div className="ml-auto">$0</div>
+        <div>{isMint ? 'Mint fee' : `Burn fee (${burnFee}%)`}</div>
+        <div className="ml-auto">{isInverted ? `${calculateBurnFee()} d2O` : `0 ${selectedStableCoin.name}`}</div>
       </div>
     </div>
   )

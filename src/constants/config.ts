@@ -110,3 +110,5 @@ export const supportedTokens: ISupportedTokensMap = {
     bytes: ethers.utils.formatBytes32String('PSM-USDC-DAM')
   }
 }
+
+export const burnFee = 0.5
