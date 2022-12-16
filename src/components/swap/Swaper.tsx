@@ -172,12 +172,11 @@ const Swaper: FC = () => {
   }
 
   const calculateBurnFee = () => {
-    return Math.round(burnFee * Number(firstCoin)) / 100
+    return utils.beautifyNumber(Math.round(burnFee * Number(firstCoin)) / 100)
   }
 
   const calculateExpectedBurnOutput = () => {
-    const burnFee = calculateBurnFee()
-    return Number(firstCoin) - burnFee
+    return utils.beautifyNumber(Math.round(Number(firstCoin) * 100 - burnFee * Number(firstCoin)) / 100)
   }
 
   useEffect(() => {
@@ -196,16 +195,15 @@ const Swaper: FC = () => {
 
   checkNeedsApprove()
 
-  // TODO: Fix this
   const gasDetails = (
     <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
       <div className="flex">
         <div>Expected Output</div>
-        <div className="ml-auto">{isInverted ? `${calculateExpectedBurnOutput()} d2O` : `${secondCoin} ${selectedStableCoin.name}`}</div>
+        <div className="ml-auto">{isInverted ? `${calculateExpectedBurnOutput()} ${selectedStableCoin.name}` : `${secondCoin} d2O`}</div>
       </div>
       <div className="flex">
         <div>{isMint ? 'Mint fee' : `Burn fee (${burnFee}%)`}</div>
-        <div className="ml-auto">{isInverted ? `${calculateBurnFee()} d2O` : `0 ${selectedStableCoin.name}`}</div>
+        <div className="ml-auto">{isInverted ? `${calculateBurnFee()} ${selectedStableCoin.name}` : `0 d2O`}</div>
       </div>
     </div>
   )
@@ -323,7 +321,7 @@ const Swaper: FC = () => {
         handleClose={() => setHideUnsupported(true)}
         show={isNetworkUnsupported() && !hideUnsupported}
         title="Unsupported network"
-        description={`Mint is only available on Goerli at this time`}
+        description={`Mint and burn are only available on Goerli at this time`}
       ></InfoPopupWithNetwork>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
       <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>

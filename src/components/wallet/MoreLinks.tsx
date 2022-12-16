@@ -28,7 +28,7 @@ const MoreLinks: FC = () => {
     twitter: { label: 'Twitter', url: 'https://twitter.com/DAM_Finance' },
     telegram: { label: 'Telegram', url: 'https://t.me/damfinance' },
     logout: {
-      label: 'Log out',
+      label: 'Disconnect',
       action: () => {
         appStore.disconnectWallet()
         setShowMenu(false)

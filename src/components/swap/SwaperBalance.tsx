@@ -11,7 +11,7 @@ const SwaperBalance: FC<SwaperBalanceProps> = ({ balance, rightAligned = false, 
   return (
     <div className="flex ml-4 gap-2 text-sm">
       <div className={`text-gray-600 font-light ${rightAligned ? 'ml-auto' : ''}`}>Balance</div>
-      <div className="text-gray-400 pr-4">{utils.format(balance, decimals)}</div>
+      <div className="text-gray-400 pr-4">{utils.beautifyNumber(utils.format(balance, decimals))}</div>
     </div>
   )
 }
