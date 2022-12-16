@@ -26,7 +26,7 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
           <button className="rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">Learn More</button>
         </div>
       </div>
-      <img src={portfolioImg} alt="Portfolio" />
+      <img className="hidden md:block" src={portfolioImg} alt="Portfolio" />
     </div>
   )
 

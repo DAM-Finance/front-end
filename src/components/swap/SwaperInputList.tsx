@@ -56,6 +56,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({
           type="string"
           disabled={disabled}
           className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
+          style={{ width: 'inherit' }}
         />
         <button
           onClick={() => handleChange(utils.unbeautifyNumber(appStore.balances[selectedCoin.balancesMapper], maxDecimals))}

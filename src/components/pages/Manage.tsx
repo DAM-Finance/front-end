@@ -5,7 +5,7 @@ import './Manage.css'
 
 const Manage: FC = () => {
   return (
-    <div className="flex p-4 w-full justify-center py-24 ">
+    <div className="flex p-4 w-full justify-center lg:py-24 py-12 ">
       <div className="flex flex-col gap-6">
         <div className="flex justify-between bg-damtranspgray p-2 rounded-2xl text-gray-500">
           <NavLink className="manage-navbar" to="/manage/borrow">

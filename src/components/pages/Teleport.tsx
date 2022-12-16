@@ -106,7 +106,7 @@ const Teleport: FC = () => {
   }
 
   return (
-    <div className="flex p-4 w-full justify-center py-24">
+    <div className="flex p-4 w-full justify-center lg:py-24 py-12">
       <div className="flex flex-col max-w-7xl gap-6">
         <Disclaimer infoTxt={['Teleport d2O between Ethereum and Polkadot.']}></Disclaimer>
         <div
