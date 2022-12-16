@@ -251,9 +251,9 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
         {isDev && showDevSwitch && (
           <div className="flex flex-col gap-2 pt-4">
             <div className="text-md text-damlabelgray">
-              <span>Switch network </span>
-              <span className="font-bold text-damyellow">now </span>
-              <span>to track teleportation.</span>
+              <span>Switch network to access</span>
+              {/* <span className="font-bold text-damyellow">now </span> */}
+              <span> your teleported d2O</span>
             </div>
             <button
               onClick={async () => {

@@ -336,7 +336,7 @@ const Swaper: FC = () => {
             {txState === 'mintCompleted' && (
               <>
                 <div className="text-md text-damlabelgray">
-                  <span>Want to teleport your d2O to a different network?</span>
+                  <span>Do you want to teleport your d2O to a different network?</span>
                 </div>
 
                 <NavLink to="/teleport">
