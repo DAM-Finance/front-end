@@ -60,7 +60,7 @@ const Swaper: FC = () => {
       }
 
       if (isInverted) {
-        const requiresApproval = await appStore.tokenRequiresApproval('dPrime', 'usdcPSM')
+        const requiresApproval = await appStore.tokenRequiresApproval('dPrime', selectedStableCoin.tokenPSM as any)
         setApproveButtonState(requiresApproval ? 'ShowApprove' : 'HideApprove')
       } else {
         const requiresApproval = await appStore.tokenRequiresApproval(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
@@ -76,34 +76,66 @@ const Swaper: FC = () => {
   }
 
   const approve = async () => {
+    let txUpdate: IPendingTransaction
     try {
-      if (isInverted) {
-        setTxState('waiting')
-        const tx = await appStore.approveToken('dPrime', 'usdcPSM')
-        const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
-        setTxLink(link)
-        setTxState('inprogress')
-        await tx.wait()
-        setTxState('approveCompleted')
-      } else {
-        setTxState('waiting')
-        const tx = await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
-        const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
-        setTxLink(link)
-        setTxState('inprogress')
-        await tx.wait()
-        setTxState('approveCompleted')
+      const pendingTransaction: IPendingTransaction = {
+        hash: '',
+        status: 'INFLIGHT',
+        type: 'APPROVE',
+        startedAt: new Date()
       }
+      const dPrimeDetails = {
+        amount: '',
+        token: supportedTokens.dPrime.symbol,
+        networkImg: appStore.selectedNetwork!.iconName,
+        network: appStore.selectedNetwork!.name,
+        chainId: appStore.selectedNetwork!.chainId
+      }
+      const stableDetails = {
+        amount: '',
+        token: selectedStableCoin.symbol,
+        networkImg: appStore.selectedNetwork!.iconName,
+        network: appStore.selectedNetwork!.name,
+        chainId: appStore.selectedNetwork!.chainId
+      }
+
+      setTxState('waiting')
+      let tx
+      if (isInverted) {
+        tx = await appStore.approveToken('dPrime', selectedStableCoin.tokenPSM as any)
+        pendingTransaction.from = dPrimeDetails
+        pendingTransaction.to = stableDetails
+      } else {
+        tx = await appStore.approveToken(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
+        pendingTransaction.from = stableDetails
+        pendingTransaction.to = dPrimeDetails
+      }
+
+      const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
+      setTxLink(link)
+      setTxState('inprogress')
+      pendingTransaction.hash = tx.hash
+      appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
+      await tx.wait()
+      txUpdate = { ...pendingTransaction }
+      txUpdate.status = 'DELIVERED'
+      txUpdate.link = link
+      setTxState('approveCompleted')
     } catch (err: any) {
       setTxState('failed')
+      txUpdate!.status = 'FAILED'
       if (err.code === 4001) {
         // alert('User rejected approve process')
       }
       console.error(err)
+    } finally {
+      const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
+      appStore.setPendingTransactions([...txs, txUpdate!])
     }
   }
 
   const swap = async (amount: string) => {
+    let txUpdate: IPendingTransaction
     try {
       let swapCall
 
@@ -145,16 +177,19 @@ const Swaper: FC = () => {
       const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
       setTxLink(link)
       setTxState('inprogress')
+      txUpdate = { ...pendingTransaction }
+      txUpdate.link = link
       await tx.wait()
-      const txUpdate = { ...pendingTransaction }
       txUpdate.status = 'DELIVERED'
-      const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
-      appStore.setPendingTransactions([...txs, txUpdate])
-      setTxState(isMint ? 'mintCompleted' : 'burnCompleted')
       appStore.updateBalances()
+      setTxState(isMint ? 'mintCompleted' : 'burnCompleted')
     } catch (err) {
       setTxState('failed')
+      txUpdate!.status = 'FAILED'
       console.error(err)
+    } finally {
+      const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
+      appStore.setPendingTransactions([...txs, txUpdate!])
     }
   }
 

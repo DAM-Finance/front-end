@@ -104,7 +104,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
     [appStore]
   )
 
-  const handleSwap = useCallback(
+  const handleSwapApprove = useCallback(
     async (transaction: IPendingTransaction) => {
       if (!appStore.walletProvider.web3Provider) {
         return
@@ -123,13 +123,13 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
       const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
       appStore.setPendingTransactions([...txs, transaction])
       await appStore.updateTokenBalance(transaction.from?.token as keyof ISupportedTokensMap)
-      await appStore.updateTokenBalance(transaction.from?.token as keyof ISupportedTokensMap)
+      await appStore.updateTokenBalance(transaction.to?.token as keyof ISupportedTokensMap)
 
-      if (['DELIVERED', 'FAILED'].includes(transaction.status)) {
-        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
-        appStore.setPendingTransactions(txs)
-        return
-      }
+      // if (['DELIVERED', 'FAILED'].includes(transaction.status)) {
+      //   const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+      //   appStore.setPendingTransactions(txs)
+      //   return
+      // }
     },
     [appStore]
   )
@@ -154,14 +154,14 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
 
         if (transaction.type === 'TELEPORT') {
           handleTeleport(transaction)
-        } else if (transaction.type === 'SWAP') {
-          handleSwap(transaction)
+        } else if (transaction.type === 'SWAP' || transaction.type === 'APPROVE') {
+          handleSwapApprove(transaction)
         }
       } catch (err) {
         console.error(err)
       }
     },
-    [appStore, handleTeleport, handleSwap]
+    [appStore, handleTeleport, handleSwapApprove]
   )
 
   const processPendingTasks = useCallback(() => {
