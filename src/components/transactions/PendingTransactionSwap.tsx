@@ -11,7 +11,7 @@ const PendingTransactionSwap: FC<PendingTransactionSwapProps> = ({ tx }) => {
   const isBurn = tx.from?.token === supportedTokens.dPrime.symbol
 
   let action = 'Mint'
-  let actionDesc = `${tx.to?.amount} ${tx.to?.token} `
+  let actionDesc = `${tx.to?.amount} ${tx.to?.token.toUpperCase()} `
   let actionDesc2 = ` ${tx.from?.token.toUpperCase()}` // [${tx.from?.network}]
 
   if (isBurn) {

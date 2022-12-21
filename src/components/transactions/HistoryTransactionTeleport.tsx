@@ -28,7 +28,7 @@ const HistoryTransactionTeleport: FC<HistoryTransactionTeleportProps> = ({ tx })
       <div className="flex items-center">
         <span>Teleport&nbsp;</span>
         <span className="font-bold ">
-          {tx.from?.amount}&nbsp;{tx.from?.token}&nbsp;
+          {tx.from?.amount}&nbsp;{tx.from?.token.toUpperCase()}&nbsp;
         </span>
         <span>from&nbsp;</span>
         <span className="font-bold ">{tx.from?.network}&nbsp;</span>

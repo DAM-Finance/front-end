@@ -6,7 +6,7 @@ interface HistoryTransactionsWidgetProps {}
 const HistoryTransactionsWidget: FC<HistoryTransactionsWidgetProps> = () => {
   const appStore = useAppStore()
 
-  if (!appStore.historyTransactions.length) {
+  if (!appStore.historyTransactions.length || !appStore.walletProvider.connected) {
     return <></>
   }
 

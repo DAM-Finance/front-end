@@ -8,7 +8,7 @@ interface PendingTransactionApproveProps {
 
 const PendingTransactionApprove: FC<PendingTransactionApproveProps> = ({ tx }) => {
   let action = `Approve`
-  let actionDesc = `${tx.to?.token}` // [${tx.from?.network}]
+  let actionDesc = `${tx.to?.token.toUpperCase()}` // [${tx.from?.network}]
 
   return (
     <div className="flex gap-2">

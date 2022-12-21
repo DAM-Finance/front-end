@@ -28,7 +28,7 @@ const PendingTransactionTeleport: FC<PendingTransactionTeleportProps> = ({ tx })
       <div className="flex items-center w-full pl-2">
         <span>Teleport&nbsp;</span>
         <span className="font-bold ">
-          {tx.from?.amount}&nbsp;{tx.from?.token}&nbsp;
+          {tx.from?.amount}&nbsp;{tx.from?.token.toUpperCase()}&nbsp;
         </span>
         <span>from&nbsp;</span>
         <span className="font-bold ">{tx.from?.network}&nbsp;</span>

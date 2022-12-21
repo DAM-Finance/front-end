@@ -11,12 +11,12 @@ const HistoryTransactionSwap: FC<HistoryTransactionSwapProps> = ({ tx }) => {
   const isBurn = tx.from?.token === supportedTokens.dPrime.symbol
 
   let action = 'Mint'
-  let actionDesc = `${tx.to?.amount} ${tx.to?.token} `
+  let actionDesc = `${tx.to?.amount} ${tx.to?.token.toUpperCase()} `
   let actionDesc2 = ` ${tx.from?.token.toUpperCase()}` //  [${tx.from?.network}]
 
   if (isBurn) {
     action = 'Burn'
-    actionDesc = `${tx.from?.amount} ${tx.from?.token} `
+    actionDesc = `${tx.from?.amount} ${tx.from?.token.toUpperCase()} `
     actionDesc2 = ` ${tx.to?.token.toUpperCase()}` //  [${tx.from?.network}]
   }
 
@@ -25,7 +25,7 @@ const HistoryTransactionSwap: FC<HistoryTransactionSwapProps> = ({ tx }) => {
       <div className="flex items-center">
         <img
           src={utils.getImageSrc(tx.to?.networkImg as string)}
-          width="30"
+          height="30"
           alt="origin network"
           className="border-damgray border-solid border-2"
           style={{ borderRadius: '50%' }}

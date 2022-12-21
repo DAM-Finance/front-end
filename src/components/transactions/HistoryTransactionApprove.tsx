@@ -8,14 +8,14 @@ interface HistoryTransactionApproveProps {
 
 const HistoryTransactionApprove: FC<HistoryTransactionApproveProps> = ({ tx }) => {
   let action = `Approve`
-  let actionDesc = `${tx.to?.token}` // [${tx.from?.network}]
+  let actionDesc = `${tx.to?.token.toUpperCase()}` // [${tx.from?.network}]
 
   return (
     <div className="flex gap-2">
       <div className="flex items-center">
         <img
           src={utils.getImageSrc(tx.to?.networkImg as string)}
-          width="30"
+          height="30"
           alt="origin network"
           className="border-damgray border-solid border-2"
           style={{ borderRadius: '50%' }}
