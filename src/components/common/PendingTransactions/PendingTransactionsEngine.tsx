@@ -42,7 +42,6 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
     async (transaction: IPendingTransaction) => {
       if (transaction.status === 'REQUESTING') {
         const txReceipt = await appStore.walletProvider.web3Provider!.waitForTransaction(transaction.hash)
-        console.log({ txReceipt })
         if (txReceipt.status === 1) {
           transaction.status = 'INFLIGHT'
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
@@ -53,6 +52,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
           appStore.setNotifyTransaction(transaction)
           appStore.setPendingTransactions([...txs])
+          // appStore.pushHistoryTransaction(transaction)
           return
         }
       }
@@ -122,14 +122,9 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
       }
       const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
       appStore.setPendingTransactions([...txs, transaction])
+      // appStore.pushHistoryTransaction(transaction)
       await appStore.updateTokenBalance(transaction.from?.token as keyof ISupportedTokensMap)
       await appStore.updateTokenBalance(transaction.to?.token as keyof ISupportedTokensMap)
-
-      // if (['DELIVERED', 'FAILED'].includes(transaction.status)) {
-      //   const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
-      //   appStore.setPendingTransactions(txs)
-      //   return
-      // }
     },
     [appStore]
   )
@@ -138,10 +133,11 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
     async (pendingTransaction: IPendingTransaction) => {
       try {
         const transaction: IPendingTransaction = { ...pendingTransaction }
-        console.log(transaction.hash, transaction)
+        console.log(transaction.hash) // , transaction
         if (['DELIVERED', 'FAILED'].includes(transaction.status)) {
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
           appStore.setPendingTransactions(txs)
+          appStore.pushHistoryTransaction(transaction)
           return
         }
         const now = new Date().getTime()
@@ -215,13 +211,6 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
 
   return (
     <div className="text-black">
-      <></>
-      {/* <div className="flex flex-col gap-4">
-        {appStore.pendingTransactions.map((tx) => (
-          <PendingTransaction key={tx.hash} tx={tx}></PendingTransaction>
-        ))}
-      </div> */}
-
       <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
         <div className="text-[14px] text-damlabelgray">
           <span>Teleporting d2O takes on average </span>

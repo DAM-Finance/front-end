@@ -2,11 +2,11 @@ import { FC } from 'react'
 import { IPendingTransaction } from '../../constants/IPendingTransaction'
 import utils from '../../constants/utils'
 
-interface PendingTransactionTeleportProps {
+interface HistoryTransactionTeleportProps {
   tx: IPendingTransaction
 }
 
-const PendingTransactionTeleport: FC<PendingTransactionTeleportProps> = ({ tx }) => {
+const HistoryTransactionTeleport: FC<HistoryTransactionTeleportProps> = ({ tx }) => {
   return (
     <div className="flex gap-2">
       <div className="flex items-center">
@@ -25,7 +25,7 @@ const PendingTransactionTeleport: FC<PendingTransactionTeleportProps> = ({ tx })
           style={{ borderRadius: '50%' }}
         />
       </div>
-      <div className="flex items-center w-full pl-2">
+      <div className="flex items-center">
         <span>Teleport&nbsp;</span>
         <span className="font-bold ">
           {tx.from?.amount}&nbsp;{tx.from?.token}&nbsp;
@@ -37,14 +37,24 @@ const PendingTransactionTeleport: FC<PendingTransactionTeleportProps> = ({ tx })
       </div>
       {!!tx.lzScan ? (
         <a className="flex gap-1 justify-center" href={tx.lzScan} target="_blank" rel="noreferrer">
-          <img width="25" src={utils.getImageSrc('progress.svg')} className="rotate" alt="progress animation" />
+          {tx.status === 'FAILED' && <img width="30" src={utils.getImageSrc('failed.png')} alt="failed" />}
+          {tx.status === 'DELIVERED' && <img width="30" src={utils.getImageSrc('success.png')} alt="failed" />}
           <img width="10" src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
         </a>
       ) : (
-        <img width="25" src={utils.getImageSrc('progress.svg')} className="rotate" alt="progress animation" />
+        <>
+          {tx.status === 'FAILED' || tx.status === 'DELIVERED' ? (
+            <>
+              {tx.status === 'FAILED' && <img width="30" src={utils.getImageSrc('failed.png')} alt="failed" />}
+              {tx.status === 'DELIVERED' && <img width="30" src={utils.getImageSrc('success.png')} alt="failed" />}
+            </>
+          ) : (
+            <img width="25" src={utils.getImageSrc('progress.svg')} className="rotate" alt="progress animation" />
+          )}
+        </>
       )}
     </div>
   )
 }
 
-export default PendingTransactionTeleport
+export default HistoryTransactionTeleport

@@ -10,6 +10,7 @@ import { localStorageObjects } from '../../../constants/persist'
 import PendingTransactionsWidget from '../../transactions/PendingTramsactionsWidget'
 import DownloadWalletButton from '../../wallet/DownloadWalletButton'
 import MoreLinks from '../../wallet/MoreLinks'
+import HistoryTransactionsWidget from '../../transactions/HistoryTransactionsWidget'
 
 interface NavbarProps {}
 
@@ -48,6 +49,7 @@ const Navbar: FC<NavbarProps> = () => {
           <>
             {/* <TVLButton /> */}
             <MoreLinks></MoreLinks>
+            <HistoryTransactionsWidget></HistoryTransactionsWidget>
             <PendingTransactionsWidget></PendingTransactionsWidget>
             {!isDprimeAdded && <AddDPrimeToWallet></AddDPrimeToWallet>}
             <SwitchNetworkSelector />

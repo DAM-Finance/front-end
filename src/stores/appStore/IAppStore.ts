@@ -20,6 +20,9 @@ export interface IAppStore {
   isPendingTransactionsVisible: boolean
   tooglePendingTransactions: () => void
 
+  isHistoryTransactionsVisible: boolean
+  toogleHistoryTransactions: () => void
+
   gateway: IGateway | null
   setGateway: (gateway: IGateway) => void
 
@@ -40,6 +43,10 @@ export interface IAppStore {
 
   pendingTransactions: IPendingTransaction[]
   setPendingTransactions: (txs: IPendingTransaction[]) => void
+
+  historyTransactions: IPendingTransaction[]
+  setHistoryTransactions: (txs: IPendingTransaction[]) => void
+  pushHistoryTransaction: (tx: IPendingTransaction) => void
 
   chooseGateway: () => IGateway
   gatewayEventHandler: (event: IGatewayEvent) => void

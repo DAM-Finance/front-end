@@ -10,6 +10,7 @@ import TermsAndConditionsPopup from './components/wallet/TermsAndConditionsPopup
 import { localStorageObjects } from './constants/persist'
 import PendingTransactionsEngine from './components/common/PendingTransactions/PendingTransactionsEngine'
 import PendingTransactionsList from './components/transactions/PendingTransactionList'
+import HistoryTransactionsList from './components/transactions/HistoryTransactionList'
 
 const App = () => {
   const appStore = useAppStore()
@@ -56,6 +57,7 @@ const App = () => {
         <Navbar />
         <div className="w-full h-full relative">
           <PendingTransactionsList></PendingTransactionsList>
+          <HistoryTransactionsList></HistoryTransactionsList>
           <Routes />
         </div>
       </div>

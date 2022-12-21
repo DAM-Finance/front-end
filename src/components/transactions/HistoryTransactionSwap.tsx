@@ -3,16 +3,16 @@ import { supportedTokens } from '../../constants/config'
 import { IPendingTransaction } from '../../constants/IPendingTransaction'
 import utils from '../../constants/utils'
 
-interface PendingTransactionSwapProps {
+interface HistoryTransactionSwapProps {
   tx: IPendingTransaction
 }
 
-const PendingTransactionSwap: FC<PendingTransactionSwapProps> = ({ tx }) => {
+const HistoryTransactionSwap: FC<HistoryTransactionSwapProps> = ({ tx }) => {
   const isBurn = tx.from?.token === supportedTokens.dPrime.symbol
 
   let action = 'Mint'
   let actionDesc = `${tx.to?.amount} ${tx.to?.token} `
-  let actionDesc2 = ` ${tx.from?.token.toUpperCase()}` // [${tx.from?.network}]
+  let actionDesc2 = ` ${tx.from?.token.toUpperCase()}` //  [${tx.from?.network}]
 
   if (isBurn) {
     action = 'Burn'
@@ -37,12 +37,17 @@ const PendingTransactionSwap: FC<PendingTransactionSwapProps> = ({ tx }) => {
         <span>&nbsp;with&nbsp;</span>
         <span className="font-bold">{actionDesc2}</span>
       </div>
-      <a className="flex gap-1 justify-center" href={tx.link} target="_blank" rel="noreferrer">
+      {!!tx.link ? (
+        <a className="flex gap-1 justify-center ml-auto" href={tx.link} target="_blank" rel="noreferrer">
+          {tx.status === 'FAILED' && <img width="30" src={utils.getImageSrc('failed.png')} alt="failed" />}
+          {tx.status === 'DELIVERED' && <img width="30" src={utils.getImageSrc('success.png')} alt="failed" />}
+          <img width="10" src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
+        </a>
+      ) : (
         <img width="25" src={utils.getImageSrc('progress.svg')} className="rotate" alt="progress animation" />
-        {!!tx.link && <img width="10" src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />}
-      </a>
+      )}
     </div>
   )
 }
 
-export default PendingTransactionSwap
+export default HistoryTransactionSwap

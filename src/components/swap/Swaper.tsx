@@ -115,11 +115,11 @@ const Swaper: FC = () => {
       setTxLink(link)
       setTxState('inprogress')
       pendingTransaction.hash = tx.hash
+      pendingTransaction.link = link
       appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
       await tx.wait()
       txUpdate = { ...pendingTransaction }
       txUpdate.status = 'DELIVERED'
-      txUpdate.link = link
       setTxState('approveCompleted')
     } catch (err: any) {
       setTxState('failed')
@@ -135,7 +135,7 @@ const Swaper: FC = () => {
   }
 
   const swap = async (amount: string) => {
-    let txUpdate: IPendingTransaction
+    let txUpdate: IPendingTransaction | undefined
     try {
       let swapCall
 
@@ -172,13 +172,15 @@ const Swaper: FC = () => {
 
       setTxState('waiting')
       const tx = await swapCall
-      pendingTransaction.hash = tx.hash
-      appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
+
       const link = utils.getTxLink(appStore.selectedNetwork!, tx.hash!)
+      pendingTransaction.hash = tx.hash
+      pendingTransaction.link = link
       setTxLink(link)
+      appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
       setTxState('inprogress')
+
       txUpdate = { ...pendingTransaction }
-      txUpdate.link = link
       await tx.wait()
       txUpdate.status = 'DELIVERED'
       appStore.updateBalances()
@@ -188,8 +190,11 @@ const Swaper: FC = () => {
       txUpdate!.status = 'FAILED'
       console.error(err)
     } finally {
-      const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
-      appStore.setPendingTransactions([...txs, txUpdate!])
+      if (txUpdate) {
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate!.hash)
+        // appStore.pushHistoryTransaction(txUpdate)
+        appStore.setPendingTransactions([...txs, txUpdate])
+      }
     }
   }
 

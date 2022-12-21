@@ -2,11 +2,11 @@ import { FC } from 'react'
 import { IPendingTransaction } from '../../constants/IPendingTransaction'
 import utils from '../../constants/utils'
 
-interface PendingTransactionApproveProps {
+interface HistoryTransactionApproveProps {
   tx: IPendingTransaction
 }
 
-const PendingTransactionApprove: FC<PendingTransactionApproveProps> = ({ tx }) => {
+const HistoryTransactionApprove: FC<HistoryTransactionApproveProps> = ({ tx }) => {
   let action = `Approve`
   let actionDesc = `${tx.to?.token}` // [${tx.from?.network}]
 
@@ -21,12 +21,14 @@ const PendingTransactionApprove: FC<PendingTransactionApproveProps> = ({ tx }) =
           style={{ borderRadius: '50%' }}
         />
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center w-full">
         <span>{action}&nbsp;</span>
         <span className="font-bold">{actionDesc}</span>
       </div>
       {!!tx.link ? (
         <a className="flex gap-1 justify-center" href={tx.link} target="_blank" rel="noreferrer">
+          {tx.status === 'FAILED' && <img width="30" src={utils.getImageSrc('failed.png')} alt="failed" />}
+          {tx.status === 'DELIVERED' && <img width="30" src={utils.getImageSrc('success.png')} alt="failed" />}
           <img width="10" src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
         </a>
       ) : (
@@ -36,4 +38,4 @@ const PendingTransactionApprove: FC<PendingTransactionApproveProps> = ({ tx }) =
   )
 }
 
-export default PendingTransactionApprove
+export default HistoryTransactionApprove

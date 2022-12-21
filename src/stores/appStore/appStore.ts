@@ -1,3 +1,4 @@
+import { IPendingTransaction } from './../../constants/IPendingTransaction'
 import { ethers } from 'ethers'
 import produce from 'immer'
 import create from 'zustand'
@@ -66,8 +67,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   showWaitingForConfirmation: false,
   isWrongNetworkPopupEnabled: true,
   pendingTransactions: localStorage.getItem(localStorageObjects.pendingTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.pendingTxs)!) : [],
+  historyTransactions: localStorage.getItem(localStorageObjects.historyTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.historyTxs)!) : [],
   notifyTransaction: null,
   isPendingTransactionsVisible: false,
+  isHistoryTransactionsVisible: false,
 
   setNotifyTransaction: (tx) => {
     set(
@@ -151,10 +154,38 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
     localStorage.setItem(localStorageObjects.pendingTxs, JSON.stringify(get().pendingTransactions))
   },
+  setHistoryTransactions: (data) => {
+    set(
+      produce((state: IAppStore) => {
+        state.historyTransactions = data
+      })
+    )
+    localStorage.setItem(localStorageObjects.historyTxs, JSON.stringify(get().historyTransactions))
+  },
+  pushHistoryTransaction: (tx: IPendingTransaction) => {
+    const txs = get().historyTransactions.slice()
+    const alreadyPushed = txs.findIndex((foundTx) => foundTx.hash === tx.hash) > -1
+    if (alreadyPushed) return
+    txs.unshift(tx)
+    get().setHistoryTransactions(txs.slice(0, 10))
+  },
   tooglePendingTransactions: () => {
     set(
       produce((state: IAppStore) => {
+        if (!state.isPendingTransactionsVisible) {
+          state.isHistoryTransactionsVisible = false
+        }
         state.isPendingTransactionsVisible = !state.isPendingTransactionsVisible
+      })
+    )
+  },
+  toogleHistoryTransactions: () => {
+    set(
+      produce((state: IAppStore) => {
+        if (!state.isHistoryTransactionsVisible) {
+          state.isPendingTransactionsVisible = false
+        }
+        state.isHistoryTransactionsVisible = !state.isHistoryTransactionsVisible
       })
     )
   },
