@@ -201,6 +201,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   connectWallet: async () => {
     try {
+      localStorage.setItem(localStorageObjects.disconnected, 'false')
       const accounts = await get().gateway?.connect(get().walletProvider.provider)
       get().setWalletProvider({ accounts })
       get().attachContracts()
@@ -213,6 +214,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   disconnectWallet: async () => {
     try {
+      localStorage.setItem(localStorageObjects.disconnected, 'true')
       get().setWalletProvider({ accounts: [] })
     } catch (err: any) {
       console.error(err)
@@ -280,6 +282,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     get().attachContracts()
     get().updateBalances()
+
+    if (localStorage.getItem(localStorageObjects.disconnected) === 'true') {
+      get().setWalletProvider({ accounts: [] })
+    }
   },
   switchNetwork: async (chainId: string) => {
     try {
