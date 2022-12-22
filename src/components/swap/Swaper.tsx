@@ -60,10 +60,15 @@ const Swaper: FC = () => {
       }
 
       if (isInverted) {
-        const requiresApproval = await appStore.tokenRequiresApproval('dPrime', selectedStableCoin.tokenPSM as any)
+        const requiresApproval = await appStore.tokenRequiresApproval('dPrime', selectedStableCoin.tokenPSM as any, secondCoin, supportedTokens.dPrime.units)
         setApproveButtonState(requiresApproval ? 'ShowApprove' : 'HideApprove')
       } else {
-        const requiresApproval = await appStore.tokenRequiresApproval(selectedStableCoin.balancesMapper, selectedStableCoin.tokenJoin)
+        const requiresApproval = await appStore.tokenRequiresApproval(
+          selectedStableCoin.balancesMapper,
+          selectedStableCoin.tokenJoin,
+          firstCoin,
+          selectedStableCoin.decimals
+        )
         setApproveButtonState(requiresApproval ? 'ShowApprove' : 'HideApprove')
       }
     } catch (err: any) {
@@ -76,7 +81,7 @@ const Swaper: FC = () => {
   }
 
   const approve = async () => {
-    let txUpdate: IPendingTransaction
+    let txUpdate: IPendingTransaction | undefined
     try {
       const pendingTransaction: IPendingTransaction = {
         hash: '',
@@ -123,14 +128,18 @@ const Swaper: FC = () => {
       setTxState('approveCompleted')
     } catch (err: any) {
       setTxState('failed')
-      txUpdate!.status = 'FAILED'
+      if (!!txUpdate) {
+        txUpdate!.status = 'FAILED'
+      }
       if (err.code === 4001) {
         // alert('User rejected approve process')
       }
       console.error(err)
     } finally {
-      const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
-      appStore.setPendingTransactions([...txs, txUpdate!])
+      if (txUpdate) {
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate!.hash)
+        appStore.setPendingTransactions([...txs, txUpdate!])
+      }
     }
   }
 
@@ -187,7 +196,9 @@ const Swaper: FC = () => {
       setTxState(isMint ? 'mintCompleted' : 'burnCompleted')
     } catch (err) {
       setTxState('failed')
-      txUpdate!.status = 'FAILED'
+      if (txUpdate) {
+        txUpdate!.status = 'FAILED'
+      }
       console.error(err)
     } finally {
       if (txUpdate) {

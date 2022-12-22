@@ -33,6 +33,7 @@ import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
+import { BigNumber, utils as ethersUtils } from 'ethers'
 
 //BYTES
 // let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
@@ -410,14 +411,22 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const gasLimit = get().selectedNetwork?.suggestedGasLimit
     return connectedContracts[tokenPsm as any].getCollateral(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
   },
-  tokenRequiresApproval: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses) => {
+  tokenRequiresApproval: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, value, decimals) => {
+    if (value === '') {
+      value = '0'
+    }
+
     const { accounts } = get().walletProvider
     const joinContract = get().selectedNetwork?.addresses[tokenJoin]
+    // const ceiledValue = Math.ceil(Number(value))
+    // const test = ethersUtils.parseUnits(value, decimals)
+    // console.log({ test })
     if (!connectedContracts[token]) {
       throw new Error('Contracts not set')
     }
-    const allowance = await connectedContracts[token].allowance(accounts[0], joinContract)
-    return allowance < minApprove
+    const allowance: BigNumber = await connectedContracts[token].allowance(accounts[0], joinContract)
+    let bigValue = ethersUtils.parseUnits(value, decimals) // BigNumber.from(ceiledValue).mul(Math.pow(10, decimals).toString())
+    return allowance.lt(bigValue)
   },
   approveToken: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, amount = maxApprove) => {
     const joinContract = get().selectedNetwork?.addresses[tokenJoin]

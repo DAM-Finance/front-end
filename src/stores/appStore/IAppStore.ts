@@ -74,6 +74,11 @@ export interface IAppStore {
   swapDPrimeToStable: (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => Promise<any>
   // stableSwap: (amount: string) => void
   approveToken: (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, amount?: string) => Promise<ethers.ContractTransaction>
-  tokenRequiresApproval: (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses) => Promise<boolean>
+  tokenRequiresApproval: (
+    token: keyof typeof supportedTokens,
+    tokenJoin: keyof ISupportedNetworkAddresses,
+    approvalRequired: string,
+    decimals: number
+  ) => Promise<boolean>
   teleport: (dPrimeAmount: string, dstChainName: string) => Promise<any>
 }
