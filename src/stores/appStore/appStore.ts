@@ -40,7 +40,6 @@ import { BigNumber, utils as ethersUtils } from 'ethers'
 const connectedContracts = {} as IContractInstances | any
 const initBalances: IBalances = { dPrime: '0', usdc: '0' }
 const maxApprove = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-const minApprove = 10000000000
 
 // const initTeleportFees = {} as ITeleportFees
 
