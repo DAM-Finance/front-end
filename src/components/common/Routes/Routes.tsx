@@ -15,7 +15,7 @@ import NotFound from './../../../components/pages/PageNotFound'
 
 const AppRoutes: FC = () => {
   return (
-    <div>
+    <div className="bg-damdarkgray">
       <Routes>
         <Route path="" element={<Dashboard />} />
         <Route path="analytics" element={<Analytics />} />

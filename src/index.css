@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background: #151823;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;

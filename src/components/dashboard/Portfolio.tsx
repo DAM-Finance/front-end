@@ -23,10 +23,12 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
               <span>Get d2O</span>
             </button>
           </NavLink>
-          <button className="rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">Learn More</button>
+          <a href="https://medium.com/dam-d2o/liquidity-pipes-dam-finance-goes-multi-chain-78c55a01fafa" target="_blank" rel="noreferrer">
+            <button className="rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">Learn More</button>
+          </a>
         </div>
       </div>
-      <img src={portfolioImg} alt="Portfolio" />
+      <img className="hidden md:block" src={portfolioImg} alt="Portfolio" />
     </div>
   )
 

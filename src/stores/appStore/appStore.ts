@@ -1,3 +1,4 @@
+import { IPendingTransaction } from './../../constants/IPendingTransaction'
 import { ethers } from 'ethers'
 import produce from 'immer'
 import create from 'zustand'
@@ -32,13 +33,13 @@ import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
+import { BigNumber, utils as ethersUtils } from 'ethers'
 
 //BYTES
 // let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
 const connectedContracts = {} as IContractInstances | any
 const initBalances: IBalances = { dPrime: '0', usdc: '0' }
 const maxApprove = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-const minApprove = 10000000000
 
 // const initTeleportFees = {} as ITeleportFees
 
@@ -66,8 +67,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   showWaitingForConfirmation: false,
   isWrongNetworkPopupEnabled: true,
   pendingTransactions: localStorage.getItem(localStorageObjects.pendingTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.pendingTxs)!) : [],
+  historyTransactions: localStorage.getItem(localStorageObjects.historyTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.historyTxs)!) : {},
   notifyTransaction: null,
   isPendingTransactionsVisible: false,
+  isHistoryTransactionsVisible: false,
 
   setNotifyTransaction: (tx) => {
     set(
@@ -151,10 +154,43 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
     localStorage.setItem(localStorageObjects.pendingTxs, JSON.stringify(get().pendingTransactions))
   },
+  setHistoryTransactions: (data) => {
+    set(
+      produce((state: IAppStore) => {
+        state.historyTransactions = data
+      })
+    )
+    localStorage.setItem(localStorageObjects.historyTxs, JSON.stringify(data))
+  },
+  pushHistoryTransaction: (tx: IPendingTransaction) => {
+    const account: string = get().walletProvider?.accounts && get().walletProvider?.accounts[0] && get().walletProvider.accounts[0].toLowerCase()
+
+    let txs = (get().historyTransactions[account] || []).slice()
+    const alreadyPushed = txs.findIndex((foundTx) => foundTx.hash === tx.hash) > -1
+    if (alreadyPushed) {
+      return
+    }
+    txs.unshift(tx)
+    txs = txs.slice(0, 10)
+    get().setHistoryTransactions({ ...get().historyTransactions, [account]: txs })
+  },
   tooglePendingTransactions: () => {
     set(
       produce((state: IAppStore) => {
+        if (!state.isPendingTransactionsVisible) {
+          state.isHistoryTransactionsVisible = false
+        }
         state.isPendingTransactionsVisible = !state.isPendingTransactionsVisible
+      })
+    )
+  },
+  toogleHistoryTransactions: () => {
+    set(
+      produce((state: IAppStore) => {
+        if (!state.isHistoryTransactionsVisible) {
+          state.isPendingTransactionsVisible = false
+        }
+        state.isHistoryTransactionsVisible = !state.isHistoryTransactionsVisible
       })
     )
   },
@@ -170,6 +206,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   connectWallet: async () => {
     try {
+      localStorage.setItem(localStorageObjects.disconnected, 'false')
       const accounts = await get().gateway?.connect(get().walletProvider.provider)
       get().setWalletProvider({ accounts })
       get().attachContracts()
@@ -178,6 +215,14 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       if (err.code === -32002) {
         alert('Wallet request pending!')
       }
+    }
+  },
+  disconnectWallet: async () => {
+    try {
+      localStorage.setItem(localStorageObjects.disconnected, 'true')
+      get().setWalletProvider({ accounts: [] })
+    } catch (err: any) {
+      console.error(err)
     }
   },
   refreshSelectedNetwork: async () => {
@@ -242,6 +287,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     get().attachContracts()
     get().updateBalances()
+
+    if (localStorage.getItem(localStorageObjects.disconnected) === 'true') {
+      get().setWalletProvider({ accounts: [] })
+    }
   },
   switchNetwork: async (chainId: string) => {
     try {
@@ -269,7 +318,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       supportedTokens.dPrime.imgUrl
     )
     const dprimeAddedWallet = JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
-    dprimeAddedWallet[get().selectedNetwork!.id] = true
+    dprimeAddedWallet[get().selectedNetwork!.addresses.dPrime] = true
     localStorage.setItem(localStorageObjects.DPrimeAddedWallet, JSON.stringify(dprimeAddedWallet))
     return dprimeAddedWallet
   },
@@ -366,14 +415,22 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const gasLimit = get().selectedNetwork?.suggestedGasLimit
     return connectedContracts[tokenPsm as any].getCollateral(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
   },
-  tokenRequiresApproval: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses) => {
+  tokenRequiresApproval: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, value, decimals) => {
+    if (value === '') {
+      value = '0'
+    }
+
     const { accounts } = get().walletProvider
     const joinContract = get().selectedNetwork?.addresses[tokenJoin]
+    // const ceiledValue = Math.ceil(Number(value))
+    // const test = ethersUtils.parseUnits(value, decimals)
+    // console.log({ test })
     if (!connectedContracts[token]) {
       throw new Error('Contracts not set')
     }
-    const allowance = await connectedContracts[token].allowance(accounts[0], joinContract)
-    return allowance < minApprove
+    const allowance: BigNumber = await connectedContracts[token].allowance(accounts[0], joinContract)
+    let bigValue = ethersUtils.parseUnits(value, decimals) // BigNumber.from(ceiledValue).mul(Math.pow(10, decimals).toString())
+    return allowance.lt(bigValue)
   },
   approveToken: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, amount = maxApprove) => {
     const joinContract = get().selectedNetwork?.addresses[tokenJoin]

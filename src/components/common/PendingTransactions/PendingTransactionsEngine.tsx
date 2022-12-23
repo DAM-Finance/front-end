@@ -17,9 +17,9 @@ import {
   supportedNetworks,
   supportedTokens
 } from '../../../constants/config'
+import { ISupportedTokensMap } from '../../../constants/ISupportedToken'
 const moveDecimal = require('move-decimal-point')
 const BN = require('bn.js')
-// import PendingTransaction from './PendingTransaction'
 
 const client = createClient('testnet')
 
@@ -38,14 +38,106 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
     return () => clearInterval(interval)
   }, [])
 
+  const handleTeleport = useCallback(
+    async (transaction: IPendingTransaction) => {
+      if (transaction.status === 'REQUESTING') {
+        const txReceipt = await appStore.walletProvider.web3Provider!.waitForTransaction(transaction.hash)
+        if (txReceipt.status === 1) {
+          transaction.status = 'INFLIGHT'
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+          appStore.setNotifyTransaction(transaction)
+          appStore.setPendingTransactions([...txs, transaction])
+        } else {
+          transaction.status = 'FAILED'
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+          appStore.setNotifyTransaction(transaction)
+          appStore.setPendingTransactions([...txs])
+          // appStore.pushHistoryTransaction(transaction)
+          return
+        }
+      }
+
+      const res = await client.getMessagesBySrcTxHash(transaction.hash)
+      if (appStore.selectedNetwork && res.messages && res.messages.length && (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)) {
+        const message = res.messages[0]
+        transaction.status = message.status
+        transaction.lzData = message
+
+        const originChain = supportedNetworks.find((net) => net.chainId === transaction.from?.chainId)!
+        const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)!
+        let url = appStore.selectedNetwork!.scanLz
+        url = url.replace(scanOriginLzIdMask, originChain.layerZeroChainIds)
+        url = url.replace(scanOriginLzPipeMask, originChain.addresses.lzPipe!)
+        url = url.replace(scanDestinationLzIdMask, dstChain.layerZeroChainIds)
+        url = url.replace(scanDestinationLzPipeMask, dstChain.addresses.lzPipe!)
+        url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
+        transaction.lzScan = url
+
+        appStore.setNotifyTransaction(transaction)
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+        appStore.setPendingTransactions([...txs, transaction])
+        await appStore.updateTokenBalance('dPrime')
+      }
+      if (isDev) {
+        const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
+        const dPrimeBalance = await appStore.getTokenBalance('dPrime')
+        const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)
+        const newBalanceBN = new BN(newBalance, 10)
+        const diff = newBalanceBN.sub(new BN(balance, 10))
+        if (diff.eq(new BN('0'))) {
+          return
+        }
+        const transferValue: string = moveDecimal(diff.toString(), -supportedTokens.dPrime.units)
+        const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue)
+        if (!foundTx) {
+          return
+        }
+        const txUpdate = { ...foundTx }
+        txUpdate.status = 'DELIVERED'
+        appStore.setNotifyTransaction(txUpdate)
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
+        appStore.setPendingTransactions([...txs, txUpdate])
+        await appStore.updateTokenBalance('dPrime')
+        setShowDevSwitch(true)
+      }
+    },
+    [appStore]
+  )
+
+  const handleSwapApprove = useCallback(
+    async (transaction: IPendingTransaction) => {
+      if (!appStore.walletProvider.web3Provider) {
+        return
+      }
+
+      const receipt = await appStore.walletProvider.web3Provider.getTransactionReceipt(transaction.hash)
+      if (!receipt) {
+        return
+      }
+
+      if (receipt.status === 1) {
+        transaction.status = 'DELIVERED'
+      } else if (receipt.status === 0) {
+        transaction.status = 'FAILED'
+      }
+      const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
+      appStore.setPendingTransactions([...txs, transaction])
+      // appStore.pushHistoryTransaction(transaction)
+      await appStore.updateTokenBalance(transaction.from?.token as keyof ISupportedTokensMap)
+      await appStore.updateTokenBalance(transaction.to?.token as keyof ISupportedTokensMap)
+    },
+    [appStore]
+  )
+
   const processTransaction = useCallback(
     async (pendingTransaction: IPendingTransaction) => {
       try {
         const transaction: IPendingTransaction = { ...pendingTransaction }
-        console.log(transaction.hash, transaction)
+        console.log(transaction.hash) // , transaction
         if (['DELIVERED', 'FAILED'].includes(transaction.status)) {
           const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
           appStore.setPendingTransactions(txs)
+          appStore.pushHistoryTransaction(transaction)
           return
         }
         const now = new Date().getTime()
@@ -55,62 +147,17 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           appStore.setPendingTransactions(txs)
           return
         }
-        if (transaction.status === 'REQUESTING') {
-          await appStore.walletProvider.web3Provider!.waitForTransaction(transaction.hash)
-          transaction.status = 'INFLIGHT'
-          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
-          appStore.setNotifyTransaction(transaction)
-          appStore.setPendingTransactions([...txs, transaction])
-        }
 
-        const res = await client.getMessagesBySrcTxHash(transaction.hash)
-        if (appStore.selectedNetwork && res.messages && res.messages.length && (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)) {
-          const message = res.messages[0]
-          transaction.status = message.status
-          transaction.lzData = message
-
-          const originChain = supportedNetworks.find((net) => net.chainId === transaction.from?.chainId)!
-          const dstChain = supportedNetworks.find((net) => net.chainId === transaction.to?.chainId)!
-          let url = appStore.selectedNetwork!.scanLz
-          url = url.replace(scanOriginLzIdMask, originChain.layerZeroChainIds)
-          url = url.replace(scanOriginLzPipeMask, originChain.addresses.lzPipe!)
-          url = url.replace(scanDestinationLzIdMask, dstChain.layerZeroChainIds)
-          url = url.replace(scanDestinationLzPipeMask, dstChain.addresses.lzPipe!)
-          url = url.replace(scanNonceMask, transaction.lzData.srcUaNonce.toString())
-          transaction.lzScan = url
-
-          appStore.setNotifyTransaction(transaction)
-          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
-          appStore.setPendingTransactions([...txs, transaction])
-          await appStore.updateTokenBalance('dPrime')
-        }
-        if (isDev) {
-          const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
-          const dPrimeBalance = await appStore.getTokenBalance('dPrime')
-          const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)
-          const newBalanceBN = new BN(newBalance, 10)
-          const diff = newBalanceBN.sub(new BN(balance, 10))
-          if (diff.eq(new BN('0'))) {
-            return
-          }
-          const transferValue: string = moveDecimal(diff.toString(), -supportedTokens.dPrime.units)
-          const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue)
-          if (!foundTx) {
-            return
-          }
-          const txUpdate = { ...foundTx }
-          txUpdate.status = 'DELIVERED'
-          appStore.setNotifyTransaction(txUpdate)
-          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
-          appStore.setPendingTransactions([...txs, txUpdate])
-          await appStore.updateTokenBalance('dPrime')
-          setShowDevSwitch(true)
+        if (transaction.type === 'TELEPORT') {
+          handleTeleport(transaction)
+        } else if (transaction.type === 'SWAP' || transaction.type === 'APPROVE') {
+          handleSwapApprove(transaction)
         }
       } catch (err) {
         console.error(err)
       }
     },
-    [appStore]
+    [appStore, handleTeleport, handleSwapApprove]
   )
 
   const processPendingTasks = useCallback(() => {
@@ -164,13 +211,6 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
 
   return (
     <div className="text-black">
-      <></>
-      {/* <div className="flex flex-col gap-4">
-        {appStore.pendingTransactions.map((tx) => (
-          <PendingTransaction key={tx.hash} tx={tx}></PendingTransaction>
-        ))}
-      </div> */}
-
       <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
         <div className="text-[14px] text-damlabelgray">
           <span>Teleporting d2O takes on average </span>
@@ -193,16 +233,16 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           setShowDevSwitch(true)
         }}
         show={showTeleportInflight()}
-        message="Step 2/3: Teleportation in flight between origin and destination! ETA is 15 minutes."
+        message="Step 2/3: Teleportation in flight between origin and destination! It should take 15 minutes."
         txLink={appStore.notifyTransaction?.lzScan || ''}
         imgName="teleport-progress.svg"
       >
         {isDev && showDevSwitch && (
           <div className="flex flex-col gap-2 pt-4">
             <div className="text-md text-damlabelgray">
-              <span>Switch network </span>
-              <span className="font-bold text-damyellow">now </span>
-              <span>to track teleportation.</span>
+              <span>Switch network to access</span>
+              {/* <span className="font-bold text-damyellow">now </span> */}
+              <span> your teleported d2O</span>
             </div>
             <button
               onClick={async () => {

@@ -68,6 +68,13 @@ class Metamask {
     return accounts
   }
 
+  async disconnect(provider) {
+    if (!this.isValidProvider(provider)) return []
+
+    const accounts = await provider.request({ method: 'eth_requestAccounts', params: [{ eth_accounts: {} }] })
+    return accounts
+  }
+
   subscribeEvents(provider, handler) {
     if (!this.isValidProvider(provider)) {
       console.error('Invalid provider', provider)

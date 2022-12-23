@@ -77,6 +77,9 @@ export class Utils {
     if (value.length && value.indexOf('.') === value.length - 1) {
       val += '.'
     }
+    if (val.includes('NaN')) {
+      return ''
+    }
     // console.log('unbeautifyNumber:AFTER3:', val)
     return val
   }

@@ -45,19 +45,11 @@ const Teleport: FC = () => {
   }, [availableDestinations])
 
   const teleportTo = async (dPrimeAmount: string, dstnetwork: ISupportedNetwork) => {
+    let pendingTransaction: IPendingTransaction | undefined
     try {
-      const waitConfirmation: IPendingTransaction = {
-        hash: 'hash',
-        status: 'CONFIRMING',
-        type: 'TELEPORT',
-        startedAt: new Date()
-      }
-      appStore.setNotifyTransaction(waitConfirmation)
-      const tx = await appStore.teleport(dPrimeAmount, dstnetwork.name)
-      const pendingTransaction: IPendingTransaction = {
-        hash: tx.hash,
+      pendingTransaction = {
+        hash: '',
         status: 'REQUESTING',
-        source: tx,
         type: 'TELEPORT',
         from: {
           amount: dPrimeAmount,
@@ -75,20 +67,21 @@ const Teleport: FC = () => {
         },
         startedAt: new Date()
       }
+      appStore.setNotifyTransaction(pendingTransaction)
+      const tx = await appStore.teleport(dPrimeAmount, dstnetwork.name)
+      pendingTransaction = { ...pendingTransaction, hash: tx.hash, source: tx, status: 'REQUESTING' }
       appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
       appStore.setNotifyTransaction(pendingTransaction)
-
       await tx.wait()
       appStore.updateBalances()
     } catch (err) {
       console.error(err)
-      const errorTx: IPendingTransaction = {
-        hash: 'hash',
-        status: 'FAILED',
-        type: 'TELEPORT',
-        startedAt: new Date()
+      if (pendingTransaction) {
+        pendingTransaction = { ...pendingTransaction, status: 'FAILED' }
+        appStore.setNotifyTransaction(pendingTransaction)
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== pendingTransaction!.hash)
+        appStore.setPendingTransactions([...txs, pendingTransaction])
       }
-      appStore.setNotifyTransaction(errorTx)
     }
   }
 
@@ -106,7 +99,7 @@ const Teleport: FC = () => {
   }
 
   return (
-    <div className="flex p-4 w-full justify-center py-24">
+    <div className="flex p-4 w-full justify-center lg:py-24 py-12">
       <div className="flex flex-col max-w-7xl gap-6">
         <Disclaimer infoTxt={['Teleport d2O between Ethereum and Polkadot.']}></Disclaimer>
         <div
@@ -139,11 +132,7 @@ const Teleport: FC = () => {
               <div className="flex flex-col gap-1 text-sm text-damlabelgray2">
                 <div className="flex">
                   <div>Teleport Fee</div>
-                  <div className="ml-auto">{appStore.teleportFees}</div>
-                </div>
-                <div className="flex">
-                  <div>Gas fee</div>
-                  <div className="ml-auto">$0</div>
+                  <div className="ml-auto">{appStore.teleportFees} d2O</div>
                 </div>
               </div>
             </AvailableInput>
@@ -161,7 +150,7 @@ const Teleport: FC = () => {
               </button>
               <div className="flex justify-center items-center gap-2">
                 <img src={utils.getImageSrc('warning.svg')} alt="" />
-                <div className="text-damlightyellow text-sm font-light">Make sure you have enough gas on the destination chain.</div>
+                <div className="text-damlightyellow text-sm font-light">Make sure you have enough destination chain gas to transact.</div>
               </div>
             </div>
           ) : (

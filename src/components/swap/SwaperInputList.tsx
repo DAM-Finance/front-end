@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { ISupportedNetworkAddresses } from '../../constants/ISupportedNetworks'
+import { ISupportedTokensMap } from '../../constants/ISupportedToken'
 import utils from '../../constants/utils'
 import { useAppStore } from '../../stores/appStore/appStore'
 import { IBalances } from '../../stores/appStore/IBalances'
@@ -19,9 +20,11 @@ export interface Coin {
   name: string
   balancesMapper: keyof IBalances
   tokenJoin: keyof ISupportedNetworkAddresses
+  tokenPSM: string
   icon: string
   balance: string
   decimals: number
+  symbol: keyof ISupportedTokensMap
 }
 
 const SwaperInputList: FC<SwaperInputListProps> = ({
@@ -53,6 +56,7 @@ const SwaperInputList: FC<SwaperInputListProps> = ({
           type="string"
           disabled={disabled}
           className="bg-damdarkgray p-4 text-2xl borsder-damdarkgray outline-none border-none rounded-2xl"
+          style={{ width: 'inherit' }}
         />
         <button
           onClick={() => handleChange(utils.unbeautifyNumber(appStore.balances[selectedCoin.balancesMapper], maxDecimals))}

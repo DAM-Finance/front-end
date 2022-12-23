@@ -9,6 +9,8 @@ import AddDPrimeToWallet from '../../wallet/AddDPrimeToWallet'
 import { localStorageObjects } from '../../../constants/persist'
 import PendingTransactionsWidget from '../../transactions/PendingTramsactionsWidget'
 import DownloadWalletButton from '../../wallet/DownloadWalletButton'
+import MoreLinks from '../../wallet/MoreLinks'
+import HistoryTransactionsWidget from '../../transactions/HistoryTransactionsWidget'
 
 interface NavbarProps {}
 
@@ -18,7 +20,7 @@ const Navbar: FC<NavbarProps> = () => {
   const [dprimeAddedToWalletByNetwork, setDprimeAddedToWalletByNetwork] = useState(
     JSON.parse(localStorage.getItem(localStorageObjects.DPrimeAddedWallet) || '{}')
   )
-  const isDprimeAdded = !!appStore.selectedNetwork && !!dprimeAddedToWalletByNetwork && dprimeAddedToWalletByNetwork[appStore.selectedNetwork.id]
+  const isDprimeAdded = !!appStore.selectedNetwork && !!dprimeAddedToWalletByNetwork && dprimeAddedToWalletByNetwork[appStore.selectedNetwork.addresses.dPrime]
 
   return (
     <nav className="flex items-center flex-wrap gap-12 bg-damgray px-4 md:px-24 py-5">
@@ -46,6 +48,8 @@ const Navbar: FC<NavbarProps> = () => {
         {!appStore.walletProvider.loading && (
           <>
             {/* <TVLButton /> */}
+            <MoreLinks></MoreLinks>
+            <HistoryTransactionsWidget></HistoryTransactionsWidget>
             <PendingTransactionsWidget></PendingTransactionsWidget>
             {!isDprimeAdded && <AddDPrimeToWallet></AddDPrimeToWallet>}
             <SwitchNetworkSelector />

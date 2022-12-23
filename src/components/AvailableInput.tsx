@@ -32,8 +32,8 @@ const AvailableInput: FC<AvailableInputProps> = ({ amount = '0', available, gasP
         </button>
       </div>
       <div className="flex gap-2 ml-4">
-        <div className="text-damlabelgray2 ">{utils.format(available, 2)}</div>
-        <div className="text-damlabelgray3 font-light text-sm">Available d2O</div>
+        <div className="text-damlabelgray2 ">{utils.beautifyNumber(utils.format(available, 2))}</div>
+        <div className="text-damlabelgray3 font-light text-sm">d2O Balance</div>
         {gasPrice && (
           <div onClick={toogleShowFees} className="flex items-center gap-2 ml-auto mr-4 cursor-pointer text-damlabelgray2 hover:text-damNavGray">
             <img src={utils.getImageSrc('gaspump.svg')} alt="gas" />
