@@ -44,8 +44,8 @@ export interface IAppStore {
   pendingTransactions: IPendingTransaction[]
   setPendingTransactions: (txs: IPendingTransaction[]) => void
 
-  historyTransactions: IPendingTransaction[]
-  setHistoryTransactions: (txs: IPendingTransaction[]) => void
+  historyTransactions: { [wallet: string]: IPendingTransaction[] }
+  setHistoryTransactions: (txs: { [wallet: string]: IPendingTransaction[] }) => void
   pushHistoryTransaction: (tx: IPendingTransaction) => void
 
   chooseGateway: () => IGateway

@@ -67,7 +67,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   showWaitingForConfirmation: false,
   isWrongNetworkPopupEnabled: true,
   pendingTransactions: localStorage.getItem(localStorageObjects.pendingTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.pendingTxs)!) : [],
-  historyTransactions: localStorage.getItem(localStorageObjects.historyTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.historyTxs)!) : [],
+  historyTransactions: localStorage.getItem(localStorageObjects.historyTxs) ? JSON.parse(localStorage.getItem(localStorageObjects.historyTxs)!) : {},
   notifyTransaction: null,
   isPendingTransactionsVisible: false,
   isHistoryTransactionsVisible: false,
@@ -160,14 +160,19 @@ export const useAppStore = create<IAppStore>((set, get) => ({
         state.historyTransactions = data
       })
     )
-    localStorage.setItem(localStorageObjects.historyTxs, JSON.stringify(get().historyTransactions))
+    localStorage.setItem(localStorageObjects.historyTxs, JSON.stringify(data))
   },
   pushHistoryTransaction: (tx: IPendingTransaction) => {
-    const txs = get().historyTransactions.slice()
+    const account: string = get().walletProvider?.accounts && get().walletProvider?.accounts[0] && get().walletProvider.accounts[0].toLowerCase()
+
+    let txs = (get().historyTransactions[account] || []).slice()
     const alreadyPushed = txs.findIndex((foundTx) => foundTx.hash === tx.hash) > -1
-    if (alreadyPushed) return
+    if (alreadyPushed) {
+      return
+    }
     txs.unshift(tx)
-    get().setHistoryTransactions(txs.slice(0, 10))
+    txs = txs.slice(0, 10)
+    get().setHistoryTransactions({ ...get().historyTransactions, [account]: txs })
   },
   tooglePendingTransactions: () => {
     set(

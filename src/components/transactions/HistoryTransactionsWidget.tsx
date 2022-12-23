@@ -5,8 +5,14 @@ interface HistoryTransactionsWidgetProps {}
 
 const HistoryTransactionsWidget: FC<HistoryTransactionsWidgetProps> = () => {
   const appStore = useAppStore()
+  const account = appStore.walletProvider.accounts && appStore.walletProvider.accounts[0] && appStore.walletProvider.accounts[0].toLowerCase()
 
-  if (!appStore.historyTransactions.length || !appStore.walletProvider.connected) {
+  if (!account) {
+    return <></>
+  }
+
+  const history = appStore.historyTransactions[account]
+  if (!account || !history || !history.length || !appStore.walletProvider.connected) {
     return <></>
   }
 
