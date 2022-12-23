@@ -45,19 +45,11 @@ const Teleport: FC = () => {
   }, [availableDestinations])
 
   const teleportTo = async (dPrimeAmount: string, dstnetwork: ISupportedNetwork) => {
+    let pendingTransaction: IPendingTransaction | undefined
     try {
-      const waitConfirmation: IPendingTransaction = {
-        hash: 'hash',
-        status: 'CONFIRMING',
-        type: 'TELEPORT',
-        startedAt: new Date()
-      }
-      appStore.setNotifyTransaction(waitConfirmation)
-      const tx = await appStore.teleport(dPrimeAmount, dstnetwork.name)
-      const pendingTransaction: IPendingTransaction = {
-        hash: tx.hash,
+      pendingTransaction = {
+        hash: '',
         status: 'REQUESTING',
-        source: tx,
         type: 'TELEPORT',
         from: {
           amount: dPrimeAmount,
@@ -75,20 +67,21 @@ const Teleport: FC = () => {
         },
         startedAt: new Date()
       }
+      appStore.setNotifyTransaction(pendingTransaction)
+      const tx = await appStore.teleport(dPrimeAmount, dstnetwork.name)
+      pendingTransaction = { ...pendingTransaction, hash: tx.hash, source: tx, status: 'REQUESTING' }
       appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
       appStore.setNotifyTransaction(pendingTransaction)
-
       await tx.wait()
       appStore.updateBalances()
     } catch (err) {
       console.error(err)
-      const errorTx: IPendingTransaction = {
-        hash: 'hash',
-        status: 'FAILED',
-        type: 'TELEPORT',
-        startedAt: new Date()
+      if (pendingTransaction) {
+        pendingTransaction = { ...pendingTransaction, status: 'FAILED' }
+        appStore.setNotifyTransaction(pendingTransaction)
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== pendingTransaction!.hash)
+        appStore.setPendingTransactions([...txs, pendingTransaction])
       }
-      appStore.setNotifyTransaction(errorTx)
     }
   }
 
