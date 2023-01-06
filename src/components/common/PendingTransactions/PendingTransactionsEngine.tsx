@@ -213,8 +213,8 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
     <div className="text-black">
       <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
         <div className="text-[14px] text-damlabelgray">
-          <span>Teleporting d2O takes on average </span>
-          <span className="text-damyellow font-bold">15 min.</span>
+          <span>Teleporting d2O can take </span>
+          <span className="text-damyellow font-bold">60 min.</span>
         </div>
       </WaitingForConfirmationPopup>
 
@@ -233,7 +233,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           setShowDevSwitch(true)
         }}
         show={showTeleportInflight()}
-        message="Step 2/3: Teleportation in flight between origin and destination! It should take 15 minutes."
+        message="Step 2/3: Teleportation in flight between origin and destination! It can take 60 minutes."
         txLink={appStore.notifyTransaction?.lzScan || ''}
         imgName="teleport-progress.svg"
       >
