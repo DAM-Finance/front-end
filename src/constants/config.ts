@@ -11,10 +11,10 @@ export const scanNonceMask = 'DAM__NONCE'
 export const isDev = true
 export const supportedNetworks: ISupportedNetwork[] = [
   {
-    name: 'Moonbase',
-    symbol: 'MDEV',
-    chainId: '0x507',
-    id: 1287,
+    name: 'Moonbeam',
+    symbol: 'GLMR',
+    chainId: '0x504',
+    id: 1284,
     iconName: 'moonbeamneticon.svg',
     teleportBgImg: 'moonbase-bg.png',
     addresses: {
@@ -23,33 +23,33 @@ export const supportedNetworks: ISupportedNetwork[] = [
       lzPipe: '0xfd7243e3837Aa0a1Fd0ECa7DB0e7154e502Af191'.toLowerCase(),
       hyperlanePipe: '0xbA3CE03A101980B624550E3554d6Eb9b9E87384c'
     },
-    layerZeroChainIds: '10126',
+    layerZeroChainIds: '126',
     suggestedGasLimit: 500000,
     capabilities: {
       canSwap: false,
       canTeleport: true,
       hasUsdc: false
     },
-    scanUrl: `https://moonbase.moonscan.io/tx/${scanUrlMask}`,
-    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
+    scanUrl: `https://moonscan.io/tx/${scanUrlMask}`,
+    scanLz: `https://layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
     default: false,
     addNetworkData: {
-      chainId: '0x507',
-      chainName: 'Moonbase Alpha',
+      chainId: '0x504',
+      chainName: 'Moonbeam',
       nativeCurrency: {
-        name: 'DEV',
-        symbol: 'DEV',
+        name: 'GLMR',
+        symbol: 'GLMR',
         decimals: 18
       },
-      rpcUrls: ['https://rpc.api.moonbase.moonbeam.network'],
-      blockExplorerUrls: ['https://moonbase.moonscan.io/']
+      rpcUrls: ['https://rpc.api.moonbeam.network'],
+      blockExplorerUrls: ['https://moonscan.io/']
     }
   },
   {
-    name: 'Goerli',
-    symbol: 'GTH',
-    chainId: '0x5',
-    id: 5,
+    name: 'Ethereum',
+    symbol: 'ETH',
+    chainId: '0x1',
+    id: 1,
     iconName: 'ethneticon.png',
     teleportBgImg: 'goerli-bg.png',
     addresses: {
@@ -77,19 +77,19 @@ export const supportedNetworks: ISupportedNetwork[] = [
       canTeleport: true,
       hasUsdc: true
     },
-    scanUrl: `https://goerli.etherscan.io/tx/${scanUrlMask}`,
-    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
+    scanUrl: `https://etherscan.io/tx/${scanUrlMask}`,
+    scanLz: `https://layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
     default: true,
     addNetworkData: {
-      chainId: '0x5',
-      chainName: 'Goerli',
+      chainId: '0x1',
+      chainName: 'Ethereum',
       nativeCurrency: {
-        name: 'Goerli ETH',
-        symbol: 'gorETH',
+        name: 'ETH',
+        symbol: 'ETH',
         decimals: 18
       },
-      rpcUrls: ['https://rpc.ankr.com/eth_goerli'],
-      blockExplorerUrls: ['https://goerli.etherscan.io']
+      rpcUrls: ['https://mainnet.infura.io/v3/'],
+      blockExplorerUrls: ['https://etherscan.io']
     }
   }
 ]
