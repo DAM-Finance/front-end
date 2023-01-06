@@ -213,8 +213,8 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
     <div className="text-black">
       <WaitingForConfirmationPopup handleClose={() => appStore.setNotifyTransaction(null)} show={showTeleportWaiting()} addTokenOption={false}>
         <div className="text-[14px] text-damlabelgray">
-          <span>Teleporting d2O can take </span>
-          <span className="text-damyellow font-bold">60 min.</span>
+          <span>Teleporting d2O can take</span>
+          <span className="text-damyellow font-bold">60 minutes.</span>
         </div>
       </WaitingForConfirmationPopup>
 
