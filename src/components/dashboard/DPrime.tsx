@@ -16,7 +16,7 @@ const DPrime: FC<Partial<IPortfolio>> = (props) => {
   return (
     <div className="flex flex-col bg-damgray rounded-xl overflow-hidden" style={{ opacity: isValidNetworkConnected() ? '1' : '0.2' }}>
       <div className="flex flex-col p-6 gap-2 relative">
-        <div className="text-damlabelgray">d2O Balance</div>
+        <div className="text-damlabelgray">Your d2O Balance</div>
         <div className="text-3xl">{appStore.balances.dPrime ? utils.beautifyNumber(utils.format(appStore.balances.dPrime, 2)) : 0}</div>
         {/* <img className="absolute top-2 right-2" width={115} src={utils.getImageSrc('dprimebg.svg')} alt="dPrime background" /> */}
         <img
