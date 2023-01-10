@@ -70,7 +70,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       link: '', // '0x01BE23585060835E02B77ef475b0Cc51aA1e0709',
       linkJoin: '' // '0xbb2EbebC17CAf0cD430965912632615aF9611273',
     },
-    layerZeroChainIds: '10121',
+    layerZeroChainIds: '101',
     suggestedGasLimit: 500000,
     capabilities: {
       canSwap: true,
