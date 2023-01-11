@@ -11,7 +11,7 @@ const DDPrime: FC = () => {
     <div
       className="flex rounded-xl p-8 py-8 overflow-hidden"
       style={{
-        background: `url(${utils.getImageSrc('ddprimeback.png')}), linear-gradient(124.57deg, #4B2BA5 -118.12%, #1F212C 57.01%)`,
+        background: `url(${utils.getImageSrc('')}), linear-gradient(124.57deg, #4B2BA5 -118.12%, #1F212C 57.01%)`,
         backgroundSize: 'cover'
       }}
     >
