@@ -20,7 +20,7 @@ const DPrime: FC<Partial<IPortfolio>> = (props) => {
         <div className="text-3xl">{appStore.balances.dPrime ? utils.beautifyNumber(utils.format(appStore.balances.dPrime, 2)) : 0}</div>
         {/* <img className="absolute top-2 right-2" width={115} src={utils.getImageSrc('dprimebg.svg')} alt="dPrime background" /> */}
         <img
-          className="absolute right-[10px] top-[30px]"
+          className="absolute right-[20px] top-[30px]"
           width={150}
           src={utils.getImageSrc('d2o_Logo_white.svg')}
           style={{ opacity: 0.3 }}
