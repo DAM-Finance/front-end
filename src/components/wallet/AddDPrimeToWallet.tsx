@@ -24,7 +24,7 @@ const AddDPrimeToWallet: FC = () => {
       {!isDprimeAdded && isConnected && (
         <div className="flex items-center px-4 gap-2 rounded-full bg-dambackgroundgrayed text-white cursor-pointer" onClick={addDPrime}>
           <div>Add</div>
-          <img className="pb-1" width="28px" src={utils.getImageSrc('dprimelogo.svg')} alt="wallet" />
+          <img className="pb-1" width="28px" src={utils.getImageSrc('d2o_Logo_white.svg')} alt="wallet" />
         </div>
       )}
     </>
