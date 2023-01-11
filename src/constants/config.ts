@@ -8,7 +8,7 @@ export const scanDestinationLzIdMask = 'DAM__DESTINATION__LZ__ID'
 export const scanOriginLzPipeMask = 'DAM__ORIGIN__LZPIPE'
 export const scanDestinationLzPipeMask = 'DAM__DESTINATION__LZPIPE'
 export const scanNonceMask = 'DAM__NONCE'
-export const isDev = true
+export const isDev = false
 export const supportedNetworks: ISupportedNetwork[] = [
   {
     name: 'Moonbeam',
