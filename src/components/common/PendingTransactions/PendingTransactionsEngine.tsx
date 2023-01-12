@@ -21,7 +21,7 @@ import { ISupportedTokensMap } from '../../../constants/ISupportedToken'
 const moveDecimal = require('move-decimal-point')
 const BN = require('bn.js')
 
-const client = createClient('testnet')
+const client = createClient(isDev ? 'testnet' : 'mainnet')
 
 interface PendingTransactionsProps {}
 
