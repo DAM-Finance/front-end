@@ -31,7 +31,7 @@ const Navbar: FC<NavbarProps> = () => {
         Dashboard
       </NavLink>
       <NavLink to="/swap" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
-        Get d2O
+        Get d2o
       </NavLink>
       {/* <NavLink to="/manage" className={({ isActive }) => (isActive ? 'text-white font-bold' : 'text-damNavGray hover:text-gray-300')}>
         Manage

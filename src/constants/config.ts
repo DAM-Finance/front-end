@@ -97,7 +97,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
 export const supportedTokens: ISupportedTokensMap = {
   dPrime: {
     name: 'Deuterium',
-    symbol: 'd2O',
+    symbol: 'd2o',
     units: 18,
     imgUrl: 'Twitter_d2o_rounded.png',
     bytes: '0x0'

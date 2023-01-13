@@ -20,7 +20,7 @@ const BorrowingSoon: FC = () => {
       >
         <div className="text-lg">
           <span>Earn yield on your </span>
-          <span className="font-bold">d2O </span>
+          <span className="font-bold">d2o </span>
         </div>
         <div className="text-damlabelgray3 text-m font-light">
           <span>Provide native liquidity with USDT on </span>
