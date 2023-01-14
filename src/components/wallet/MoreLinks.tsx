@@ -11,9 +11,9 @@ interface ILink {
 interface ILinks {
   home: ILink
   docs: ILink
+  audit: ILink
   discord: ILink
   twitter: ILink
-  telegram: ILink
   logout: ILink
 }
 
@@ -22,11 +22,11 @@ const MoreLinks: FC = () => {
   const appStore = useAppStore()
 
   const links: ILinks = {
-    home: { label: 'Home', url: 'https://dam-testing.netlify.app/' },
+    home: { label: 'Home', url: 'https://dam.finance/' },
     docs: { label: 'Docs', url: 'https://medium.com/dam-d2o' },
+    audit: {label: 'Audit', url: 'https://github.com/HalbornSecurity/PublicReports/tree/master/Solidity%20Smart%20Contract%20Audits/DAMfinance%20Audits' },
     discord: { label: 'Discord', url: 'https://t.co/MObW17EWXX' },
     twitter: { label: 'Twitter', url: 'https://twitter.com/DAM_Finance' },
-    telegram: { label: 'Telegram', url: 'https://t.me/damfinance' },
     logout: {
       label: 'Disconnect',
       action: () => {
