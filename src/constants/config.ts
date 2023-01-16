@@ -24,7 +24,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       hyperlanePipe: '0xbA3CE03A101980B624550E3554d6Eb9b9E87384c'
     },
     layerZeroChainIds: '126',
-    suggestedGasLimit: 300000,
+    suggestedGasLimit: 600000,
     capabilities: {
       canSwap: false,
       canTeleport: true,
@@ -71,7 +71,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       linkJoin: '' // '0xbb2EbebC17CAf0cD430965912632615aF9611273',
     },
     layerZeroChainIds: '101',
-    suggestedGasLimit: 300000,
+    suggestedGasLimit: 600000,
     capabilities: {
       canSwap: true,
       canTeleport: true,
