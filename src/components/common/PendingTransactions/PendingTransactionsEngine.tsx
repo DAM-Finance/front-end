@@ -77,7 +77,9 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
         const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
         appStore.setPendingTransactions([...txs, transaction])
         await appStore.updateTokenBalance('dPrime')
-        setInviteSwitchNetwork(true)
+        if (message.status === 'DELIVERED') {
+          setInviteSwitchNetwork(true)
+        }
       }
       if (isDev) {
         const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
