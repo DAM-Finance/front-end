@@ -28,7 +28,7 @@ interface PendingTransactionsProps {}
 const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
   const appStore = useAppStore()
   const [forceUpdate, setForceUpdate] = useState(0)
-  const [showDevSwitch, setShowDevSwitch] = useState(true)
+  const [inviteSwitchNetwork, setInviteSwitchNetwork] = useState(true)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -77,6 +77,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
         const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== transaction.hash)
         appStore.setPendingTransactions([...txs, transaction])
         await appStore.updateTokenBalance('dPrime')
+        setInviteSwitchNetwork(true)
       }
       if (isDev) {
         const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
@@ -98,7 +99,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
         const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
         appStore.setPendingTransactions([...txs, txUpdate])
         await appStore.updateTokenBalance('dPrime')
-        setShowDevSwitch(true)
+        setInviteSwitchNetwork(true)
       }
     },
     [appStore]
@@ -230,14 +231,14 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
       <TransactionInProgressPopup
         handleClose={() => {
           appStore.setNotifyTransaction(null)
-          setShowDevSwitch(true)
+          setInviteSwitchNetwork(true)
         }}
         show={showTeleportInflight()}
         message="Step 2/3: Teleportation in flight between origin and destination! It usually takes 15 minutes."
         txLink={appStore.notifyTransaction?.lzScan || ''}
         imgName="teleport-progress.svg"
       >
-        {isDev && showDevSwitch && (
+        {inviteSwitchNetwork && (
           <div className="flex flex-col gap-2 pt-4">
             <div className="text-md text-damlabelgray">
               <span>Switch network to access</span>
@@ -247,7 +248,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
             <button
               onClick={async () => {
                 await appStore.switchNetwork(appStore.notifyTransaction?.to?.chainId!)
-                setShowDevSwitch(false)
+                setInviteSwitchNetwork(false)
               }}
               className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
             >
@@ -255,7 +256,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
             </button>
           </div>
         )}
-        {!showDevSwitch && (
+        {!inviteSwitchNetwork && (
           <div className="pt-4 text-sm text-damlabelgray">
             <span>Please reach out on </span>
             <a href="https://discord.com/invite/FqzSeEzhNS" target="_blank" rel="noreferrer">
@@ -271,23 +272,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
         show={showTeleportComplete()}
         imgName="teleport-completed.svg"
         message="Step 3/3: Teleport successful!"
-      >
-        {!isDev && (
-          <div className="flex flex-col gap-6">
-            <div className="text-md text-damlabelgray">
-              <span>Switch network to use your d2O.</span>
-            </div>
-            <button
-              onClick={() => {
-                appStore.switchNetwork(appStore.notifyTransaction?.to?.chainId!)
-              }}
-              className="flex items-center justify-center gap-2 rounded-full py-3 px-6 mx-auto bg-damyellow text-damgray hover:bg-yellow-200 font-bold"
-            >
-              <span>Switch Network</span>
-            </button>
-          </div>
-        )}
-      </TransactionCompletedPopup>
+      ></TransactionCompletedPopup>
 
       <TransactionFailedPopup
         handleClose={() => appStore.setNotifyTransaction(null)}
