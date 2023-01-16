@@ -222,12 +222,17 @@ const Swaper: FC = () => {
     return Number(firstCoin) > Number(balance)
   }
 
+  let AmtLessFee = Number(firstCoin) - (burnFee * Number(firstCoin) / 100)
+
   const calculateBurnFee = () => {
-    return utils.beautifyNumber(Math.round(burnFee * Number(firstCoin)) / 100)
+    return burnFee * AmtLessFee / 100
+  }
+  const beautifulBurnFee = () => {
+    return utils.beautifyNumber(calculateBurnFee().toFixed(2))
   }
 
   const calculateExpectedBurnOutput = () => {
-    return utils.beautifyNumber(Math.round(Number(firstCoin) * 100 - burnFee * Number(firstCoin)) / 100)
+    return utils.beautifyNumber(AmtLessFee)
   }
 
   useEffect(() => {
@@ -254,7 +259,7 @@ const Swaper: FC = () => {
       </div>
       <div className="flex">
         <div>{isMint ? 'Mint fee' : `Burn fee (${burnFee}%)`}</div>
-        <div className="ml-auto">{isInverted ? `${calculateBurnFee()} ${selectedStableCoin.name}` : `0 d2O`}</div>
+        <div className="ml-auto"> ~ {isInverted ? `${beautifulBurnFee()} ${selectedStableCoin.name}` : `0 d2O`}</div>
       </div>
     </div>
   )
@@ -305,7 +310,7 @@ const Swaper: FC = () => {
         </SwaperInput>
       ) : (
         <SwaperInputList
-          value={firstCoin}
+          value={isMint ? firstCoin : AmtLessFee.toFixed(2).toString()}
           coins={stableCoins}
           selectedCoin={selectedStableCoin}
           handleChange={updateBothInputs}
@@ -340,7 +345,7 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'HideApprove' && (
           <button
-            onClick={() => swap(firstCoin)}
+            onClick={() => isMint ? swap(firstCoin) : swap(AmtLessFee.toString())}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isBelowZero() || isAboveBalance()}
           >
@@ -350,7 +355,7 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'loading' && appStore.walletProvider?.connected && (
           <button
-            onClick={() => swap(firstCoin)}
+            onClick={() => isMint ? swap(firstCoin) : swap(AmtLessFee.toString())}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={true}
           >
