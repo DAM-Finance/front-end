@@ -1,7 +1,7 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { burnFee, supportedNetworks, supportedTokens } from '../../constants/config'
+import { burnFee, estimateForBurnFee, supportedNetworks, supportedTokens } from '../../constants/config'
 import { IPendingTransaction } from '../../constants/IPendingTransaction'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
@@ -222,9 +222,13 @@ const Swaper: FC = () => {
     return Number(firstCoin) > Number(balance)
   }
 
-  let AmtLessFee = Number(firstCoin) - (burnFee * Number(firstCoin) / 100)
+  let AmtLessFee = Number(firstCoin) - (estimateForBurnFee * Number(firstCoin) / 100)
 
   const calculateBurnFee = () => {
+    let burn : number = burnFee * AmtLessFee / 100
+    console.log("ALF " + AmtLessFee);
+    console.log("BRN " + burn);
+    console.log(burn + AmtLessFee);
     return burnFee * AmtLessFee / 100
   }
   const beautifulBurnFee = () => {
@@ -232,7 +236,7 @@ const Swaper: FC = () => {
   }
 
   const calculateExpectedBurnOutput = () => {
-    return utils.beautifyNumber(AmtLessFee)
+    return utils.beautifyNumber(AmtLessFee.toFixed(2))
   }
 
   useEffect(() => {
@@ -258,7 +262,7 @@ const Swaper: FC = () => {
         <div className="ml-auto">{isInverted ? `${calculateExpectedBurnOutput()} ${selectedStableCoin.name}` : `${secondCoin} d2O`}</div>
       </div>
       <div className="flex">
-        <div>{isMint ? 'Mint fee' : `Burn fee (${burnFee}%)`}</div>
+        <div>{isMint ? 'Mint fee' : `Burn fee (${burnFee.toFixed(2)}%)`}</div>
         <div className="ml-auto"> ~ {isInverted ? `${beautifulBurnFee()} ${selectedStableCoin.name}` : `0 d2O`}</div>
       </div>
     </div>
@@ -345,7 +349,7 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'HideApprove' && (
           <button
-            onClick={() => isMint ? swap(firstCoin) : swap(AmtLessFee.toString())}
+            onClick={() => isMint ? swap(firstCoin) : swap(AmtLessFee.toFixed(6).toString())}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isBelowZero() || isAboveBalance()}
           >
@@ -355,7 +359,7 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'loading' && appStore.walletProvider?.connected && (
           <button
-            onClick={() => isMint ? swap(firstCoin) : swap(AmtLessFee.toString())}
+            onClick={() => isMint ? swap(firstCoin) : swap(AmtLessFee.toFixed(6).toString())}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={true}
           >
