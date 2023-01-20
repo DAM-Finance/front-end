@@ -377,7 +377,7 @@ const Swaper: FC = () => {
         handleClose={() => setHideUnsupported(true)}
         show={isNetworkUnsupported() && !hideUnsupported}
         title="Unsupported network"
-        description={`Mint and burn are only available on Goerli at this time`}
+        description={`Mint and burn are only available on Ethereum at this time`}
       ></InfoPopupWithNetwork>
       <WaitingForConfirmationPopup handleClose={() => setTxState('none')} show={txState === 'waiting'}></WaitingForConfirmationPopup>
       <TransactionInProgressPopup handleClose={() => setTxState('none')} show={txState === 'inprogress'} txLink={txLink}></TransactionInProgressPopup>
@@ -392,7 +392,7 @@ const Swaper: FC = () => {
             {txState === 'mintCompleted' && (
               <>
                 <div className="text-md text-damlabelgray">
-                  <span>Do you want to teleport your d2O to a different network?</span>
+                  <span>Do you want to teleport your d2o to a different network?</span>
                 </div>
 
                 <NavLink to="/teleport">

@@ -1,6 +1,8 @@
 import { FC } from 'react'
 import utils from '../../constants/utils'
 
+import { NavLink } from 'react-router-dom'
+
 const BorrowingSoon: FC = () => {
   return (
     <div
@@ -17,10 +19,15 @@ const BorrowingSoon: FC = () => {
         }}
       >
         <div className="text-lg">
-          <span className="font-bold">Mainnet </span>
-          <span>coming soon</span>
+          <span>Earn yield on your </span>
+          <span className="font-bold">d2o </span>
         </div>
-        <div className="text-damlabelgray3 text-sm font-light">DAM token targeted for 2023</div>
+        <div className="text-damlabelgray3 text-m font-light">
+          <span>Provide native liquidity with USDT on </span>
+          <NavLink to="" >
+          <button className="font-bold"> Moonbeam</button>
+          </NavLink>
+          </div>
       </div>
     </div>
   )

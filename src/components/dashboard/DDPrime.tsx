@@ -11,7 +11,7 @@ const DDPrime: FC = () => {
     <div
       className="flex rounded-xl p-8 py-8 overflow-hidden"
       style={{
-        background: `url(${utils.getImageSrc('ddprimeback.png')}), linear-gradient(124.57deg, #4B2BA5 -118.12%, #1F212C 57.01%)`,
+        background: `url(${utils.getImageSrc('')}), linear-gradient(124.57deg, #4B2BA5 -118.12%, #1F212C 57.01%)`,
         backgroundSize: 'cover'
       }}
     >
@@ -20,11 +20,11 @@ const DDPrime: FC = () => {
           <span>Meet </span>
           <span className="font-bold">dReservoir</span>
         </div>
-        <div className="text-damlabellightgray text-sm">Teleport d2O from Ethereum to Polkadot</div>
+        <div className="text-damlabellightgray text-sm">Teleport d2o from Ethereum to Polkadot</div>
       </div>
       <NavLink to="/teleport" className="ml-auto flex justify-center font-bold">
         <button className="flex items-center gap-2 rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">
-          <span>Teleport d2O</span>
+          <span>Teleport d2o</span>
           <ArrowRightIcon className="h-5 w-5 text-damyellow"></ArrowRightIcon>
         </button>
       </NavLink>
