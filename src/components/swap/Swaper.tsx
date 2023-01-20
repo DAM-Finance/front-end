@@ -225,10 +225,6 @@ const Swaper: FC = () => {
   let AmtLessFee = Number(firstCoin) - (estimateForBurnFee * Number(firstCoin) / 100)
 
   const calculateBurnFee = () => {
-    let burn : number = burnFee * AmtLessFee / 100
-    console.log("ALF " + AmtLessFee);
-    console.log("BRN " + burn);
-    console.log(burn + AmtLessFee);
     return burnFee * AmtLessFee / 100
   }
   const beautifulBurnFee = () => {
