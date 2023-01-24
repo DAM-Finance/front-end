@@ -111,6 +111,4 @@ export const supportedTokens: ISupportedTokensMap = {
   }
 }
 
-
-export const estimateForBurnFee: number = 0.7444444
-export const burnFee: number = 0.75002
+export const burnFee = 0.75

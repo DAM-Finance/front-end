@@ -1,7 +1,7 @@
 import { utils as ethersUtils } from 'ethers'
 import { FC, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { burnFee, estimateForBurnFee, supportedNetworks, supportedTokens } from '../../constants/config'
+import { burnFee, supportedNetworks, supportedTokens } from '../../constants/config'
 import { IPendingTransaction } from '../../constants/IPendingTransaction'
 import { ITxState } from '../../constants/ITxState'
 import utils from '../../constants/utils'
@@ -222,17 +222,12 @@ const Swaper: FC = () => {
     return Number(firstCoin) > Number(balance)
   }
 
-  let AmtLessFee = Number(firstCoin) - (estimateForBurnFee * Number(firstCoin) / 100)
-
   const calculateBurnFee = () => {
-    return burnFee * AmtLessFee / 100
-  }
-  const beautifulBurnFee = () => {
-    return utils.beautifyNumber(calculateBurnFee().toFixed(2))
+    return utils.beautifyNumber(Math.round(burnFee * Number(firstCoin)) / 100)
   }
 
   const calculateExpectedBurnOutput = () => {
-    return utils.beautifyNumber(AmtLessFee.toFixed(2))
+    return utils.beautifyNumber(Math.round(Number(firstCoin) * 100 - burnFee * Number(firstCoin)) / 100)
   }
 
   useEffect(() => {
@@ -258,8 +253,8 @@ const Swaper: FC = () => {
         <div className="ml-auto">{isInverted ? `${calculateExpectedBurnOutput()} ${selectedStableCoin.name}` : `${secondCoin} d2O`}</div>
       </div>
       <div className="flex">
-        <div>{isMint ? 'Mint fee' : `Burn fee (${burnFee.toFixed(2)}%)`}</div>
-        <div className="ml-auto"> ~ {isInverted ? `${beautifulBurnFee()} ${selectedStableCoin.name}` : `0 d2O`}</div>
+        <div>{isMint ? 'Mint fee' : `Burn fee (${burnFee}%)`}</div>
+        <div className="ml-auto">{isInverted ? `${calculateBurnFee()} ${selectedStableCoin.name}` : `0 d2O`}</div>
       </div>
     </div>
   )
@@ -310,7 +305,7 @@ const Swaper: FC = () => {
         </SwaperInput>
       ) : (
         <SwaperInputList
-          value={isMint ? firstCoin : AmtLessFee.toFixed(2).toString()}
+          value={firstCoin}
           coins={stableCoins}
           selectedCoin={selectedStableCoin}
           handleChange={updateBothInputs}
@@ -345,7 +340,7 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'HideApprove' && (
           <button
-            onClick={() => isMint ? swap(firstCoin) : swap(AmtLessFee.toFixed(6).toString())}
+            onClick={() => swap(firstCoin)}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isBelowZero() || isAboveBalance()}
           >
@@ -355,7 +350,7 @@ const Swaper: FC = () => {
 
         {approveButtonState === 'loading' && appStore.walletProvider?.connected && (
           <button
-            onClick={() => isMint ? swap(firstCoin) : swap(AmtLessFee.toFixed(6).toString())}
+            onClick={() => swap(firstCoin)}
             className="flex items-center w-full justify-center gap-2 rounded-full py-3 px-6  bg-yellow-300 text-damgray hover:bg-yellow-200 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={true}
           >
