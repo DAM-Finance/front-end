@@ -18,7 +18,9 @@ const DDPrime: FC = () => {
       <div>
         <div className="text-2xl text-white">
           <span>Meet </span>
-          <span className="font-bold">dReservoir</span>
+          <a href="https://docs.dam.finance/concepts/dreservoir" rel="noreferrer">
+          <button className="font-bold">dReservoir</button>
+          </a>
         </div>
         <div className="text-damlabellightgray text-sm">Teleport d2o from Ethereum to Polkadot</div>
       </div>
