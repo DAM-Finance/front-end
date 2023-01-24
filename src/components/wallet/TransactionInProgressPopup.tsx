@@ -32,8 +32,7 @@ const TransactionInProgressPopup: FC<TransactionInProgressPopupProps> = ({
                 <div className="flex flex-col">
                   <a className="flex gap-1 justify-center" href={txLink} target="_blank" rel="noreferrer">
                     <div className="text-sm text-damlabelgray">
-                      <span>Follow the </span>
-                      <span className="text-damyellow">transaction</span>
+                      <span>Follow the transaction</span>
                     </div>
                     <img src={utils.getImageSrc('diagonal-arrow.svg')} alt="arrow" />
                   </a>
