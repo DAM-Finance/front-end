@@ -11,7 +11,6 @@ interface ILink {
 interface ILinks {
   home: ILink
   docs: ILink
-  github: ILink
   audit: ILink
   discord: ILink
   twitter: ILink
@@ -24,8 +23,7 @@ const MoreLinks: FC = () => {
 
   const links: ILinks = {
     home: { label: 'Home', url: 'https://dam.finance/' },
-    docs: { label: 'Docs', url: 'https://docs.dam.finance/' },
-    github: { label: 'GitHub', url: 'https://github.com/DAM-Finance' },
+    docs: { label: 'Docs', url: 'https://medium.com/dam-d2o' },
     audit: {label: 'Audit', url: 'https://github.com/HalbornSecurity/PublicReports/tree/master/Solidity%20Smart%20Contract%20Audits/DAMfinance%20Audits' },
     discord: { label: 'Discord', url: 'https://t.co/MObW17EWXX' },
     twitter: { label: 'Twitter', url: 'https://twitter.com/DAM_Finance' },

@@ -24,9 +24,9 @@ const BorrowingSoon: FC = () => {
         </div>
         <div className="text-damlabelgray3 text-m font-light">
           <span>Provide native liquidity with USDT on </span>
-          <a href="https://curve.fi/#/moonbeam/pools/factory-v2-18/deposit" rel="noreferrer">
-            <button className="font-bold"> Moonbeam</button>
-          </a>
+          <NavLink to="" >
+          <button className="font-bold"> Moonbeam</button>
+          </NavLink>
           </div>
       </div>
     </div>
