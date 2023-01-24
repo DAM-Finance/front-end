@@ -27,7 +27,7 @@ const MoreLinks: FC = () => {
     docs: { label: 'Docs', url: 'https://docs.dam.finance' },
     github: { label: 'GitHub', url: 'https://github.com/DAM-Finance' },
     audit: {label: 'Audit', url: 'https://github.com/HalbornSecurity/PublicReports/tree/master/Solidity%20Smart%20Contract%20Audits/DAMfinance%20Audits' },
-    discord: { label: 'Discord', url: 'https://t.co/MObW17EWXX' },
+    discord: { label: 'Discord', url: 'https://discord.gg/xGB4pyU4Jp' },
     twitter: { label: 'Twitter', url: 'https://twitter.com/DAM_Finance' },
     logout: {
       label: 'Disconnect',
