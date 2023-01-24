@@ -1,8 +1,6 @@
 import { FC } from 'react'
 import utils from '../../constants/utils'
 
-import { NavLink } from 'react-router-dom'
-
 const BorrowingSoon: FC = () => {
   return (
     <div
