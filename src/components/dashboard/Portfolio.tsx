@@ -23,7 +23,7 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
               <span>Get d2o</span>
             </button>
           </NavLink>
-          <a href="https://docs.dam.finance" rel="noreferrer">
+          <a href="https://medium.com/dam-d2o/liquidity-pipes-dam-finance-goes-multi-chain-78c55a01fafa" target="_blank" rel="noreferrer">
             <button className="rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">Learn More</button>
           </a>
         </div>
