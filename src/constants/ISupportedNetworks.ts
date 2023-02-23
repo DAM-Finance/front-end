@@ -34,6 +34,9 @@ export interface ISupportedNetworkAddresses {
   linkJoin?: string
   lzPipe?: string
   hyperlanePipe?: string
+  InterchainGasPaymaster?: string
+  Mailbox?: string
+
 }
 
 export interface IAddNetworkData {

@@ -17,10 +17,12 @@ const BorrowingSoon: FC = () => {
         }}
       >
         <div className="text-lg">
-          <span className="font-bold">Mainnet </span>
-          <span>coming soon</span>
+          <span>New networks being added for </span>
+          <span className="font-bold">d2o </span>
         </div>
-        <div className="text-damlabelgray3 text-sm font-light">DAM token targeted for 2023</div>
+        <div className="text-damlabelgray3 text-m font-light">
+        <span>DAM token targeted for 2023 </span>
+          </div>
       </div>
     </div>
   )

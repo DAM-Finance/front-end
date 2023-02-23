@@ -16,14 +16,14 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
           <span className="text-2xl">Take your stablecoin liquidity anywhere through </span>
           <span className="text-2xl font-bold">DAM</span>
         </div>
-        <div className="text-gray-500">d2O is a scalable, omnichain stablecoin with utility in Polkadot</div>
+        <div className="text-gray-500">d2o is a native, omnichain stablecoin with utility in Polkadot</div>
         <div className="flex gap-4">
           <NavLink to="/swap">
             <button className="flex font-bold items-center gap-2 rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200">
-              <span>Get d2O</span>
+              <span>Get d2o</span>
             </button>
           </NavLink>
-          <a href="https://medium.com/dam-d2o/liquidity-pipes-dam-finance-goes-multi-chain-78c55a01fafa" target="_blank" rel="noreferrer">
+          <a href="https://docs.dam.finance" rel="noreferrer">
             <button className="rounded-full py-1 px-6 bg-dambackgroundgrayed hover:bg-dambackgroundgrayedhover text-damyellow">Learn More</button>
           </a>
         </div>
@@ -41,7 +41,7 @@ const Portfolio: FC<Partial<IPortfolio>> = (portfolio) => {
             <div className="text-4xl">$ {portfolio?.portfolioValue?.toLocaleString()}</div>
             <NavLink className="ml-auto" to="manage/borrow">
               <button className="flex items-center gap-2  rounded-full py-2 px-6 bg-damyellow text-damgray hover:bg-yellow-200 font-bold">
-                <span>Borrow d2O</span>
+                <span>Borrow d2o</span>
               </button>
             </NavLink>
           </div>

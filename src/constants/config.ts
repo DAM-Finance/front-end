@@ -46,6 +46,42 @@ export const supportedNetworks: ISupportedNetwork[] = [
     }
   },
   {
+    name: 'Shibuya',
+    symbol: 'SBY',
+    chainId: '0x517', //THIS IS WRONG I THINK
+    id: 81,
+    iconName: 'astar_icon.png',
+    teleportBgImg: 'the_astar.png',
+    addresses: {
+      dPrime: '0x687007C510Cd174f815cdaDA4De51d66BA73544d',
+      dPrimeGuardian: '0xB1fbcD7415F9177F5EBD3d9700eD5F15B476a5Fe',
+      hyperlanePipe: '0xceE15Ca9fF2dA87080b34ca922AB8C195aD6D6EB', // NOT SURE IF THIS NEEDS TO BE BETTER INTEGRATED
+      InterchainGasPaymaster: '0xc806B0600cbAfA0B197562a9F7e3B9856866E9bF',
+      Mailbox:'0x2FdA8c6783Aa36BeD645baD28a4cDC8769dCD252',
+    },
+    layerZeroChainIds: '10126',
+    suggestedGasLimit: 500000,
+    capabilities: {
+      canSwap: false,
+      canTeleport: true,
+      hasUsdc: false
+    },
+    scanUrl: `https://moonbase.moonscan.io/tx/${scanUrlMask}`,
+    scanLz: `https://testnet.layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`, // I ASSUME THIS ISNT NEEDED ANYMORE
+    default: false,
+    addNetworkData: {
+      chainId: '0x517',//THIS IS WRONG I THINK
+      chainName: 'Shibuya',
+      nativeCurrency: {
+        name: 'SBY',
+        symbol: 'SBY',
+        decimals: 18
+      },
+      rpcUrls: ['https://evm.shibuya.astar.network'],
+      blockExplorerUrls: ['https://moonbase.moonscan.io/']
+    }
+  },
+  {
     name: 'Goerli',
     symbol: 'GTH',
     chainId: '0x5',
@@ -97,9 +133,9 @@ export const supportedNetworks: ISupportedNetwork[] = [
 export const supportedTokens: ISupportedTokensMap = {
   dPrime: {
     name: 'Deuterium',
-    symbol: 'd2O',
+    symbol: 'd2o',
     units: 18,
-    imgUrl: 'dam-logo-rounded.png',
+    imgUrl: 'Twitter_d2o_rounded.png',
     bytes: '0x0'
   },
   usdc: {
