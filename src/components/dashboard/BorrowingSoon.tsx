@@ -1,8 +1,6 @@
 import { FC } from 'react'
 import utils from '../../constants/utils'
 
-import { NavLink } from 'react-router-dom'
-
 const BorrowingSoon: FC = () => {
   return (
     <div
@@ -23,10 +21,10 @@ const BorrowingSoon: FC = () => {
           <span className="font-bold">d2o </span>
         </div>
         <div className="text-damlabelgray3 text-m font-light">
-          <span>Provide native liquidity with USDT on </span>
-          <a href="https://curve.fi/#/moonbeam/pools/factory-v2-18/deposit" rel="noreferrer">
-            <button className="font-bold"> Moonbeam</button>
-          </a>
+        <span>Provide native liquidity with USDT on </span>
+        <a href="https://curve.fi/#/moonbeam/pools/factory-v2-18/deposit" rel="noreferrer">
+          <button className="font-bold"> Moonbeam</button>
+        </a>
           </div>
       </div>
     </div>
