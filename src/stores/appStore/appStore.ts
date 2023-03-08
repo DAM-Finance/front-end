@@ -347,6 +347,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.layerZeroChainIds
     const teleportFee = await connectedContracts.lzPipe.estimateSendFee(dstChainId, accounts[0], utils.fwad(dPrimeAmount), false, [])
+    const gasLimit = get().selectedNetwork?.suggestedGasLimit
     return connectedContracts.lzPipe.sendFrom(
       accounts[0], //address _from,
       dstChainId, //uint16 _dstChainId,
@@ -355,7 +356,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       accounts[0], //address payable _refundAddress,
       accounts[0], //address _zroPaymentAddress,
       [], //bytes memory _adapterParams
-      { value: teleportFee.nativeFee}
+      { value: teleportFee.nativeFee, gasLimit: gasLimit }
     )
   },
   updateBalances: async () => {
@@ -387,6 +388,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().setBalances(token, formatedBalance)
   },
   swapStableToDPrime: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => {
+    const gasLimit = get().selectedNetwork?.suggestedGasLimit
     await get().ensureConnected()
 
     if (amount === '0' || !get().selectedNetwork || !get().walletProvider.connected) {
@@ -397,9 +399,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const swapAmount = ethers.utils.parseUnits(amount, decimals).toString()
     const tokenBytes = supportedTokens[token].bytes
     const { accounts } = get().walletProvider
-    return connectedContracts[tokenPsm as any].createD2O(accounts[0], [tokenBytes], [swapAmount])
+    return connectedContracts[tokenPsm as any].createD2O(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
   },
   swapDPrimeToStable: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => {
+    const gasLimit = get().selectedNetwork?.suggestedGasLimit
     await get().ensureConnected()
 
     if (amount === '0' || !get().selectedNetwork || !get().walletProvider.connected) {
@@ -410,7 +413,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const swapAmount = ethers.utils.parseUnits(amount, decimals).toString()
     const tokenBytes = supportedTokens[token].bytes
     const { accounts } = get().walletProvider
-    return connectedContracts[tokenPsm as any].getCollateral(accounts[0], [tokenBytes], [swapAmount])
+    return connectedContracts[tokenPsm as any].getCollateral(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
   },
   tokenRequiresApproval: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, value, decimals) => {
     if (value === '') {
