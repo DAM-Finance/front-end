@@ -71,7 +71,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       linkJoin: '' // '0xbb2EbebC17CAf0cD430965912632615aF9611273',
     },
     layerZeroChainIds: '101',
-    suggestedGasLimit: 400000,
+    suggestedGasLimit: 300000,
     capabilities: {
       canSwap: true,
       canTeleport: true,
