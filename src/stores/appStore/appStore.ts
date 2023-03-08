@@ -388,7 +388,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     get().setBalances(token, formatedBalance)
   },
   swapStableToDPrime: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => {
-    const gasLimit = get().selectedNetwork?.suggestedGasLimit
+    // const gasLimit = get().selectedNetwork?.suggestedGasLimit //, { gasLimit: gasLimit }
     await get().ensureConnected()
 
     if (amount === '0' || !get().selectedNetwork || !get().walletProvider.connected) {
@@ -399,10 +399,10 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const swapAmount = ethers.utils.parseUnits(amount, decimals).toString()
     const tokenBytes = supportedTokens[token].bytes
     const { accounts } = get().walletProvider
-    return connectedContracts[tokenPsm as any].createD2O(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
+    return connectedContracts[tokenPsm as any].createD2O(accounts[0], [tokenBytes], [swapAmount])
   },
   swapDPrimeToStable: async (token: keyof typeof supportedTokens, tokenPsm: string | undefined, amount: string) => {
-    const gasLimit = get().selectedNetwork?.suggestedGasLimit
+    // const gasLimit = get().selectedNetwork?.suggestedGasLimit //, { gasLimit: gasLimit }
     await get().ensureConnected()
 
     if (amount === '0' || !get().selectedNetwork || !get().walletProvider.connected) {
@@ -413,7 +413,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     const swapAmount = ethers.utils.parseUnits(amount, decimals).toString()
     const tokenBytes = supportedTokens[token].bytes
     const { accounts } = get().walletProvider
-    return connectedContracts[tokenPsm as any].getCollateral(accounts[0], [tokenBytes], [swapAmount], { gasLimit: gasLimit })
+    return connectedContracts[tokenPsm as any].getCollateral(accounts[0], [tokenBytes], [swapAmount])
   },
   tokenRequiresApproval: async (token: keyof typeof supportedTokens, tokenJoin: keyof ISupportedNetworkAddresses, value, decimals) => {
     if (value === '') {
