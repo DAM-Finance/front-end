@@ -17,10 +17,15 @@ const BorrowingSoon: FC = () => {
         }}
       >
         <div className="text-lg">
-          <span className="font-bold">Mainnet </span>
-          <span>coming soon</span>
+          <span>Earn yield on your </span>
+          <span className="font-bold">d2o </span>
         </div>
-        <div className="text-damlabelgray3 text-sm font-light">DAM token targeted for 2023</div>
+        <div className="text-damlabelgray3 text-m font-light">
+        <span>Provide native liquidity with USDT on </span>
+        <a href="https://curve.fi/#/moonbeam/pools/factory-v2-18/deposit" rel="noreferrer">
+          <button className="font-bold"> Moonbeam</button>
+        </a>
+          </div>
       </div>
     </div>
   )

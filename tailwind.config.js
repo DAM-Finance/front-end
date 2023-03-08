@@ -20,7 +20,8 @@ module.exports = {
         damyellow: '#F5DB59',
         damlightyellow: '#E6CE82',
         damorange: '#CBA56C',
-        damspecialbanner: 'linear-gradient(124.57deg, #4B2BA5 -118.12%, #1F212C 57.01%)'
+        damspecialbanner: 'linear-gradient(124.57deg, #4B2BA5 -118.12%, #1F212C 57.01%)',
+        dampurple: '#9D44DB'
       }
     },
     fontFamily: {
