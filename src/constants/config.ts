@@ -74,7 +74,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
     suggestedGasLimit: 400000,
     capabilities: {
       canSwap: false,
-      canTeleport: true,
+      canTeleport: false,
       hasUsdc: false
     },
     scanUrl: `https://etherscan.io/tx/${scanUrlMask}`,
