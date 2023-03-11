@@ -73,9 +73,9 @@ export const supportedNetworks: ISupportedNetwork[] = [
     layerZeroChainIds: '101',
     suggestedGasLimit: 400000,
     capabilities: {
-      canSwap: true,
+      canSwap: false,
       canTeleport: true,
-      hasUsdc: true
+      hasUsdc: false
     },
     scanUrl: `https://etherscan.io/tx/${scanUrlMask}`,
     scanLz: `https://layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
