@@ -73,9 +73,9 @@ export const supportedNetworks: ISupportedNetwork[] = [
     layerZeroChainIds: '101',
     suggestedGasLimit: 400000,
     capabilities: {
-      canSwap: false,
+      canSwap: true,
       canTeleport: false,
-      hasUsdc: false
+      hasUsdc: true
     },
     scanUrl: `https://etherscan.io/tx/${scanUrlMask}`,
     scanLz: `https://layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
@@ -110,7 +110,6 @@ export const supportedTokens: ISupportedTokensMap = {
     bytes: ethers.utils.formatBytes32String('PSM-USDC')
   }
 }
-
 
 export const estimateForBurnFee: number = 0.7444444
 export const burnFee: number = 0.75002
