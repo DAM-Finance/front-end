@@ -73,7 +73,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
     layerZeroChainIds: '101',
     suggestedGasLimit: 400000,
     capabilities: {
-      canSwap: false,
+      canSwap: true,
       canTeleport: false,
       hasUsdc: true
     },
