@@ -90,6 +90,18 @@ const Teleport: FC = () => {
   //   setTxState('none')
   // }
 
+  const getGasPrice = async () => {
+    const web3Provider = appStore.walletProvider?.web3Provider
+    if (!web3Provider) {
+      return
+    }
+
+    const gasPrice = await web3Provider.getGasPrice()
+    console.log(gasPrice);
+    const priceInGwei = ethersUtils.formatUnits(gasPrice, 'gwei')
+    setGasPrice(priceInGwei.toString())
+  }
+
   const isBelowZero = () => {
     return Number(amount) <= 0
   }
@@ -111,7 +123,7 @@ const Teleport: FC = () => {
               <SelectNetwork
                 networks={supportedNetworks}
                 selectedNetwork={originNetwork}
-                handleChange={(network) => appStore.switchNetwork(network.chainId)}
+                handleChange={(network) => appStore.switchNetwork(network.chainId).then(() => {getGasPrice()})}
               ></SelectNetwork>
               <img src={utils.getImageSrc('right-arrow.svg')} alt="" />
               <SelectNetwork
@@ -150,6 +162,7 @@ const Teleport: FC = () => {
               </button>
               <div className="flex justify-center items-center gap-2">
                 <img src={utils.getImageSrc('warning.svg')} alt="" />
+                <div className="text-damlightyellow text-sm font-light">Make sure you have enough destination chain gas to transact.</div>
                 <div className="text-damlightyellow text-sm font-light">Make sure you have enough destination chain gas to transact.</div>
               </div>
             </div>
