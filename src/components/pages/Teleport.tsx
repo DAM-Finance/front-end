@@ -163,7 +163,6 @@ const Teleport: FC = () => {
               <div className="flex justify-center items-center gap-2">
                 <img src={utils.getImageSrc('warning.svg')} alt="" />
                 <div className="text-damlightyellow text-sm font-light">Make sure you have enough destination chain gas to transact.</div>
-                <div className="text-damlightyellow text-sm font-light">Make sure you have enough destination chain gas to transact.</div>
               </div>
             </div>
           ) : (
