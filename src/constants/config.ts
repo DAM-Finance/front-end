@@ -11,85 +11,85 @@ export const scanNonceMask = 'DAM__NONCE'
 export const isDev = false
 export const supportedNetworks: ISupportedNetwork[] = [
   {
-    name: 'Moonbeam',
-    symbol: 'GLMR',
-    chainId: '0x504',
-    id: 1284,
+    name: 'Fuji',
+    symbol: 'AVAX',
+    chainId: '0xa869',
+    id: 43113,
     iconName: 'moonbeamneticon.svg',
     teleportBgImg: 'moonbase-bg.png',
     addresses: {
-      dPrime: '0xc806B0600cbAfA0B197562a9F7e3B9856866E9bF', // d2o
-      dPrimeGuardian: '0x05533EA9B9F37daA890512d8a2DD5b853620819e',
-      lzPipe: '0xDd92aF2acb2Dd66Abe5C2023c7D446989DF0af53'.toLowerCase(), // LayerZeroPipe
-      hyperlanePipe: '0xbA3CE03A101980B624550E3554d6Eb9b9E87384c'
+      dPrime: '0xcD6f577169c95411299ED5CfB6F6D0A7b07E4B9c', // d2o
+      dPrimeGuardian: '0x56c98a952B4eb9A8Ae02aAa595de0D44dE18e1e5',
+      lzPipe: '0x4e6AE3f1Aa290ecb392Daec7ADb1b3826Ffe677e'.toLowerCase(), // LayerZeroPipe
+      hyperlanePipe: ''
     },
-    layerZeroChainIds: '126',
+    layerZeroChainIds: '10106',
     suggestedGasLimit: 400000,
     capabilities: {
       canSwap: false,
       canTeleport: true,
       hasUsdc: false
     },
-    scanUrl: `https://moonscan.io/tx/${scanUrlMask}`,
+    scanUrl: `https://testnet.snowtrace.io/tx/${scanUrlMask}`,
     scanLz: `https://layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
     default: false,
     addNetworkData: {
-      chainId: '0x504',
-      chainName: 'Moonbeam',
+      chainId: '0xa869',
+      chainName: 'Fuji',
       nativeCurrency: {
-        name: 'GLMR',
-        symbol: 'GLMR',
+        name: 'Avalanche',
+        symbol: 'AVAX',
         decimals: 18
       },
-      rpcUrls: ['https://rpc.api.moonbeam.network'],
-      blockExplorerUrls: ['https://moonscan.io/']
+      rpcUrls: ['https://endpoints.omniatech.io/v1/avax/fuji/public'],
+      blockExplorerUrls: ['https://testnet.snowtrace.io/']
     }
   },
   {
-    name: 'Ethereum',
-    symbol: 'ETH',
-    chainId: '0x1',
-    id: 1,
+    name: 'Sepolia',
+    symbol: 'sETH',
+    chainId: '0xAA36A7',
+    id: 11155111,
     iconName: 'ethneticon.png',
     teleportBgImg: 'goerli-bg.png',
     addresses: {
-      dPrime: '0x2FdA8c6783Aa36BeD645baD28a4cDC8769dCD252', // d2O
-      dPrimeJoin: '0x687007C510Cd174f815cdaDA4De51d66BA73544d', // d2O Join
-      dPrimeGuardian: '0x88E4B42e9eB353AE91F32025631df7fCC6BcCDC2',
-      lmcv: '0xc806B0600cbAfA0B197562a9F7e3B9856866E9bF',
-      lmcvProxy: '0xDd92aF2acb2Dd66Abe5C2023c7D446989DF0af53',
-      lzPipe: '0x78D7480aFcB1c2310917fDa95e96cA4E1C06CcfF'.toLowerCase(), // lzPipe / LayerZeroPipe
-      hyperlanePipe: '0x2a4d2fE5A242Fe1eE8964A0Cf67151885e7B21f4',
-      usdcPSM: '0x68A8A1C3e103d9b8e568B061357ec2eAe87Bf396', // PSM
+      dPrime: '0xFE0b8fc2247515374F4D261ae5DcAE95eb3D93d0', // d2O
+      dPrimeJoin: '0x2be88c9324B67Cb2e84B4d78740FD7DbAEB9755E', // d2O Join
+      dPrimeGuardian: '0xcD6f577169c95411299ED5CfB6F6D0A7b07E4B9c',
+      lmcv: '0x2deF13E0DBF40190660c8682A6E03f19F481F5A2',
+      lmcvProxy: '0x5921eC92D08B67e92FbdA21Cd0Ea062859e9078d',
+      lzPipe: '0x56c98a952B4eb9A8Ae02aAa595de0D44dE18e1e5'.toLowerCase(), // lzPipe / LayerZeroPipe
+      hyperlanePipe: '',
+      usdcPSM: '0xDC93a8cA7486e97a1ae969266898777526221bA4', // PSM
 
-      usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
-      usdcJoin: '0xB1fbcD7415F9177F5EBD3d9700eD5F15B476a5Fe', //DEC COLLAT JOIN contract
+      usdc: '0x4e7Ff8F3Dadd7cC40cA019c987ab252d80da7E34', // '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
+      usdcJoin: '0x935C486825FE0C433259Ad9D9b4Bb3D46ADbb239', //DEC COLLAT JOIN contract
 
       weth: '', // '0xc778417E063141139Fce010982780140Aa0cD5Ab',
       wethJoin: '', // '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',
       link: '', // '0x01BE23585060835E02B77ef475b0Cc51aA1e0709',
       linkJoin: '' // '0xbb2EbebC17CAf0cD430965912632615aF9611273',
     },
-    layerZeroChainIds: '101',
+    layerZeroChainIds: '10161',
     suggestedGasLimit: 400000,
     capabilities: {
       canSwap: true,
       canTeleport: true,
       hasUsdc: true
     },
-    scanUrl: `https://etherscan.io/tx/${scanUrlMask}`,
+    scanUrl: `https://sepolia.etherscan.io/tx/${scanUrlMask}`,
     scanLz: `https://layerzeroscan.com/${scanOriginLzIdMask}/address/${scanOriginLzPipeMask}/message/${scanDestinationLzIdMask}/address/${scanDestinationLzPipeMask}/nonce/${scanNonceMask}`,
     default: true,
     addNetworkData: {
-      chainId: '0x1',
-      chainName: 'Ethereum',
+      chainId: '0xAA36A7',
+      chainName: 'Sepolia',
       nativeCurrency: {
-        name: 'ETH',
-        symbol: 'ETH',
+        name: 'SepoliaETH',
+        symbol: 'sETH',
         decimals: 18
       },
-      rpcUrls: ['https://mainnet.infura.io/v3/'],
-      blockExplorerUrls: ['https://etherscan.io']
+      rpcUrls: ['https://rpc.sepolia.org/'],
+      blockExplorerUrls: ['https://sepolia.etherscan.io']
     }
   }
 ]
