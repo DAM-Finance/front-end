@@ -10,6 +10,16 @@
         "internalType": "address",
         "name": "_d2OContract",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_treasury",
+        "type": "address"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_sharedDecimals",
+        "type": "uint8"
       }
     ],
     "stateMutability": "nonpayable",
@@ -51,6 +61,37 @@
       }
     ],
     "name": "Cage",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint16",
+        "name": "_srcChainId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "_srcAddress",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "_nonce",
+        "type": "uint64"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "_hash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "CallOFTReceivedSuccess",
     "type": "event"
   },
   {
@@ -132,6 +173,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "NonContractAddress",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -155,12 +209,6 @@
         "internalType": "uint16",
         "name": "_srcChainId",
         "type": "uint16"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes",
-        "name": "_fromAddress",
-        "type": "bytes"
       },
       {
         "indexed": true,
@@ -239,9 +287,9 @@
       },
       {
         "indexed": true,
-        "internalType": "bytes",
+        "internalType": "bytes32",
         "name": "_toAddress",
-        "type": "bytes"
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -289,6 +337,19 @@
       }
     ],
     "name": "SetPrecrime",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "teleportFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetTeleportFee",
     "type": "event"
   },
   {
@@ -357,6 +418,19 @@
   },
   {
     "inputs": [],
+    "name": "DEFAULT_PAYLOAD_SIZE_LIMIT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "NO_EXTRA_GAS",
     "outputs": [
       {
@@ -373,9 +447,22 @@
     "name": "PT_SEND",
     "outputs": [
       {
-        "internalType": "uint16",
+        "internalType": "uint8",
         "name": "",
-        "type": "uint16"
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "PT_SEND_AND_CALL",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -414,6 +501,54 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_srcChainId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_srcAddress",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint64",
+        "name": "_nonce",
+        "type": "uint64"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_from",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_payload",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_gasForCall",
+        "type": "uint256"
+      }
+    ],
+    "name": "callOnOFTReceived",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "circulatingSupply",
     "outputs": [
@@ -421,6 +556,35 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      }
+    ],
+    "name": "creditedPackets",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -460,9 +624,63 @@
         "type": "uint16"
       },
       {
-        "internalType": "bytes",
+        "internalType": "bytes32",
         "name": "_toAddress",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_payload",
         "type": "bytes"
+      },
+      {
+        "internalType": "uint64",
+        "name": "_dstGasForCall",
+        "type": "uint64"
+      },
+      {
+        "internalType": "bool",
+        "name": "_useZro",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_adapterParams",
+        "type": "bytes"
+      }
+    ],
+    "name": "estimateSendAndCallFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "nativeFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "zroFee",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_dstChainId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_toAddress",
+        "type": "bytes32"
       },
       {
         "internalType": "uint256",
@@ -740,6 +958,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "name": "payloadSizeLimitLookup",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "precrime",
     "outputs": [
@@ -813,9 +1050,9 @@
         "type": "uint16"
       },
       {
-        "internalType": "bytes",
+        "internalType": "bytes32",
         "name": "_toAddress",
-        "type": "bytes"
+        "type": "bytes32"
       },
       {
         "internalType": "uint256",
@@ -823,19 +1060,86 @@
         "type": "uint256"
       },
       {
-        "internalType": "address payable",
-        "name": "_refundAddress",
-        "type": "address"
+        "internalType": "bytes",
+        "name": "_payload",
+        "type": "bytes"
       },
+      {
+        "internalType": "uint64",
+        "name": "_dstGasForCall",
+        "type": "uint64"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "refundAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "zroPaymentAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "adapterParams",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct ICommonOFT.LzCallParams",
+        "name": "_callParams",
+        "type": "tuple"
+      }
+    ],
+    "name": "sendAndCall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "address",
-        "name": "_zroPaymentAddress",
+        "name": "_from",
         "type": "address"
       },
       {
-        "internalType": "bytes",
-        "name": "_adapterParams",
-        "type": "bytes"
+        "internalType": "uint16",
+        "name": "_dstChainId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_toAddress",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "refundAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "zroPaymentAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "adapterParams",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct ICommonOFT.LzCallParams",
+        "name": "_callParams",
+        "type": "tuple"
       }
     ],
     "name": "sendFrom",
@@ -910,6 +1214,24 @@
   {
     "inputs": [
       {
+        "internalType": "uint16",
+        "name": "_dstChainId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_size",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPayloadSizeLimit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_precrime",
         "type": "address"
@@ -942,6 +1264,32 @@
       }
     ],
     "name": "setSendVersion",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_teleportFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setTeleportFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_treasury",
+        "type": "address"
+      }
+    ],
+    "name": "setTreasury",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1032,6 +1380,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "sharedDecimals",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes4",
@@ -1051,6 +1412,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "teleportFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "token",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1061,6 +1448,19 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treasury",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

@@ -345,16 +345,33 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     await get().ensureConnected()
     const { accounts } = get().walletProvider
 
+    function byteify(address: any) {
+      return ethers.utils.hexZeroPad(ethers.utils.hexlify(address), 32)
+    }
+
+    // const feeEstimate = await read(
+    //   "LayerZeroPipe",
+    //   {from: taskArgs.address},
+    //   "estimateSendFee",
+    //   taskArgs.dest, toAddress, fwad(taskArgs.amount), false, []
+    // );
+    console.log( accounts[0])
+
     let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.layerZeroChainIds
-    const teleportFee = await connectedContracts.lzPipe.estimateSendFee(dstChainId, accounts[0], utils.fwad(dPrimeAmount), false, [])
+    console.log(dstChainId);
+    console.log(byteify(accounts[0]))
+    console.log(connectedContracts.lzPipe);
+    const teleportFee = await connectedContracts.lzPipe.estimateSendFee(dstChainId, byteify(accounts[0]), utils.fwad(dPrimeAmount), false, [])
+    console.log(teleportFee);
+    
     return connectedContracts.lzPipe.sendFrom(
       accounts[0], //address _from,
       dstChainId, //uint16 _dstChainId,
-      accounts[0], //bytes memory _toAddress,
-      utils.fwad(dPrimeAmount), //uint _amount,
-      accounts[0], //address payable _refundAddress,
-      accounts[0], //address _zroPaymentAddress,
-      [], //bytes memory _adapterParams
+      byteify(accounts[0]), //bytes memory _toAddress,
+      utils.fwad(dPrimeAmount), //uint _amount, 
+      {refundAddress: accounts[0], //address payable _refundAddress,
+      zroPaymentAddress: accounts[0], //address _zroPaymentAddress,
+      adapterParams:[]}, //bytes memory _adapterParams
       { value: teleportFee.nativeFee}
     )
   },

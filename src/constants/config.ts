@@ -47,7 +47,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
   },
   {
     name: 'Sepolia',
-    symbol: 'sETH',
+    symbol: 'ETH',
     chainId: '0xAA36A7',
     id: 11155111,
     iconName: 'ethneticon.png',
@@ -85,7 +85,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       chainName: 'Sepolia',
       nativeCurrency: {
         name: 'SepoliaETH',
-        symbol: 'sETH',
+        symbol: 'ETH',
         decimals: 18
       },
       rpcUrls: ['https://rpc.sepolia.org/'],
@@ -103,7 +103,7 @@ export const supportedTokens: ISupportedTokensMap = {
     bytes: '0x0'
   },
   usdc: {
-    name: 'usdc',
+    name: 'Test usdc',
     symbol: 'USDC',
     units: 6,
     imgUrl: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
