@@ -80,5 +80,6 @@ export interface IAppStore {
     approvalRequired: string,
     decimals: number
   ) => Promise<boolean>
-  teleport: (dPrimeAmount: string, dstChainName: string) => Promise<any>
+  teleportLZ: (dPrimeAmount: string, dstChainName: string) => Promise<any>
+  teleportHyperlane: (dPrimeAmount: string, dstChainName: string) => Promise<any>
 }

@@ -7,6 +7,7 @@ export interface ISupportedNetwork {
   teleportBgImg: string
   addresses: ISupportedNetworkAddresses
   layerZeroChainIds: string
+  hyperlaneChainId: string
   suggestedGasLimit: number
   capabilities: {
     canSwap: boolean

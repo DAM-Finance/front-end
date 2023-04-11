@@ -11,6 +11,10 @@ import {
   supportedNetworks,
   supportedTokens
 } from '../../constants/config'
+import {
+  MultiProvider,
+  HyperlaneIgp,
+} from "@hyperlane-xyz/sdk";
 import { ISupportedNetworkAddresses } from './../../constants/ISupportedNetworks'
 import Metamask from './../../wallet/metamask'
 import { IAppStore } from './IAppStore'
@@ -34,6 +38,7 @@ import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
 import { BigNumber, utils as ethersUtils } from 'ethers'
+
 
 //BYTES
 // let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
@@ -341,7 +346,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     // console.log(connectedContracts)
     // get().estimateTeleportFees()
   },
-  teleport: async (dPrimeAmount: string, dstChainName: string) => {
+  teleportLZ: async (dPrimeAmount: string, dstChainName: string) => {
     await get().ensureConnected()
     const { accounts } = get().walletProvider
 
@@ -357,6 +362,43 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       [], //bytes memory _adapterParams
       { value: teleportFee.nativeFee}
     )
+  },
+  teleportHyperlane: async (dPrimeAmount: string, dstChainName: string) => {
+    console.log("got here");
+    await get().ensureConnected()
+    console.log("got here2");
+    const { accounts } = get().walletProvider
+    console.log("got here3");
+
+    let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.hyperlaneChainId
+    console.log(dstChainId);
+    
+    // Set up a MultiProvider with the default providers.
+
+
+    const multiProvider = new MultiProvider();
+
+    const ethmeta = multiProvider.tryGetChainMetadata(1)
+    const moonbeammeta = multiProvider.tryGetChainMetadata(1284)
+
+    ethmeta != null ? multiProvider.addChain(ethmeta) : console.log("No data");
+    moonbeammeta != null ? multiProvider.addChain(moonbeammeta) : console.log("No data");
+
+    console.log(multiProvider);
+    
+
+
+    // const teleportFee = await connectedContracts.lzPipe.estimateSendFee(dstChainId, accounts[0], utils.fwad(dPrimeAmount), false, [])
+    // return connectedContracts.lzPipe.sendFrom(
+    //   accounts[0], //address _from,
+    //   dstChainId, //uint16 _dstChainId,
+    //   accounts[0], //bytes memory _toAddress,
+    //   utils.fwad(dPrimeAmount), //uint _amount,
+    //   accounts[0], //address payable _refundAddress,
+    //   accounts[0], //address _zroPaymentAddress,
+    //   [], //bytes memory _adapterParams
+    //   { value: teleportFee.nativeFee}
+    // )
   },
   updateBalances: async () => {
     await get().updateTokenBalance('dPrime')

@@ -24,6 +24,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       hyperlanePipe: '0xbA3CE03A101980B624550E3554d6Eb9b9E87384c'
     },
     layerZeroChainIds: '126',
+    hyperlaneChainId: '1284',
     suggestedGasLimit: 400000,
     capabilities: {
       canSwap: false,
@@ -71,6 +72,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
       linkJoin: '' // '0xbb2EbebC17CAf0cD430965912632615aF9611273',
     },
     layerZeroChainIds: '101',
+    hyperlaneChainId: '1',
     suggestedGasLimit: 400000,
     capabilities: {
       canSwap: true,
@@ -90,6 +92,42 @@ export const supportedNetworks: ISupportedNetwork[] = [
       },
       rpcUrls: ['https://mainnet.infura.io/v3/'],
       blockExplorerUrls: ['https://etherscan.io']
+    }
+  },
+  {
+    name: 'Astar',
+    symbol: 'ASTR',
+    chainId: '0x250',
+    id: 592,
+    iconName: 'astar_icon.png', //TODO
+    teleportBgImg: 'the_astar.png', //TODO
+    addresses: {
+      dPrime: '0xc806B0600cbAfA0B197562a9F7e3B9856866E9bF', // d2o
+      dPrimeGuardian: '0xDd92aF2acb2Dd66Abe5C2023c7D446989DF0af53',
+      lzPipe: '',
+      hyperlanePipe: '0x52e93015Bc6716359B1539e9D562b1DEe7e46139'
+    },
+    layerZeroChainIds: '',
+    hyperlaneChainId: '417374',
+    suggestedGasLimit: 400000,
+    capabilities: {
+      canSwap: false,
+      canTeleport: true,
+      hasUsdc: false
+    },
+    scanUrl: `https://blockscout.com/astar/tx/${scanUrlMask}`,
+    scanLz: '',
+    default: false,
+    addNetworkData: {
+      chainId: '0x250',
+      chainName: 'Astar',
+      nativeCurrency: {
+        name: 'Astar',
+        symbol: 'ASTR',
+        decimals: 18
+      },
+      rpcUrls: ['https://astar.public.blastapi.io'],
+      blockExplorerUrls: ['https://blockscout.com']
     }
   }
 ]
