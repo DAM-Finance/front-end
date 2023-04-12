@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { ISupportedNetwork } from './ISupportedNetworks'
 import { ISupportedTokensMap } from './ISupportedToken'
+import { ChainMetadata } from '@hyperlane-xyz/sdk'
 
 export const scanUrlMask = 'DAM__TX__ADDRESS'
 export const scanOriginLzIdMask = 'DAM__ORIGIN__LZ__ID'
@@ -152,3 +153,38 @@ export const supportedTokens: ISupportedTokensMap = {
 
 export const estimateForBurnFee: number = 0.7444444
 export const burnFee: number = 0.75002
+
+export const astarHyperlaneMetadata: ChainMetadata = {
+  chainId: 592,
+  /** Hyperlane domain, only required if differs from id above */
+  domainId: 417374,
+  name: "astar",
+  displayName: "Astar",
+  displayNameShort: "ASTR",
+  /** Default currency/token used by chain */
+  nativeToken: {
+      name: "Astar",
+      symbol: "ASTR",
+      decimals: 18,
+  },
+  /** Collection of RPC endpoints */
+  publicRpcUrls: [{
+    http: "https://astar.public.blastapi.io",
+  }],
+  blockExplorers: [{
+    name: "Blockscout",
+    url: "https://blockscout.com/astar",
+  }],
+  blocks: {
+      /** Number of blocks to wait before considering a transaction confirmed */
+      confirmations: 1,
+      /** Number of blocks before a transaction has a near-zero chance of reverting */
+      reorgPeriod: 1,
+      /** Rough estimate of time per block in seconds */
+      estimateBlockTime: 12,
+  },
+  /** The CoinGecko API sometimes expects IDs that do not match ChainNames */
+  gasCurrencyCoinGeckoId: "astar",
+  /** Is chain a testnet or a mainnet */
+  isTestnet: false
+}

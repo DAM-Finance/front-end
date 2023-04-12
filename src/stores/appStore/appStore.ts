@@ -38,6 +38,7 @@ import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
 import { BigNumber, utils as ethersUtils } from 'ethers'
+import { astarHyperlaneMetadata } from "../../constants/config"
 
 
 //BYTES
@@ -364,27 +365,27 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
   },
   teleportHyperlane: async (dPrimeAmount: string, dstChainName: string) => {
-    console.log("got here");
+    // console.log("got here");
     await get().ensureConnected()
-    console.log("got here2");
+    // console.log("got here2");
     const { accounts } = get().walletProvider
     console.log("got here3");
 
     let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.hyperlaneChainId
-    console.log(dstChainId);
-    
-    // Set up a MultiProvider with the default providers.
-
+    // console.log(dstChainId);
 
     const multiProvider = new MultiProvider();
 
-    const ethmeta = multiProvider.tryGetChainMetadata(1)
-    const moonbeammeta = multiProvider.tryGetChainMetadata(1284)
-
-    ethmeta != null ? multiProvider.addChain(ethmeta) : console.log("No data");
-    moonbeammeta != null ? multiProvider.addChain(moonbeammeta) : console.log("No data");
+    // ethmeta != null ? multiProvider.addChain(ethmeta) : console.log("No data on Ethereum");
+    // moonbeammeta != null ? multiProvider.addChain(moonbeammeta) : console.log("No data on Moonbeam");
 
     console.log(multiProvider);
+
+    const hyperlaneIGP = HyperlaneIgp.fromEnvironment("mainnet", multiProvider);
+    // console.log(hyperlaneIGP.quoteGasPayment("ethereum", "astar", BigNumber.from("1000000")))
+
+    hyperlaneIGP.multiProvider.addChain(astarHyperlaneMetadata);
+    console.log(hyperlaneIGP);
     
 
 
