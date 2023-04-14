@@ -33,12 +33,18 @@ import LMCVProxyAbi from '../../constants/abis/LMCVProxy.json'
 import LZPipeAbi from '../../constants/abis/LZPipe.json'
 import hyperlanePipeAbi from '../../constants/abis/hyperlanePipe.json'
 import PSMAbi from '../../constants/abis/PSM.json'
+import hypProxyAdminAbi from '../../constants/abis/HyperlaneProxyAdmin.json' 
+import hypIGPProxyAbi from '../../constants/abis/HyperlaneIGPImpl.json' //Need actual proxy??
+import hypIGPImplAbi from '../../constants/abis/HyperlaneIGPImpl.json' 
+import hypISMAbi from '../../constants/abis/HyperlaneISM.json'
+import  hypGasOracleAbi from '../../constants/abis/HyperlaneGasOracle.json'
 import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
 import { BigNumber, utils as ethersUtils } from 'ethers'
 import { astarHyperlaneMetadata } from "../../constants/config"
+import { error } from 'console'
 
 
 //BYTES
@@ -59,7 +65,12 @@ const abis = {
   lmcvProxy: LMCVProxyAbi,
   usdcPSM: PSMAbi,
   lzPipe: LZPipeAbi,
-  hyperlanePipe: hyperlanePipeAbi
+  hyperlanePipe: hyperlanePipeAbi,
+  hypProxyAdmin: hypProxyAdminAbi,
+  hypIGPProxy: hypIGPProxyAbi,
+  hypIGPImpl: hypIGPImplAbi,
+  hypISM: hypISMAbi,
+  hypGasOracle: hypGasOracleAbi,
 } as any
 
 export const useAppStore = create<IAppStore>((set, get) => ({
@@ -365,41 +376,33 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     )
   },
   teleportHyperlane: async (dPrimeAmount: string, dstChainName: string) => {
-    // console.log("got here");
     await get().ensureConnected()
-    // console.log("got here2");
     const { accounts } = get().walletProvider
-    console.log("got here3");
 
-    let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.hyperlaneChainId
-    // console.log(dstChainId);
+    let dstChain = supportedNetworks.find((net) => net.name === dstChainName);
+    let dstChainId = dstChain?.hyperlaneChainId;
 
-    const multiProvider = new MultiProvider();
+    let originChain = get().selectedNetwork;
+    let teleportFee;
 
-    // ethmeta != null ? multiProvider.addChain(ethmeta) : console.log("No data on Ethereum");
-    // moonbeammeta != null ? multiProvider.addChain(moonbeammeta) : console.log("No data on Moonbeam");
+    if(originChain?.id === 592){
+      teleportFee = await connectedContracts.hypIGPImpl.quoteGasPayment("1", "200000");
+    }else{
+      const multiProvider = new MultiProvider();
+      const igp = HyperlaneIgp.fromEnvironment("mainnet", multiProvider);
 
-    console.log(multiProvider);
-
-    const hyperlaneIGP = HyperlaneIgp.fromEnvironment("mainnet", multiProvider);
-    // console.log(hyperlaneIGP.quoteGasPayment("ethereum", "astar", BigNumber.from("1000000")))
-
-    hyperlaneIGP.multiProvider.addChain(astarHyperlaneMetadata);
-    console.log(hyperlaneIGP);
+      console.log(igp);
     
+      if(originChain?.hyperlaneChainId && dstChainId){
+        teleportFee = await igp.quoteGasPayment(originChain.hyperlaneChainId, dstChainId, BigNumber.from("200000"))
+      }
+    }
 
+    console.log(teleportFee);
 
-    // const teleportFee = await connectedContracts.lzPipe.estimateSendFee(dstChainId, accounts[0], utils.fwad(dPrimeAmount), false, [])
-    // return connectedContracts.lzPipe.sendFrom(
-    //   accounts[0], //address _from,
-    //   dstChainId, //uint16 _dstChainId,
-    //   accounts[0], //bytes memory _toAddress,
-    //   utils.fwad(dPrimeAmount), //uint _amount,
-    //   accounts[0], //address payable _refundAddress,
-    //   accounts[0], //address _zroPaymentAddress,
-    //   [], //bytes memory _adapterParams
-    //   { value: teleportFee.nativeFee}
-    // )
+    let ret = await connectedContracts.hyperlanePipe.transferRemote(dstChainId, accounts[0], utils.fwad(dPrimeAmount), { value: teleportFee})
+    console.log(ret);
+    return ret;
   },
   updateBalances: async () => {
     await get().updateTokenBalance('dPrime')

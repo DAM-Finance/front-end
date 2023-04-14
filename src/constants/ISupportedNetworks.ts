@@ -35,6 +35,11 @@ export interface ISupportedNetworkAddresses {
   linkJoin?: string
   lzPipe?: string
   hyperlanePipe?: string
+  hypProxyAdmin?: string
+  hypIGPProxy?: string
+  hypIGPImpl?: string
+  hypISM?: string
+  hypGasOracle?: string
 }
 
 export interface IAddNetworkData {

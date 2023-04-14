@@ -106,7 +106,13 @@ export const supportedNetworks: ISupportedNetwork[] = [
       dPrime: '0xc806B0600cbAfA0B197562a9F7e3B9856866E9bF', // d2o
       dPrimeGuardian: '0xDd92aF2acb2Dd66Abe5C2023c7D446989DF0af53',
       lzPipe: '',
-      hyperlanePipe: '0x52e93015Bc6716359B1539e9D562b1DEe7e46139'
+      hyperlanePipe: '0x52e93015Bc6716359B1539e9D562b1DEe7e46139',
+      hypProxyAdmin: '0x2FdA8c6783Aa36BeD645baD28a4cDC8769dCD252',
+      hypIGPProxy: '0x687007C510Cd174f815cdaDA4De51d66BA73544d',
+      hypIGPImpl: '0xb70b00a68e032ebFf1775Db1491550967F7E092C',
+      hypISM: '0xB1fbcD7415F9177F5EBD3d9700eD5F15B476a5Fe',
+      hypGasOracle: '0xcA1d6a964dfe209e8fB33614b0EFFdA9723232D7',
+
     },
     layerZeroChainIds: '',
     hyperlaneChainId: '417374',

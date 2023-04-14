@@ -47,7 +47,6 @@ const Teleport: FC = () => {
   const teleportTo = async (dPrimeAmount: string, dstnetwork: ISupportedNetwork) => {
     let pendingTransaction: IPendingTransaction | undefined
     if(originNetwork.id === 592 || destinationNetwork.id === 592){
-      console.log("DO HYPERLANE STUFF")
       try {
         pendingTransaction = {
           hash: '',
