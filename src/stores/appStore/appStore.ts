@@ -43,8 +43,6 @@ import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
 import { BigNumber, utils as ethersUtils } from 'ethers'
-import { astarHyperlaneMetadata } from "../../constants/config"
-import { error } from 'console'
 
 
 //BYTES
