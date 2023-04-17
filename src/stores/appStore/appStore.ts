@@ -388,6 +388,9 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     }else{
       const multiProvider = new MultiProvider();
       const igp = HyperlaneIgp.fromEnvironment("mainnet", multiProvider);
+
+      console.log(dstChain);
+      console.log(igp);
     
       if(originChain?.hyperlaneChainId && dstChainId){
         teleportFee = await igp.quoteGasPayment(originChain.hyperlaneChainId, dstChainId, BigNumber.from("200000"))
