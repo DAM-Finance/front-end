@@ -393,6 +393,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   teleportHyperlane: async (dPrimeAmount: string, dstChainName: string) => {
     await get().ensureConnected()
     const { accounts } = get().walletProvider
+    const gasLimit = get().selectedNetwork?.suggestedGasLimit
 
     let dstChain = supportedNetworks.find((net) => net.name === dstChainName);
     let dstChainId = dstChain?.hyperlaneChainId;
@@ -421,7 +422,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     console.log(teleportFee.toString());
 
-    let ret = await connectedContracts.hyperlanePipe.transferRemote(dstChainId, accounts[0], utils.fwad(dPrimeAmount), { value: teleportFee})
+    let ret = await connectedContracts.hyperlanePipe.transferRemote(dstChainId, accounts[0], utils.fwad(dPrimeAmount), { value: teleportFee, gasLimit: gasLimit})
     console.log(ret);
     return ret;
   },
