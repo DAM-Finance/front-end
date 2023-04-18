@@ -402,7 +402,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     let teleportFee;
 
     if(originChain?.id === 592){
-      teleportFee = await connectedContracts.hypIGPImpl.quoteGasPayment(dstChain?.id, "200000");
+      teleportFee = await connectedContracts.hypIGPImpl.quoteGasPayment(dstChain?.id, "300000");
     }else{
       const multiProvider = new MultiProvider();
       multiProvider.addChain(astarHyperlaneMetadata);
@@ -415,7 +415,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       console.log(igp);
     
       if(originChainName){
-        teleportFee = await igp.quoteGasPayment(originChainName.toLocaleLowerCase(), dstChainName.toLocaleLowerCase(), BigNumber.from("200000"))
+        teleportFee = await igp.quoteGasPayment(originChainName.toLocaleLowerCase(), dstChainName.toLocaleLowerCase(), BigNumber.from("300000"))
       }
     }
 
