@@ -1,0 +1,16 @@
+{
+    "ethereum": {
+      "storageGasOracle": "0xB25040907bD1Ca26b9492A90b314C48741887Ddb",
+      "interchainGasPaymaster": "0x5c808421b8D6c048888a95C01724F996a436fD4D",
+      "multisigIsm": "0x7CD5f5ab54f30F9a69Aed10c123683FDeD5d179e"
+    },
+    "astar": {
+        "storageGasOracle": "0xcA1d6a964dfe209e8fB33614b0EFFdA9723232D7",
+        "validatorAnnounce": "0x05533EA9B9F37daA890512d8a2DD5b853620819e",
+        "proxyAdmin": "0x2FdA8c6783Aa36BeD645baD28a4cDC8769dCD252",
+        "mailbox": "0xceE15Ca9fF2dA87080b34ca922AB8C195aD6D6EB",
+        "interchainGasPaymaster": "0xb70b00a68e032ebFf1775Db1491550967F7E092C",
+        "multisigIsm": "0xB1fbcD7415F9177F5EBD3d9700eD5F15B476a5Fe"
+    }
+  }
+  

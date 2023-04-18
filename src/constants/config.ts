@@ -61,11 +61,15 @@ export const supportedNetworks: ISupportedNetwork[] = [
       lmcv: '0xc806B0600cbAfA0B197562a9F7e3B9856866E9bF',
       lmcvProxy: '0xDd92aF2acb2Dd66Abe5C2023c7D446989DF0af53',
       lzPipe: '0x78D7480aFcB1c2310917fDa95e96cA4E1C06CcfF'.toLowerCase(), // lzPipe / LayerZeroPipe
-      hyperlanePipe: '0x2a4d2fE5A242Fe1eE8964A0Cf67151885e7B21f4',
       usdcPSM: '0x68A8A1C3e103d9b8e568B061357ec2eAe87Bf396', // PSM
 
       usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
       usdcJoin: '0xB1fbcD7415F9177F5EBD3d9700eD5F15B476a5Fe', //DEC COLLAT JOIN contract
+
+      hyperlanePipe: '0x2a4d2fE5A242Fe1eE8964A0Cf67151885e7B21f4',
+      hypIGPImpl: '0x5c808421b8D6c048888a95C01724F996a436fD4D',
+      hypISM: '0x7CD5f5ab54f30F9a69Aed10c123683FDeD5d179e',
+      hypGasOracle: '0xB25040907bD1Ca26b9492A90b314C48741887Ddb',
 
       weth: '', // '0xc778417E063141139Fce010982780140Aa0cD5Ab',
       wethJoin: '', // '0x3685328d43EC3F5F3efD3c61E05cDdD037aab949',

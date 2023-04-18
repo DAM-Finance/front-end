@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import produce from 'immer'
 import create from 'zustand'
 import {
+  astarHyperlaneMetadata,
   // LayerZeroChainIds,
   // moonbase_addresses,
   // moonbase_testnet_id,
@@ -11,10 +12,18 @@ import {
   supportedNetworks,
   supportedTokens
 } from '../../constants/config'
+
+// import { MultiProvider, HyperlaneIgp } from 'astarhyperlanesdk/src'
+import { MultiProvider, HyperlaneIgp} from '@hyperlane-xyz/sdk'
+import mainnet from '../../constants/mainnet.json';
 import {
-  MultiProvider,
-  HyperlaneIgp,
-} from "@hyperlane-xyz/sdk";
+  InterchainGasPaymaster__factory,
+  OverheadIgp__factory,
+  ProxyAdmin__factory,
+  StorageGasOracle__factory,
+} from '@hyperlane-xyz/core';
+
+
 import { ISupportedNetworkAddresses } from './../../constants/ISupportedNetworks'
 import Metamask from './../../wallet/metamask'
 import { IAppStore } from './IAppStore'
@@ -43,6 +52,14 @@ import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
 import { BigNumber, utils as ethersUtils } from 'ethers'
+
+
+export const igpFactories = {
+  proxyAdmin: new ProxyAdmin__factory(),
+  interchainGasPaymaster: new InterchainGasPaymaster__factory(),
+  defaultIsmInterchainGasPaymaster: new OverheadIgp__factory(),
+  storageGasOracle: new StorageGasOracle__factory(),
+};
 
 
 //BYTES
@@ -381,23 +398,28 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     let dstChainId = dstChain?.hyperlaneChainId;
 
     let originChain = get().selectedNetwork;
+    let originChainName = originChain?.name;
     let teleportFee;
 
     if(originChain?.id === 592){
-      teleportFee = await connectedContracts.hypIGPImpl.quoteGasPayment(dstChain, "200000");
+      teleportFee = await connectedContracts.hypIGPImpl.quoteGasPayment(dstChain?.id, "200000");
     }else{
       const multiProvider = new MultiProvider();
-      const igp = HyperlaneIgp.fromEnvironment("mainnet", multiProvider);
-
-      console.log(dstChain);
+      multiProvider.addChain(astarHyperlaneMetadata);
+      const fromAddressesMap = HyperlaneIgp.fromAddressesMap(
+        mainnet,
+        igpFactories,
+        multiProvider,
+      );
+      const igp = new HyperlaneIgp(fromAddressesMap.contractsMap, fromAddressesMap.multiProvider);
       console.log(igp);
     
-      if(originChain?.hyperlaneChainId && dstChainId){
-        teleportFee = await igp.quoteGasPayment(originChain.hyperlaneChainId, dstChainId, BigNumber.from("200000"))
+      if(originChainName){
+        teleportFee = await igp.quoteGasPayment(originChainName.toLocaleLowerCase(), dstChainName.toLocaleLowerCase(), BigNumber.from("200000"))
       }
     }
 
-    console.log(teleportFee);
+    console.log(teleportFee.toString());
 
     let ret = await connectedContracts.hyperlanePipe.transferRemote(dstChainId, accounts[0], utils.fwad(dPrimeAmount), { value: teleportFee})
     console.log(ret);

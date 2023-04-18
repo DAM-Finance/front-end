@@ -137,6 +137,7 @@ const Teleport: FC = () => {
     setGasPrice(priceInGwei.toString())
   }
 
+  // eslint-disable-next-line no-unused-vars
   const isBelowZero = () => {
     return Number(amount) <= 0
   }
