@@ -425,8 +425,6 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       }
     }
 
-    console.log(teleportFee.toString());
-
     return await connectedContracts.hyperlanePipe.transferRemote(dstChainId, byteify(accounts[0]), utils.fwad(dPrimeAmount), { value: teleportFee, gasLimit: gasLimit})
   },
   updateBalances: async () => {

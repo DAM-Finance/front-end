@@ -3,19 +3,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "abacusConnectionManager",
-        "type": "address"
-      }
-    ],
-    "name": "AbacusConnectionManagerSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
         "internalType": "uint256",
         "name": "live",
@@ -49,9 +36,9 @@
       },
       {
         "indexed": true,
-        "internalType": "address",
+        "internalType": "bytes32",
         "name": "recipient",
-        "type": "address"
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -101,6 +88,32 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "module",
+        "type": "address"
+      }
+    ],
+    "name": "InterchainSecurityModuleSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "mailbox",
+        "type": "address"
+      }
+    ],
+    "name": "MailboxSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "previousOwner",
         "type": "address"
       },
@@ -125,14 +138,14 @@
       },
       {
         "indexed": true,
-        "internalType": "address",
+        "internalType": "bytes32",
         "name": "recipient",
-        "type": "address"
+        "type": "bytes32"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "amout",
         "type": "uint256"
       }
     ],
@@ -182,9 +195,9 @@
       },
       {
         "indexed": true,
-        "internalType": "address",
+        "internalType": "bytes32",
         "name": "recipient",
-        "type": "address"
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -197,24 +210,24 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "teleportFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetTeleportFee",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "ArchAdmin",
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "abacusConnectionManager",
-    "outputs": [
-      {
-        "internalType": "contract IAbacusConnectionManager",
         "name": "",
         "type": "address"
       }
@@ -281,6 +294,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "domains",
+    "outputs": [
+      {
+        "internalType": "uint32[]",
+        "name": "",
+        "type": "uint32[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint32",
@@ -294,6 +320,24 @@
       }
     ],
     "name": "enrollRemoteRouter",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32[]",
+        "name": "_domains",
+        "type": "uint32[]"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "_addresses",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "enrollRemoteRouters",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -325,7 +369,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_abacusConnectionManager",
+        "name": "_mailbox",
         "type": "address"
       },
       {
@@ -336,6 +380,16 @@
       {
         "internalType": "address",
         "name": "_d2OContract",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_gasAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_treasury",
         "type": "address"
       }
     ],
@@ -359,12 +413,38 @@
   },
   {
     "inputs": [],
+    "name": "interchainSecurityModule",
+    "outputs": [
+      {
+        "internalType": "contract IInterchainSecurityModule",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "live",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mailbox",
+    "outputs": [
+      {
+        "internalType": "contract IMailbox",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -424,9 +504,9 @@
         "type": "uint32"
       },
       {
-        "internalType": "address",
+        "internalType": "bytes32",
         "name": "_recipient",
-        "type": "address"
+        "type": "bytes32"
       },
       {
         "internalType": "uint256",
@@ -443,7 +523,7 @@
     "inputs": [
       {
         "internalType": "uint32",
-        "name": "",
+        "name": "_domain",
         "type": "uint32"
       }
     ],
@@ -462,11 +542,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_abacusConnectionManager",
+        "name": "newArch",
         "type": "address"
       }
     ],
-    "name": "setAbacusConnectionManager",
+    "name": "setArchAdmin",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -474,12 +554,12 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "newArch",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_gasAmount",
+        "type": "uint256"
       }
     ],
-    "name": "setArchAdmin",
+    "name": "setGasAmount",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -495,6 +575,71 @@
     "name": "setInterchainGasPaymaster",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_module",
+        "type": "address"
+      }
+    ],
+    "name": "setInterchainSecurityModule",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_mailbox",
+        "type": "address"
+      }
+    ],
+    "name": "setMailbox",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_teleportFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setTeleportFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_treasury",
+        "type": "address"
+      }
+    ],
+    "name": "setTreasury",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "teleportFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -518,9 +663,9 @@
         "type": "uint32"
       },
       {
-        "internalType": "address",
+        "internalType": "bytes32",
         "name": "_recipient",
-        "type": "address"
+        "type": "bytes32"
       },
       {
         "internalType": "uint256",
@@ -531,6 +676,19 @@
     "name": "transferRemote",
     "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treasury",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]
