@@ -88,6 +88,10 @@ const abis = {
   hypGasOracle: hypGasOracleAbi,
 } as any
 
+async function byteify(address: any){
+  return ethers.utils.hexZeroPad(ethers.utils.hexlify(address), 32)
+}
+
 export const useAppStore = create<IAppStore>((set, get) => ({
   selectedNetwork: null,
   walletProvider: initialWalletProvider,
@@ -373,6 +377,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     // console.log(connectedContracts)
     // get().estimateTeleportFees()
   },
+  //LZV1 impl
   teleportLZ: async (dPrimeAmount: string, dstChainName: string) => {
     await get().ensureConnected()
     const { accounts } = get().walletProvider
@@ -422,9 +427,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
 
     console.log(teleportFee.toString());
 
-    let ret = await connectedContracts.hyperlanePipe.transferRemote(dstChainId, accounts[0], utils.fwad(dPrimeAmount), { value: teleportFee, gasLimit: gasLimit})
-    console.log(ret);
-    return ret;
+    return await connectedContracts.hyperlanePipe.transferRemote(dstChainId, byteify(accounts[0]), utils.fwad(dPrimeAmount), { value: teleportFee, gasLimit: gasLimit})
   },
   updateBalances: async () => {
     await get().updateTokenBalance('dPrime')
