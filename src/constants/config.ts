@@ -137,7 +137,7 @@ export const supportedNetworks: ISupportedNetwork[] = [
         symbol: 'ASTR',
         decimals: 18
       },
-      rpcUrls: ['https://astar.public.blastapi.io'],
+      rpcUrls: ['https://astar.api.onfinality.io/public'],
       blockExplorerUrls: ['https://blockscout.com']
     }
   }
