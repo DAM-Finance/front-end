@@ -146,11 +146,11 @@ const Teleport: FC = () => {
     return Number(amount) > Number(dPrimeBalance)
   }
 
-  const isntAstarMoonbeam = () => {
+  const isAstarMoonbeam = () => {
     if((originNetwork.id === 1284 && destinationNetwork.id === 592) || (originNetwork.id === 592 && destinationNetwork.id === 1284)){
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
 
   return (
@@ -198,10 +198,10 @@ const Teleport: FC = () => {
                 onClick={() => teleportTo(amount, destinationNetwork)}
                 className="flex items-center w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed gap-2 rounded-full py-4 px-6 text-black font-bold bg-gradient-to-r from-[#7742CD] to-[#F1DD79] hover:from-[#8458cc] hover:to-[#ebdd9c]"
                 style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
-                disabled={isBelowZero() || isAboveBalance() || isntAstarMoonbeam()}
+                disabled={isBelowZero() || isAboveBalance() || isAstarMoonbeam()}
               >
                 <img src={utils.getImageSrc('teleport.svg')} alt="teleport" />
-                {isntAstarMoonbeam() ? isAboveBalance() ? 'Insufficient balance' : 'Teleport' :  'Astar <-> Moonbeam coming soon' }
+                {isAstarMoonbeam() ? 'Astar <-> Moonbeam coming soon' : isAboveBalance() ? 'Insufficient balance' : 'Teleport'  }
               </button>
               <div className="flex justify-center items-center gap-2">
                 <img src={utils.getImageSrc('warning.svg')} alt="" />
