@@ -58,6 +58,28 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
       }
 
       const res = await client.getMessagesBySrcTxHash(transaction.hash)
+      if (isDev || appStore.isHyperlane === true) {
+        const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
+        const dPrimeBalance = await appStore.getTokenBalance('dPrime')
+        const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)
+        const newBalanceBN = new BN(newBalance, 10)
+        const diff = newBalanceBN.sub(new BN(balance, 10))
+        if (diff.eq(new BN('0'))) {
+          return
+        }
+        const transferValue: string = moveDecimal(diff.toString(), -supportedTokens.dPrime.units)
+        const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue)
+        if (!foundTx) {
+          return
+        }
+        const txUpdate = { ...foundTx }
+        txUpdate.status = 'DELIVERED'
+        appStore.setNotifyTransaction(txUpdate)
+        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
+        appStore.setPendingTransactions([...txs, txUpdate])
+        await appStore.updateTokenBalance('dPrime')
+        setInviteSwitchNetwork(true)
+      }
       if (appStore.selectedNetwork && res.messages && res.messages.length && (!transaction.lzData || transaction.lzData.status !== res.messages[0].status)) {
         const message = res.messages[0]
         transaction.status = message.status
@@ -81,28 +103,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           setInviteSwitchNetwork(true)
         }
       }
-      if (isDev || appStore.isHyperlane === true) {
-        const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
-        const dPrimeBalance = await appStore.getTokenBalance('dPrime')
-        const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)
-        const newBalanceBN = new BN(newBalance, 10)
-        const diff = newBalanceBN.sub(new BN(balance, 10))
-        if (diff.eq(new BN('0'))) {
-          return
-        }
-        const transferValue: string = moveDecimal(diff.toString(), -supportedTokens.dPrime.units)
-        const foundTx = appStore.pendingTransactions.filter((tx) => tx.type === 'TELEPORT').find((tx) => tx.from?.amount === transferValue)
-        if (!foundTx) {
-          return
-        }
-        const txUpdate = { ...foundTx }
-        txUpdate.status = 'DELIVERED'
-        appStore.setNotifyTransaction(txUpdate)
-        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== txUpdate.hash)
-        appStore.setPendingTransactions([...txs, txUpdate])
-        await appStore.updateTokenBalance('dPrime')
-        setInviteSwitchNetwork(true)
-      }
+      
     },
     [appStore]
   )
