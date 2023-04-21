@@ -81,7 +81,7 @@ const PendingTransactionsEngine: FC<PendingTransactionsProps> = () => {
           setInviteSwitchNetwork(true)
         }
       }
-      if (isDev) {
+      if (isDev || appStore.isHyperlane === true) {
         const balance: string = moveDecimal(appStore.balances.dPrime, supportedTokens.dPrime.units)
         const dPrimeBalance = await appStore.getTokenBalance('dPrime')
         const newBalance = moveDecimal(dPrimeBalance, supportedTokens.dPrime.units)

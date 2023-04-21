@@ -8,6 +8,7 @@ import { IGatewayEvent } from './IGatewayEvent'
 import { IWalletProvider } from './IWalletProvider'
 
 export interface IAppStore {
+  isHyperlane: boolean
   selectedNetwork: ISupportedNetwork | null
   walletProvider: IWalletProvider
 

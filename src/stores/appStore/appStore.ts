@@ -107,6 +107,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   notifyTransaction: null,
   isPendingTransactionsVisible: false,
   isHistoryTransactionsVisible: false,
+  isHyperlane: false,
 
   setNotifyTransaction: (tx) => {
     set(
@@ -381,6 +382,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   teleportLZ: async (dPrimeAmount: string, dstChainName: string) => {
     await get().ensureConnected()
     const { accounts } = get().walletProvider
+    get().isHyperlane = false;
 
     let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.layerZeroChainIds
     const teleportFee = await connectedContracts.lzPipe.estimateSendFee(dstChainId, accounts[0], utils.fwad(dPrimeAmount), false, [])
@@ -397,6 +399,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   },
   teleportHyperlane: async (dPrimeAmount: string, dstChainName: string) => {
     await get().ensureConnected()
+    get().isHyperlane = true;
     const { accounts } = get().walletProvider
     const gasLimit = get().selectedNetwork?.suggestedGasLimit
 
