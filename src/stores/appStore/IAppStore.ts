@@ -8,6 +8,7 @@ import { IGatewayEvent } from './IGatewayEvent'
 import { IWalletProvider } from './IWalletProvider'
 
 export interface IAppStore {
+  isHyperlane: boolean
   selectedNetwork: ISupportedNetwork | null
   walletProvider: IWalletProvider
 
@@ -80,5 +81,6 @@ export interface IAppStore {
     approvalRequired: string,
     decimals: number
   ) => Promise<boolean>
-  teleport: (dPrimeAmount: string, dstChainName: string) => Promise<any>
+  teleportLZ: (dPrimeAmount: string, dstChainName: string) => Promise<any>
+  teleportHyperlane: (dPrimeAmount: string, dstChainName: string) => Promise<any>
 }

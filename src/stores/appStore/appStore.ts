@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import produce from 'immer'
 import create from 'zustand'
 import {
+  astarHyperlaneMetadata,
   // LayerZeroChainIds,
   // moonbase_addresses,
   // moonbase_testnet_id,
@@ -11,6 +12,18 @@ import {
   supportedNetworks,
   supportedTokens
 } from '../../constants/config'
+
+// import { MultiProvider, HyperlaneIgp } from 'astarhyperlanesdk/src'
+import { MultiProvider, HyperlaneIgp} from '@hyperlane-xyz/sdk'
+import mainnet from '../../constants/mainnet.json';
+import {
+  InterchainGasPaymaster__factory,
+  OverheadIgp__factory,
+  ProxyAdmin__factory,
+  StorageGasOracle__factory,
+} from '@hyperlane-xyz/core';
+
+
 import { ISupportedNetworkAddresses } from './../../constants/ISupportedNetworks'
 import Metamask from './../../wallet/metamask'
 import { IAppStore } from './IAppStore'
@@ -29,11 +42,25 @@ import LMCVProxyAbi from '../../constants/abis/LMCVProxy.json'
 import LZPipeAbi from '../../constants/abis/LZPipe.json'
 import hyperlanePipeAbi from '../../constants/abis/hyperlanePipe.json'
 import PSMAbi from '../../constants/abis/PSM.json'
+import hypProxyAdminAbi from '../../constants/abis/HyperlaneProxyAdmin.json' 
+import hypIGPProxyAbi from '../../constants/abis/HyperlaneIGPImpl.json' //Need actual proxy??
+import hypIGPImplAbi from '../../constants/abis/HyperlaneIGPImpl.json' 
+import hypISMAbi from '../../constants/abis/HyperlaneISM.json'
+import  hypGasOracleAbi from '../../constants/abis/HyperlaneGasOracle.json'
 import { ISupportedNetwork } from '../../constants/ISupportedNetworks'
 import { localStorageObjects } from '../../constants/persist'
 import utils from '../../constants/utils'
 import { IGatewayEvent } from './IGatewayEvent'
 import { BigNumber, utils as ethersUtils } from 'ethers'
+
+
+export const igpFactories = {
+  proxyAdmin: new ProxyAdmin__factory(),
+  interchainGasPaymaster: new InterchainGasPaymaster__factory(),
+  defaultIsmInterchainGasPaymaster: new OverheadIgp__factory(),
+  storageGasOracle: new StorageGasOracle__factory(),
+};
+
 
 //BYTES
 // let USDCBytes = ethers.utils.formatBytes32String('PSM-USDC')
@@ -53,8 +80,17 @@ const abis = {
   lmcvProxy: LMCVProxyAbi,
   usdcPSM: PSMAbi,
   lzPipe: LZPipeAbi,
-  hyperlanePipe: hyperlanePipeAbi
+  hyperlanePipe: hyperlanePipeAbi,
+  hypProxyAdmin: hypProxyAdminAbi,
+  hypIGPProxy: hypIGPProxyAbi,
+  hypIGPImpl: hypIGPImplAbi,
+  hypISM: hypISMAbi,
+  hypGasOracle: hypGasOracleAbi,
 } as any
+
+async function byteify(address: any){
+  return ethers.utils.hexZeroPad(ethers.utils.hexlify(address), 32)
+}
 
 export const useAppStore = create<IAppStore>((set, get) => ({
   selectedNetwork: null,
@@ -71,6 +107,7 @@ export const useAppStore = create<IAppStore>((set, get) => ({
   notifyTransaction: null,
   isPendingTransactionsVisible: false,
   isHistoryTransactionsVisible: false,
+  isHyperlane: false,
 
   setNotifyTransaction: (tx) => {
     set(
@@ -341,9 +378,11 @@ export const useAppStore = create<IAppStore>((set, get) => ({
     // console.log(connectedContracts)
     // get().estimateTeleportFees()
   },
-  teleport: async (dPrimeAmount: string, dstChainName: string) => {
+  //LZV1 impl
+  teleportLZ: async (dPrimeAmount: string, dstChainName: string) => {
     await get().ensureConnected()
     const { accounts } = get().walletProvider
+    get().isHyperlane = false;
 
     let dstChainId = supportedNetworks.find((net) => net.name === dstChainName)?.layerZeroChainIds
     const teleportFee = await connectedContracts.lzPipe.estimateSendFee(dstChainId, accounts[0], utils.fwad(dPrimeAmount), false, [])
@@ -357,6 +396,39 @@ export const useAppStore = create<IAppStore>((set, get) => ({
       [], //bytes memory _adapterParams
       { value: teleportFee.nativeFee}
     )
+  },
+  teleportHyperlane: async (dPrimeAmount: string, dstChainName: string) => {
+    await get().ensureConnected()
+    get().isHyperlane = true;
+    const { accounts } = get().walletProvider
+    const gasLimit = get().selectedNetwork?.suggestedGasLimit
+
+    let dstChain = supportedNetworks.find((net) => net.name === dstChainName);
+    let dstChainId = dstChain?.hyperlaneChainId;
+
+    let originChain = get().selectedNetwork;
+    let originChainName = originChain?.name;
+    let teleportFee;
+
+    if(originChain?.id === 592){
+      teleportFee = await connectedContracts.hypIGPImpl.quoteGasPayment(dstChain?.id, "300000");
+    }else{
+      const multiProvider = new MultiProvider();
+      multiProvider.addChain(astarHyperlaneMetadata);
+      const fromAddressesMap = HyperlaneIgp.fromAddressesMap(
+        mainnet,
+        igpFactories,
+        multiProvider,
+      );
+      const igp = new HyperlaneIgp(fromAddressesMap.contractsMap, fromAddressesMap.multiProvider);
+      console.log(igp);
+    
+      if(originChainName){
+        teleportFee = await igp.quoteGasPayment(originChainName.toLocaleLowerCase(), dstChainName.toLocaleLowerCase(), BigNumber.from("300000"))
+      }
+    }
+
+    return await connectedContracts.hyperlanePipe.transferRemote(dstChainId, byteify(accounts[0]), utils.fwad(dPrimeAmount), { value: teleportFee, gasLimit: gasLimit})
   },
   updateBalances: async () => {
     await get().updateTokenBalance('dPrime')

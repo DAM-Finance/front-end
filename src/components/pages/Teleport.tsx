@@ -46,49 +46,84 @@ const Teleport: FC = () => {
 
   const teleportTo = async (dPrimeAmount: string, dstnetwork: ISupportedNetwork) => {
     let pendingTransaction: IPendingTransaction | undefined
-    try {
-      pendingTransaction = {
-        hash: '',
-        status: 'REQUESTING',
-        type: 'TELEPORT',
-        from: {
-          amount: dPrimeAmount,
-          token: supportedTokens.dPrime.symbol,
-          networkImg: appStore.selectedNetwork!.iconName,
-          network: appStore.selectedNetwork!.name,
-          chainId: appStore.selectedNetwork!.chainId
-        },
-        to: {
-          amount: dPrimeAmount,
-          token: supportedTokens.dPrime.symbol,
-          networkImg: dstnetwork.iconName,
-          network: dstnetwork.name,
-          chainId: dstnetwork.chainId
-        },
-        startedAt: new Date()
-      }
-      appStore.setNotifyTransaction(pendingTransaction)
-      const tx = await appStore.teleport(dPrimeAmount, dstnetwork.name)
-      pendingTransaction = { ...pendingTransaction, hash: tx.hash, source: tx, status: 'REQUESTING' }
-      appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
-      appStore.setNotifyTransaction(pendingTransaction)
-      await tx.wait()
-      appStore.updateBalances()
-    } catch (err) {
-      console.error(err)
-      if (pendingTransaction) {
-        pendingTransaction = { ...pendingTransaction, status: 'FAILED' }
+    if(originNetwork.id === 592 || destinationNetwork.id === 592){
+      try {
+        pendingTransaction = {
+          hash: '',
+          status: 'REQUESTING',
+          type: 'TELEPORT',
+          from: {
+            amount: dPrimeAmount,
+            token: supportedTokens.dPrime.symbol,
+            networkImg: appStore.selectedNetwork!.iconName,
+            network: appStore.selectedNetwork!.name,
+            chainId: appStore.selectedNetwork!.chainId
+          },
+          to: {
+            amount: dPrimeAmount,
+            token: supportedTokens.dPrime.symbol,
+            networkImg: dstnetwork.iconName,
+            network: dstnetwork.name,
+            chainId: dstnetwork.chainId
+          },
+          startedAt: new Date()
+        }
         appStore.setNotifyTransaction(pendingTransaction)
-        const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== pendingTransaction!.hash)
-        appStore.setPendingTransactions([...txs, pendingTransaction])
+        const tx = await appStore.teleportHyperlane(dPrimeAmount, dstnetwork.name)
+        pendingTransaction = { ...pendingTransaction, hash: tx.hash, source: tx, status: 'REQUESTING' }
+        appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
+        appStore.setNotifyTransaction(pendingTransaction)
+        await tx.wait()
+        appStore.updateBalances()
+      } catch (err) {
+        console.error(err)
+        if (pendingTransaction) {
+          pendingTransaction = { ...pendingTransaction, status: 'FAILED' }
+          appStore.setNotifyTransaction(pendingTransaction)
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== pendingTransaction!.hash)
+          appStore.setPendingTransactions([...txs, pendingTransaction])
+        }
+      }
+    }else{
+      try {
+        pendingTransaction = {
+          hash: '',
+          status: 'REQUESTING',
+          type: 'TELEPORT',
+          from: {
+            amount: dPrimeAmount,
+            token: supportedTokens.dPrime.symbol,
+            networkImg: appStore.selectedNetwork!.iconName,
+            network: appStore.selectedNetwork!.name,
+            chainId: appStore.selectedNetwork!.chainId
+          },
+          to: {
+            amount: dPrimeAmount,
+            token: supportedTokens.dPrime.symbol,
+            networkImg: dstnetwork.iconName,
+            network: dstnetwork.name,
+            chainId: dstnetwork.chainId
+          },
+          startedAt: new Date()
+        }
+        appStore.setNotifyTransaction(pendingTransaction)
+        const tx = await appStore.teleportLZ(dPrimeAmount, dstnetwork.name)
+        pendingTransaction = { ...pendingTransaction, hash: tx.hash, source: tx, status: 'REQUESTING' }
+        appStore.setPendingTransactions([...appStore.pendingTransactions, pendingTransaction])
+        appStore.setNotifyTransaction(pendingTransaction)
+        await tx.wait()
+        appStore.updateBalances()
+      } catch (err) {
+        console.error(err)
+        if (pendingTransaction) {
+          pendingTransaction = { ...pendingTransaction, status: 'FAILED' }
+          appStore.setNotifyTransaction(pendingTransaction)
+          const txs = appStore.pendingTransactions.filter((tx) => tx.hash !== pendingTransaction!.hash)
+          appStore.setPendingTransactions([...txs, pendingTransaction])
+        }
       }
     }
   }
-
-  // const switchNetwork = async () => {
-  //   await appStore.switchNetwork(destinationNetwork.chainId)
-  //   setTxState('none')
-  // }
 
   const getGasPrice = async () => {
     const web3Provider = appStore.walletProvider?.web3Provider
@@ -102,12 +137,20 @@ const Teleport: FC = () => {
     setGasPrice(priceInGwei.toString())
   }
 
+  // eslint-disable-next-line no-unused-vars
   const isBelowZero = () => {
     return Number(amount) <= 0
   }
 
   const isAboveBalance = () => {
     return Number(amount) > Number(dPrimeBalance)
+  }
+
+  const isAstarMoonbeam = () => {
+    if((originNetwork.id === 1284 && destinationNetwork.id === 592) || (originNetwork.id === 592 && destinationNetwork.id === 1284)){
+      return true;
+    }
+    return false;
   }
 
   return (
@@ -155,10 +198,10 @@ const Teleport: FC = () => {
                 onClick={() => teleportTo(amount, destinationNetwork)}
                 className="flex items-center w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed gap-2 rounded-full py-4 px-6 text-black font-bold bg-gradient-to-r from-[#7742CD] to-[#F1DD79] hover:from-[#8458cc] hover:to-[#ebdd9c]"
                 style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
-                disabled={isBelowZero() || isAboveBalance()}
+                disabled={isBelowZero() || isAboveBalance() || isAstarMoonbeam()}
               >
                 <img src={utils.getImageSrc('teleport.svg')} alt="teleport" />
-                {isAboveBalance() ? 'Insufficient balance' : 'Teleport'}
+                {isAstarMoonbeam() ? 'Astar <-> Moonbeam coming soon' : isAboveBalance() ? 'Insufficient balance' : 'Teleport'  }
               </button>
               <div className="flex justify-center items-center gap-2">
                 <img src={utils.getImageSrc('warning.svg')} alt="" />

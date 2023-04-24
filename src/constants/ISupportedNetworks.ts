@@ -7,6 +7,7 @@ export interface ISupportedNetwork {
   teleportBgImg: string
   addresses: ISupportedNetworkAddresses
   layerZeroChainIds: string
+  hyperlaneChainId: string
   suggestedGasLimit: number
   capabilities: {
     canSwap: boolean
@@ -34,6 +35,11 @@ export interface ISupportedNetworkAddresses {
   linkJoin?: string
   lzPipe?: string
   hyperlanePipe?: string
+  hypProxyAdmin?: string
+  hypIGPProxy?: string
+  hypIGPImpl?: string
+  hypISM?: string
+  hypGasOracle?: string
 }
 
 export interface IAddNetworkData {
