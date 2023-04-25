@@ -153,6 +153,13 @@ const Teleport: FC = () => {
     return false;
   }
 
+  const originAstar = () => {
+    if(originNetwork.id === 592){
+      return true;
+    }
+    return false;
+  }
+
   return (
     <div className="flex p-4 w-full justify-center lg:py-24 py-12">
       <div className="flex flex-col max-w-7xl gap-6">
@@ -205,7 +212,10 @@ const Teleport: FC = () => {
               </button>
               <div className="flex justify-center items-center gap-2">
                 <img src={utils.getImageSrc('warning.svg')} alt="" />
-                <div className="text-damlightyellow text-sm font-light">Make sure you have enough destination chain gas to transact.</div>
+                { originAstar() 
+                  ? (<div><div className="text-damlightyellow text-sm font-light">Make sure you have enough destination chain gas to transact.</div><div className="text-damlightyellow text-sm font-light">Please allow a few minutes for your transaction to show on blockscout.</div></div> )
+                  : <div className="text-damlightyellow text-sm font-light">Make sure you have enough destination chain gas to transact.</div> 
+                }
               </div>
             </div>
           ) : (
