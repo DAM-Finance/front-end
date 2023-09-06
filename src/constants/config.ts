@@ -160,8 +160,8 @@ export const supportedTokens: ISupportedTokensMap = {
   }
 }
 
-export const estimateForBurnFee: number = 0.2444444
-export const burnFee: number = 0.25002
+export const estimateForBurnFee: number = 0.24999
+export const burnFee: number = 0.2506
 
 export const astarHyperlaneMetadata: ChainMetadata = {
   chainId: 592,
