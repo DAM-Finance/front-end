@@ -21,7 +21,7 @@ const BorrowingSoon: FC = () => {
           <span className="font-bold">d2o </span>
         </div>
         <div className="text-damlabelgray3 text-m font-light">
-        <span>Access native d2o liquidity on </span>
+        <span>Access d2o liquidity on </span>
         <a href="https://app.stellaswap.com/pulsar" rel="noreferrer">
           <button className="font-bold"> Moonbeam</button>
         </a>
